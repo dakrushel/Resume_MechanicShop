@@ -5,16 +5,85 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MechanicShop.Views"
     Shell.FlyoutBehavior="Locked"
-    Title="MechanicShop">
+    Shell.FlyoutWidth="220"
+    Shell.TabBarIsVisible="False"
+    FlyoutBackgroundColor="#814827"
+    Shell.BackgroundColor="#814827"
+    Title="Mechanic Shop">
+    
+    
+    <!--
+    App colour scheme
+    
+    Champagne: #F1DAAD 
+    Freesia:   #EAC135
+    Brown:     #814827
+    Black:     #080D10
+    -->
+    
+    <!--Flyout Header (Logo)-->
+    <Shell.FlyoutHeaderTemplate>
+        <DataTemplate>
+            <Image Aspect="AspectFit"
+                Source="dahboard.jpg"
+                Opacity="0.9" />
+        </DataTemplate>
+    </Shell.FlyoutHeaderTemplate>
+    
+    
+    <!--Navigation Item template and items-->
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid ColumnDefinitions="0.2*,0.8*">
+                <Image Source="{Binding FlyoutIcon}"
+                       Margin="5"
+                       HeightRequest="40" />
+                <Label Grid.Column="1"
+                       Text="{Binding Title}"
+                       FontAttributes="Bold"
+                       TextColor="#F1DAAD"
+                       VerticalTextAlignment="Center"
+                       Margin="5,0,0,0"
+                       WidthRequest="200"/>
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
 
-    <ShellContent
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent
         Title="Repair Orders"
+        Icon="repairorder.png"  
         ContentTemplate="{DataTemplate local:OrderView}"
         Route="MainPage" />
 
-    <ShellContent
+        <ShellContent
         Title="Customers"
+        Icon="people.png"
         ContentTemplate="{DataTemplate local:CustomerView}"
         Route="CustomerView" />
+    </FlyoutItem>
+
+
+    <!--Flyour Footer-->
+    <Shell.FlyoutFooterTemplate>
+        <DataTemplate>
+            <StackLayout>
+                <Label Text="Mechanic Shop"
+                       TextColor="#EAC135"
+                       FontSize="Medium"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Margin="0,0,0,10"/>
+                
+            </StackLayout>
+        </DataTemplate>
+    </Shell.FlyoutFooterTemplate>
+    
+    
+
+    
+
+
 
 </Shell>
