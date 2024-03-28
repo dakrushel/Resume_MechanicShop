@@ -1,5 +1,7 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,10 +11,16 @@ namespace MechanicShop.Models
     public class Employee
     {
         //PK IS ID
-        private string Name { get; set; }
-        private string ID { get; set; }
-        private string Phone { get; set; }
-        private string HireDate { get; set; }
+
+        [Required]
+        [PrimaryKey]
+        public string ID { get; set; }
+        [Required]
+        public string Name { get; set; }
+        [Required]
+        public string Phone { get; set; }
+        [Required]
+        public string HireDate { get; set; }
         
     }
 }

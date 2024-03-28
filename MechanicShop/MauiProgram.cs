@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using MechanicShop.Models;
+using Microsoft.Extensions.Logging;
 
 namespace MechanicShop
 {
@@ -14,6 +15,13 @@ namespace MechanicShop
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+            Customer Bob = new Customer("Bob", "123 Lane", "123-456-789");
+            
+            MechanicShopSQLite mechanicShopDB = new MechanicShopSQLite();
+
+            mechanicShopDB.AddCustomer(Bob);
+
 
 #if DEBUG
     		builder.Logging.AddDebug();
