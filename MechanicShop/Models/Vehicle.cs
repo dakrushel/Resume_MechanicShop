@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,37 +7,47 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ForeignKeyAttribute = SQLiteNetExtensions.Attributes.ForeignKeyAttribute;
+using TableAttribute = SQLite.TableAttribute;
 
 namespace MechanicShop.Models
 {
+    [Table("Vehicle")]
     public class Vehicle
     {
 
         //Data annotations for the databasse creation
         //In Vehicle VIN is the Primary Key
         //All other properties cannot be null 
-        [Required]
-        [PrimaryKey]
+        [PrimaryKey, NotNull]
         public string VIN { get; set; }
-        // VIN WILL BE THE PK
-        [Required]
+
         public string Make { get; set; }
-        [Required]
+
         public string Model { get; set; }
-        [Required]
+
         public string Colour { get; set; }
-        [Required]
+
         public int Year { get; set; }
 
-        //Customerphone is the foreign key for the table Customer
-        [Required]
+        [ForeignKey(typeof(Customer))]
         public string CustomerPhone { get; set; }
+        [ManyToOne]
+        public Customer customer { get; set; }
 
-        //Navigation for the database to link to the appropriate table
-        [ForeignKey(nameof(CustomerPhone))]
-        public Customer Customer { get; set; }
 
-        public RepairOrder RepairOrder { get; set; }
+        public Vehicle (string VIN, string Make, string Model, string Colour, int Year, string CustomerPhone)
+        {
+            this.VIN = VIN;
+            this.Make = Make;
+            this.Model = Model;
+            this.Colour = Colour;
+            this.Year = Year;
+            this.CustomerPhone = CustomerPhone;
+        }
+
+        public Vehicle() { }
+
 
 
 

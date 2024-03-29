@@ -15,16 +15,19 @@ namespace MechanicShop
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+            //FOR TESTING
+            Customer Bob = new Customer("Bob", "123 Lane", "123-456-7890");
+            Customer Bill = new Customer("Bill", "123 Lane", "124-555-8888");
 
-            Customer Bob = new Customer("Bob", "123 Lane", "123-456-789");
-            
+            Vehicle TestCar = new Vehicle("123T", "Test", "Model", "Purple", 1994, "124-555-8888");
             MechanicShopSQLite mechanicShopDB = new MechanicShopSQLite();
 
-            mechanicShopDB.AddCustomer(Bob);
+            mechanicShopDB.AddVehicle(TestCar);
+
 
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

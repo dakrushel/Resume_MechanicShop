@@ -1,10 +1,5 @@
 ﻿using SQLite;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MechanicShop.Models
 {
@@ -21,6 +16,6 @@ namespace MechanicShop.Models
         public string Phone { get; set; }
         [Required]
         public string HireDate { get; set; }
-        
+
     }
 }
