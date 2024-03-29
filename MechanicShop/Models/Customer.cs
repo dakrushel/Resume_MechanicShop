@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -22,6 +23,7 @@ namespace MechanicShop.Models
         [Required]
         public string Address { get; set; }
         [Required]
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List <Vehicle> CustomerVehicles { get; set; }
 
 

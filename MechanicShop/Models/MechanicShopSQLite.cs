@@ -19,12 +19,44 @@ namespace MechanicShop.Models
             this.database.Execute("PRAGMA foreign_keys = ON;");
 
 
-            this.database.CreateTable<Vehicle>();
-            this.database.CreateTable<Employee>();
-            this.database.CreateTable<RepairOrder>();
-            this.database.CreateTable<Customer>();
+            //var checkVehicle = this.database.ExecuteScalar<string>("SELECT * FROM Vehicle");
+            //if (checkVehicle == null && (this.database.ExecuteScalar<string>("SELECT COUNT (*) FROM Vehicle") != "0") )
 
-            
+
+            try
+            {
+                this.database.CreateTable<Vehicle>();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+            }
+            try
+            {
+                this.database.CreateTable<Customer>();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+            }
+
+            try
+            {
+                this.database.CreateTable<RepairOrder>();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+            }
+
+            try
+            {
+                this.database.CreateTable<Employee>();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+            }
         }
 
         public void AddCustomer(Customer customer)
