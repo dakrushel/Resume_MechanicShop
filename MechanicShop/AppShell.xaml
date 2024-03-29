@@ -58,10 +58,22 @@ Shell.BackgroundColor="#814827"-->
         Route="MainPage" />
 
         <ShellContent
+        Title="Appointments"
+        Icon="schedule.png"  
+        ContentTemplate="{DataTemplate local:AppointmentView}"
+        Route="AppointmentView" />
+
+        <ShellContent
         Title="Customers"
         Icon="people.png"
         ContentTemplate="{DataTemplate local:CustomerView}"
         Route="CustomerView" />
+
+        <ShellContent
+        Title="Technicians"
+        Icon="technician.png"  
+        ContentTemplate="{DataTemplate local:TechView}"
+        Route="TechView" />
     </FlyoutItem>
 
 
