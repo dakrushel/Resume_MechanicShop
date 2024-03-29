@@ -6,4 +6,15 @@ public partial class CustomerView : ContentPage
 	{
 		InitializeComponent();
 	}
+
+
+    private void clearCustomerSearch_Clicked(object sender, EventArgs e)
+    {
+
+    }
+
+    private void searchCustoemrsBtn_Clicked(object sender, EventArgs e)
+    {
+
+    }
 }

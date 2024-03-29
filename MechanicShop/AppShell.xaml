@@ -6,10 +6,11 @@
     xmlns:local="clr-namespace:MechanicShop.Views"
     Shell.FlyoutBehavior="Locked"
     Shell.FlyoutWidth="220"
-    Shell.TabBarIsVisible="False"
+    Shell.TabBarIsVisible="False" 
     FlyoutBackgroundColor="#814827"
-    Shell.BackgroundColor="#814827"
     Title="Mechanic Shop">
+    <!--FlyoutBackgroundColor="#814827"
+Shell.BackgroundColor="#814827"-->
     
     
     <!--

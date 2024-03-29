@@ -3,10 +3,52 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MechanicShop.Views.CustomerView"
              Title="Customers">
+    
+    
+    
+    
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+
+        
+        <Grid HorizontalOptions="Center" ColumnSpacing="10" RowSpacing="10" Margin="0,20,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Text="Search Customers" FontSize="30"/>
+            
+        <!--Search Box Entries and Labels-->
+            <Label Grid.Row="1" Text="Phone Number:" HorizontalTextAlignment="End"
+                   VerticalOptions="Center"/>
+            <Entry x:Name="phoneEntry" Placeholder="000-000-0000" Grid.Row="1" Grid.Column="1" 
+                    WidthRequest="300" MaxLength="12"/>
+
+            <Label Grid.Row="2" Text="Customer Name:" HorizontalTextAlignment="End"
+                   VerticalOptions="Center"/>
+            <Entry x:Name="nameEntry" Placeholder="Customer Name" Grid.Row="2" Grid.Column="1" 
+                   WidthRequest="300" MaxLength="20"/>
+
+        <!--Search and clear buttons-->
+            <Button x:Name="clearCustomerSearch" Grid.Row="3" Text="Clear Form"
+                    Clicked="clearCustomerSearch_Clicked"/>
+            <Button x:Name="searchCustoemrsBtn" Grid.Row="3" Grid.Column="1" Text="Search"
+                    Clicked="searchCustoemrsBtn_Clicked"/>
+    
+        <!--Customer List View-->
+            <CollectionView Grid.ColumnSpan="2" Grid.Row="4" WidthRequest="600"
+                            HeightRequest="200" Background="AliceBlue">
+                <!--Customer list view binding goes here-->
+            </CollectionView>
+        </Grid>
+        
+        
+        
     </VerticalStackLayout>
 </ContentPage>
