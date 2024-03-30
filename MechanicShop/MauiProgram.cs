@@ -18,11 +18,12 @@ namespace MechanicShop
             //FOR TESTING
             Customer Bob = new Customer("Bob", "123 Lane", "123-456-7890");
             Customer Bill = new Customer("Bill", "123 Lane", "124-555-8888");
+            Customer Jane = new Customer("Jane", "124 Avenue", "999-000-9999");
 
-            Vehicle TestCar = new Vehicle("123T", "Test", "Model", "Purple", 1994, "124-555-8888");
+
             MechanicShopSQLite mechanicShopDB = new MechanicShopSQLite();
 
-            mechanicShopDB.AddVehicle(TestCar);
+            
 
 
 

@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using System.Runtime.CompilerServices;
 
 namespace MechanicShop.Models
 {
@@ -13,10 +14,6 @@ namespace MechanicShop.Models
             this.database = new SQLiteConnection(Constant.DatabasePath);
 
             this.database.Execute("PRAGMA foreign_keys = ON;");
-
-
-            //var checkVehicle = this.database.ExecuteScalar<string>("SELECT * FROM Vehicle");
-            //if (checkVehicle == null && (this.database.ExecuteScalar<string>("SELECT COUNT (*) FROM Vehicle") != "0") )
 
             try
             {
@@ -54,6 +51,15 @@ namespace MechanicShop.Models
                 Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
             }
 
+            try
+            {
+                this.database.CreateTable<Technician>();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+            }
+
             this.database.Commit();
         }
 
@@ -82,11 +88,73 @@ namespace MechanicShop.Models
             this.database.Update(customer);
         }
 
+        //TESTED
         public void AddVehicle(Vehicle vehicle) 
         {
             this.database.Insert(vehicle);
         }
 
+        //TESTED
+        public void UpdateVehicle(Vehicle vehicle)
+        {
+            this.database.Update(vehicle);
+        }
 
+        //TESTED
+        public void RemoveVehicle(string VIN) 
+        {
+            this.database.Delete<Vehicle>(VIN);
+        }
+
+        public List<Vehicle> GetAllVehicles()
+        {
+            return this.database.Table<Vehicle>().ToList();
+        }
+
+        //TESTED
+        public void AddTechnician(Technician technician)
+        {
+            this.database.Insert(technician);
+        }
+
+        //TESTED
+        public void UpdateTechnician (Technician technician)
+        {
+            this.database.Update(technician);
+        }
+
+        //TESTED
+        public void RemoveTechnician(string employeeId)
+        {
+            this.database.Delete<Technician>(employeeId); 
+        }
+
+        public List<Technician> GetAllTechnicians()
+        {
+            return this.database.Table<Technician>().ToList();
+        }
+
+        //TESTED
+        public void AddRepairOrder(RepairOrder repairOrder)
+        {
+            this.database.Insert(repairOrder);
+        }
+
+        //TESTED
+        public void RemoveRepairOrder(string repairOrderId)
+        {
+            this.database.Delete<RepairOrder>(repairOrderId); 
+        }
+
+        //TESTED
+        public void UpdateRepairOrder (RepairOrder repairOrder)
+        {
+            this.database.Update(repairOrder);
+        }
+
+        public List<RepairOrder> GetAllRepairOrders()
+        {
+            return this.database.Table<RepairOrder>().ToList();
+        }
     }
 }

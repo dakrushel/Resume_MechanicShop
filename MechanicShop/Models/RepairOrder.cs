@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using ForeignKeyAttribute = SQLiteNetExtensions.Attributes.ForeignKeyAttribute;
@@ -52,14 +53,27 @@ namespace MechanicShop.Models
         //retrieves object reference from foreign key
         public Vehicle Vehicle { get; set; }
 
-        [ForeignKey(typeof(Vehicle))]
+        [ForeignKey(typeof(Employee))]
         //Property to act as foreign key 
         public string EmployeeId { get; set; }
         [OneToOne]
         //retrieves object reference from foreign key
         public Employee Employee { get; set; }
 
+        public RepairOrder(string repairOrderId, string description, string dateCreated, string appointmentDate, string dateClose, int hours, string VIN, string employeeId)
+        {
+            this.RepairOrderId = repairOrderId;
+            this.Description = description;
+            this.DateCreated = dateCreated;
+            this.AppointmentDate = appointmentDate;
+            this.DateClose = dateClose;
+            this.hours = hours;
+            this.VIN = VIN;
+            this.EmployeeId = employeeId;
+        }
 
+
+        public RepairOrder() { }
 
 
 

@@ -3,19 +3,28 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MechanicShop.Models
 {
+
     public class Employee
     {
         //PK IS ID
 
-        [Required]
-        [PrimaryKey]
-        public string ID { get; set; }
-        [Required]
+        [PrimaryKey, NotNull]
+        public string EmployeeId { get; set; }
+
         public string Name { get; set; }
-        [Required]
-        public string Phone { get; set; }
-        [Required]
+
+        public string EmployeePhone { get; set; }
+
         public string HireDate { get; set; }
 
+        public Employee(string employeeId, string name, string phone, string HireDate) 
+        {
+            this.EmployeeId = employeeId;
+            this.Name = name;
+            this.EmployeePhone = phone;
+            this.HireDate = HireDate;
+        }
+
+        public Employee() { }
     }
 }
