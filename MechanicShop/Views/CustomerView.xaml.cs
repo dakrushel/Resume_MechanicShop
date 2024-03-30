@@ -55,4 +55,34 @@ public partial class CustomerView : ContentPage
     {
 
     }
+
+    private async void addCustomer_Clicked(object sender, EventArgs e)
+    {
+        // Display the 'Add new customer form
+         addCustomerForm.IsVisible = true;
+         // pass the name and or phone number that was being searched
+         newNameBox.Text = nameEntry.Text;
+         newPhoneBox.Text = phoneEntry.Text;
+        addCustomer.IsEnabled = false;
+        clearCustomerSearch.IsEnabled = false;
+        searchCustoemrsBtn.IsEnabled = false;
+        phoneEntry.IsEnabled = false;
+        nameEntry.IsEnabled = false;
+    }
+
+    private void AddThisCustomerBtn_Clicked(object sender, EventArgs e)
+    {
+
+    }
+
+    private void cancelAddCustomer_Clicked(object sender, EventArgs e)
+    {
+        addCustomerForm.IsVisible = false;
+        addCustomer.IsEnabled = true;
+        clearCustomerSearch.IsEnabled = true;
+        searchCustoemrsBtn.IsEnabled = true;
+        phoneEntry.IsEnabled = true;
+        nameEntry.IsEnabled = true;
+
+    }
 }

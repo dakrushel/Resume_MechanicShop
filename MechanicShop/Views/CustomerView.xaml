@@ -8,52 +8,95 @@
 
     <ScrollView>
         <VerticalStackLayout>
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="40">
+                <!--CUSTOMER SEARCH FORM / LIST VIEW.................................................-->
+                <Border WidthRequest="650" Margin="0,20,0,0" Padding="0,0,0,10">
+                    <Grid HorizontalOptions="Center" ColumnSpacing="10" RowSpacing="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Search Customers" FontSize="30"/>
 
-            <!--CUSTOMER SEARCH FORM / LIST VIEW.................................................-->
-            <Border WidthRequest="650" Margin="0,20,0,0" Padding="0,0,0,10">
-                <Grid HorizontalOptions="Center" ColumnSpacing="10" RowSpacing="10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <Label Text="Search Customers" FontSize="30"/>
+                        <!--Search Box Entries and Labels-->
+                        <Label Grid.Row="1" Text="Phone Number:" HorizontalTextAlignment="End"
+                               VerticalOptions="Center"/>
+                        <Entry x:Name="phoneEntry" Placeholder="000-000-0000" Grid.Row="1" Grid.Column="1" 
+                                WidthRequest="300" MaxLength="12"/>
 
-                    <!--Search Box Entries and Labels-->
-                    <Label Grid.Row="1" Text="Phone Number:" HorizontalTextAlignment="End"
-                           VerticalOptions="Center"/>
-                    <Entry x:Name="phoneEntry" Placeholder="000-000-0000" Grid.Row="1" Grid.Column="1" 
-                            WidthRequest="300" MaxLength="12"/>
+                        <Label Grid.Row="2" Text="Customer Name:" HorizontalTextAlignment="End"
+                               VerticalOptions="Center"/>
+                        <Entry x:Name="nameEntry" Placeholder="Customer Name" Grid.Row="2" Grid.Column="1" 
+                               WidthRequest="300" MaxLength="30"/>
 
-                    <Label Grid.Row="2" Text="Customer Name:" HorizontalTextAlignment="End"
-                           VerticalOptions="Center"/>
-                    <Entry x:Name="nameEntry" Placeholder="Customer Name" Grid.Row="2" Grid.Column="1" 
-                           WidthRequest="300" MaxLength="20"/>
+                        <!--Search and clear buttons-->
+                        <Button x:Name="clearCustomerSearch" Grid.Row="3" Text="Clear Form"
+                                Clicked="clearCustomerSearch_Clicked"/>
+                        <Button x:Name="searchCustoemrsBtn" Grid.Row="3" Grid.Column="1" Text="Search"
+                                Clicked="searchCustoemrsBtn_Clicked"/>
 
-                    <!--Search and clear buttons-->
-                    <Button x:Name="clearCustomerSearch" Grid.Row="3" Text="Clear Form"
-                            Clicked="clearCustomerSearch_Clicked"/>
-                    <Button x:Name="searchCustoemrsBtn" Grid.Row="3" Grid.Column="1" Text="Search"
-                            Clicked="searchCustoemrsBtn_Clicked"/>
+                        <!--Customer List View-->
+                        <CollectionView Grid.ColumnSpan="2" Grid.Row="4" WidthRequest="600"
+                                        HeightRequest="200" Background="AliceBlue">
+                            <!--Customer list view binding goes here-->
+                        </CollectionView>
 
-                    <!--Customer List View-->
-                    <CollectionView Grid.ColumnSpan="2" Grid.Row="4" WidthRequest="600"
-                                    HeightRequest="200" Background="AliceBlue">
-                        <!--Customer list view binding goes here-->
-                    </CollectionView>
+                        <Button x:Name="addCustomer" Grid.Row="5" Grid.ColumnSpan="2" Text="Add New Customer"
+                                Clicked="addCustomer_Clicked"/>
+                    </Grid>
+                </Border>
+                <!--END CUSTOMER SEARCH FORM / LIST VIEW........................................................-->
+                
+                
+                <!--CONDITIONALLY VISIBLE NEW CUSTOMER INFORMATION FORM.........................................-->
+                <Border x:Name="addCustomerForm" IsVisible="false" WidthRequest="400" HeightRequest="400">
+                    <Grid HorizontalOptions="Center" ColumnSpacing="10" RowSpacing="0" Padding="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="70"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Enter new Customer Information:" Grid.ColumnSpan="2"
+                               FontAttributes="Bold"/>
+                        <Label Grid.Row="1"
+                            Text="Name:" VerticalOptions="Center" HorizontalOptions="End"/>
+                        <Entry x:Name="newNameBox" Grid.Row="1" Grid.Column="1"
+                            WidthRequest="300" MaxLength="30" Placeholder="Customer Name"/>
 
-                    <Button x:Name="addCustomer" Grid.Row="5" Grid.ColumnSpan="2" Text="Add New Customer"/>
-                </Grid>
-            </Border>
-            <!--END CUSTOMER SEARCH FORM / LIST VIEW........................................................-->
-            
+                        <Label Grid.Row="2"
+                            Text="Phone:" VerticalOptions="Center" HorizontalOptions="End"/>
+                        <Entry x:Name="newPhoneBox" Grid.Row="2" Grid.Column="1"
+                            WidthRequest="300" MaxLength="12" Placeholder="000-000-0000"/>
+
+                        <Label Grid.Row="3"
+                            Text="Email:" VerticalOptions="Center" HorizontalOptions="End"/>
+                        <Entry x:Name="newEmailBox" Grid.Row="3" Grid.Column="1"
+                            WidthRequest="300" MaxLength="30" Placeholder="customer@email.com"/>
+
+                        <HorizontalStackLayout Grid.Row="4" Grid.ColumnSpan="2" Spacing="10" Margin="20,15"
+                                               HorizontalOptions="Center">
+                            <Button WidthRequest="100"
+                                x:Name="cancelAddCustomer" Text="Cancel" Clicked="cancelAddCustomer_Clicked"/>
+                            <Button WidthRequest="200"
+                                x:Name="AddThisCustomerBtn" Text="Add Customer" Clicked="AddThisCustomerBtn_Clicked"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </Border>
+            </HorizontalStackLayout>
             <!--CUSTOMER INFORMATION DISPLAY FORM..............................................................-->
             <Border Margin="30,10" Padding="10">
                 
