@@ -52,22 +52,22 @@ Shell.BackgroundColor="#814827"-->
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
         <ShellContent
+        Title="Customers"
+        Icon="people.png"
+        ContentTemplate="{DataTemplate local:CustomerView}"
+        Route="MainPage" />
+        
+        <ShellContent
         Title="Repair Orders"
         Icon="repairorder.png"  
         ContentTemplate="{DataTemplate local:OrderView}"
-        Route="MainPage" />
+        Route="OrderPage" />
 
         <ShellContent
         Title="Appointments"
         Icon="schedule.png"  
         ContentTemplate="{DataTemplate local:AppointmentView}"
         Route="AppointmentView" />
-
-        <ShellContent
-        Title="Customers"
-        Icon="people.png"
-        ContentTemplate="{DataTemplate local:CustomerView}"
-        Route="CustomerView" />
 
         <ShellContent
         Title="Technicians"
