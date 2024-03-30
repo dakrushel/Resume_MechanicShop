@@ -1,0 +1,8 @@
+﻿Chloe's "get around to it" List. 
+This is a list of ideas to implement later if there is time
+
+Many of these are 'Nice to have' ideas that I dont want to forget, but arent
+important enough to spend time on right now.
+
+CUSTOMERS PAGE
+- Make search and clear buttons inactive unless form is populated
