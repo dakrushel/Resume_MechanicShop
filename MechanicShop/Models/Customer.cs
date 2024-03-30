@@ -1,19 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SQLite;
+using SQLiteNetExtensions.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace MechanicShop.Models
 {
     public class Customer
     {
-        private string Phone { get; set; }
+        [Required]
+        [PrimaryKey]
+        public string CustomerPhone { get; set; }
         // phone will be PK, cannot have 2 accounts with same number
-        private string Name {  get; set; }
-        private string Address { get; set; }
-        
-        private List<Vehicle> CustomerVehicles { get; set; }
+
+
+        public string Name { get; set; }
+
+        public string Address { get; set; }
+
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        public List<Vehicle> CustomerVehicles { get; set; }
 
 
         public Customer(string name, string address, string phone)
@@ -22,8 +26,10 @@ namespace MechanicShop.Models
             this.Name = name;
             this.Address = address;
             // Phone has to be unique as it is PK, validate in front end
-            this.Phone = phone;
+            this.CustomerPhone = phone;
         }
+
+        public Customer() { }   
 
         public string GetName()
         {

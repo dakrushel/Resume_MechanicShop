@@ -1,0 +1,160 @@
+﻿using SQLite;
+using System.Runtime.CompilerServices;
+
+namespace MechanicShop.Models
+{
+    public class MechanicShopSQLite
+    {
+
+        private SQLiteConnection database;
+
+        public MechanicShopSQLite()
+        {
+            Console.WriteLine(Constant.DatabasePath);
+            this.database = new SQLiteConnection(Constant.DatabasePath);
+
+            this.database.Execute("PRAGMA foreign_keys = ON;");
+
+            try
+            {
+                this.database.CreateTable<Customer>();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+            }
+
+            try
+            {
+                this.database.CreateTable<RepairOrder>();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+            }
+
+            try
+            {
+                this.database.CreateTable<Vehicle>();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+            }
+
+            try
+            {
+                this.database.CreateTable<Employee>();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+            }
+
+            try
+            {
+                this.database.CreateTable<Technician>();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+            }
+
+            this.database.Commit();
+        }
+
+
+        //TESTED 
+        public void AddCustomer(Customer customer)
+        {
+            this.database.Insert(customer);
+        }
+
+        //TESTED
+        public void RemoveCustomer(string customerPhoneNumber) 
+        {
+            this.database.Delete<Customer>(customerPhoneNumber);
+        }
+
+        public List<Customer> GetAllCustomers()
+        {
+            return this.database.Table<Customer>().ToList();
+        }
+
+
+        //TESTED
+        public void UpdateCustomer(Customer customer)
+        {
+            this.database.Update(customer);
+        }
+
+        //TESTED
+        public void AddVehicle(Vehicle vehicle) 
+        {
+            this.database.Insert(vehicle);
+        }
+
+        //TESTED
+        public void UpdateVehicle(Vehicle vehicle)
+        {
+            this.database.Update(vehicle);
+        }
+
+        //TESTED
+        public void RemoveVehicle(string VIN) 
+        {
+            this.database.Delete<Vehicle>(VIN);
+        }
+
+        public List<Vehicle> GetAllVehicles()
+        {
+            return this.database.Table<Vehicle>().ToList();
+        }
+
+        //TESTED
+        public void AddTechnician(Technician technician)
+        {
+            this.database.Insert(technician);
+        }
+
+        //TESTED
+        public void UpdateTechnician (Technician technician)
+        {
+            this.database.Update(technician);
+        }
+
+        //TESTED
+        public void RemoveTechnician(string employeeId)
+        {
+            this.database.Delete<Technician>(employeeId); 
+        }
+
+        public List<Technician> GetAllTechnicians()
+        {
+            return this.database.Table<Technician>().ToList();
+        }
+
+        //TESTED
+        public void AddRepairOrder(RepairOrder repairOrder)
+        {
+            this.database.Insert(repairOrder);
+        }
+
+        //TESTED
+        public void RemoveRepairOrder(string repairOrderId)
+        {
+            this.database.Delete<RepairOrder>(repairOrderId); 
+        }
+
+        //TESTED
+        public void UpdateRepairOrder (RepairOrder repairOrder)
+        {
+            this.database.Update(repairOrder);
+        }
+
+        public List<RepairOrder> GetAllRepairOrders()
+        {
+            return this.database.Table<RepairOrder>().ToList();
+        }
+    }
+}
