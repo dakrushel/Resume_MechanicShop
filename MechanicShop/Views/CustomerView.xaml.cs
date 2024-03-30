@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 namespace MechanicShop.Views;
 
 public partial class CustomerView : ContentPage
@@ -10,8 +12,11 @@ public partial class CustomerView : ContentPage
 
     private void clearCustomerSearch_Clicked(object sender, EventArgs e)
     {
-        // inactive unless searh fields are filled in
-        // clears search form
+        // inactive unless search fields filled in
+        nameEntry.Text = null;
+        phoneEntry.Text = null;
+        clearCustomerSearch.IsEnabled = false;
+        searchCustomersBtn.IsEnabled = false;
     }
 
     private void searchCustoemrsBtn_Clicked(object sender, EventArgs e)
@@ -56,18 +61,14 @@ public partial class CustomerView : ContentPage
 
     }
 
-    private async void addCustomer_Clicked(object sender, EventArgs e)
+    private void addCustomer_Clicked(object sender, EventArgs e)
     {
         // Display the 'Add new customer form
-         addCustomerForm.IsVisible = true;
-         // pass the name and or phone number that was being searched
-         newNameBox.Text = nameEntry.Text;
-         newPhoneBox.Text = phoneEntry.Text;
-        addCustomer.IsEnabled = false;
-        clearCustomerSearch.IsEnabled = false;
-        searchCustoemrsBtn.IsEnabled = false;
-        phoneEntry.IsEnabled = false;
-        nameEntry.IsEnabled = false;
+        addCustomerForm.IsVisible = true;
+        // pass the name and or phone number that was being searched
+        newNameBox.Text = nameEntry.Text;
+        newPhoneBox.Text = phoneEntry.Text;
+        searchCustomers.IsEnabled = false;
     }
 
     private void AddThisCustomerBtn_Clicked(object sender, EventArgs e)
@@ -78,11 +79,22 @@ public partial class CustomerView : ContentPage
     private void cancelAddCustomer_Clicked(object sender, EventArgs e)
     {
         addCustomerForm.IsVisible = false;
-        addCustomer.IsEnabled = true;
-        clearCustomerSearch.IsEnabled = true;
-        searchCustoemrsBtn.IsEnabled = true;
-        phoneEntry.IsEnabled = true;
-        nameEntry.IsEnabled = true;
+        searchCustomers.IsEnabled = true;
 
+
+    }
+
+    private void SearchTextChanged(object sender, TextChangedEventArgs e)
+    {
+        if(nameEntry.Text == null && phoneEntry.Text == null)
+        {
+            clearCustomerSearch.IsEnabled = false;
+            searchCustomersBtn.IsEnabled= false;
+            return;
+        }
+        
+        
+        clearCustomerSearch.IsEnabled = true;
+        searchCustomersBtn.IsEnabled = true;
     }
 }

@@ -18,6 +18,21 @@
         <Setter Property="StrokeShape" Value="RoundRectangle 10"/>
         <Setter Property="Background" Value="{StaticResource Primary}"/>
         <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="Shadow">
+            <Shadow Brush="{StaticResource Tertiary}" Offset="8,10" Radius="6" Opacity=".3"/>
+        </Setter>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value=".7"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
     </Style>
 
     <Style TargetType="BoxView">
@@ -50,6 +65,9 @@
                         <VisualState.Setters>
                             <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray200}}" />
                             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray600}}" />
+                            <Setter Property="Shadow">
+                                <Shadow Brush="{StaticResource Primary}" Offset="4,4" Radius="2" Opacity=".3"/>
+                            </Setter>
                         </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="Pressed">
