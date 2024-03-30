@@ -13,3 +13,4 @@ important enough to spend time on right now.
 
 CUSTOMERS PAGE
 - Make search and clear buttons inactive unless form is populated
+- Ability to link to any active appointments or RO's for the selected customer from this page

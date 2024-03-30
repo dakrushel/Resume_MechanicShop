@@ -29,6 +29,7 @@ public partial class CustomerView : ContentPage
         // initial loading of the page. 
         base.OnAppearing();
         ResetSearchWidget();
+        ResetAddVehicleForm();
         ResetEditCustomerForm();
         ResetCustomerDisplay();
         ResetAddCustomerForm();
@@ -175,8 +176,21 @@ public partial class CustomerView : ContentPage
         ResetEditCustomerForm();
         ResetSearchWidget();
     }
-    
 
+    //-----------------------------------------------------------------------------------------
+    // ADD CUSTOMER VEHICLE FORM---------------------------------------------------------------
+    // TODO: ADD YEAR / MAKE/ MODEL values for PICKERS
+    private void cancelAddVehicle_Clicked(object sender, EventArgs e)
+    {
+        ResetAddVehicleForm();
+    }
+    public void ResetAddVehicleForm()
+    {
+        AddVehicleForm.IsVisible = false;
+        searchCustomers.IsEnabled = true;
+        customerDisplay.IsEnabled = true;
+        //TODO: Reset picker selections
+    }
     //-----------------------------------------------------------------------------------------
     // CUSTOMER INFORMATION DISPLAY -----------------------------------------------------------
     private async void deleteCustomer_Clicked(object sender, EventArgs e)
@@ -208,9 +222,10 @@ public partial class CustomerView : ContentPage
     }
     private void addVehicle_Clicked(object sender, EventArgs e)
     {
-        // Add in a popup???
-        // Can we use pickers with pre loaded makes and models in a popup???
-        // Look into MODAL NAVIAGATION pages!
+        AddVehicleForm.IsVisible = true;
+        searchCustomers.IsEnabled=false;
+        customerDisplay.IsEnabled=false;
+        
     }
 
     private void editVehicle_Clicked(object sender, EventArgs e)
@@ -258,16 +273,10 @@ public partial class CustomerView : ContentPage
     {
         // TODO: VALIDATE PHONE NUMBER ENTRY
         
-       
-        
-        
-        
-
+      
 
 
     }
-
     
 }
 
-    

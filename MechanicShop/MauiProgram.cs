@@ -6,6 +6,7 @@ namespace MechanicShop
     public static class MauiProgram
     {
         public static MechanicShopSQLite ShopDB;
+        public static List<int> yearList = new List<int>();
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();

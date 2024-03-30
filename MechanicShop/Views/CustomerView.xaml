@@ -141,16 +141,16 @@
                         </Grid.ColumnDefinitions>
                         <Label Text="Edit Customer Information:" Grid.ColumnSpan="2"
                             FontAttributes="Bold"/>
-                        <Label Grid.Row="1"
+                        <Label Grid.Row="2"
                             Text="Name:" VerticalOptions="Center" HorizontalOptions="End"/>
-                        <Entry x:Name="editNameBox" Grid.Row="1" Grid.Column="1"
+                        <Entry x:Name="editNameBox" Grid.Row="2" Grid.Column="1"
                             WidthRequest="300" MaxLength="30" Placeholder="Customer Name"/>
 
-                        <Label Grid.Row="2"
+                        <Label Grid.Row="1"
                             Text="Phone:" VerticalOptions="Center" HorizontalOptions="End"/>
-                        <Entry x:Name="editPhoneBox" Grid.Row="2" Grid.Column="1"
+                        <Entry x:Name="editPhoneBox" Grid.Row="1" Grid.Column="1"
                             WidthRequest="300" MaxLength="12" Placeholder="000-000-0000"
-                            TextChanged="newPhoneBox_TextChanged" IsReadOnly="True"/>
+                            IsReadOnly="True" IsEnabled="False"/>
 
                         <Label Grid.Row="3"
                             Text="Email:" VerticalOptions="Center" HorizontalOptions="End"/>
@@ -165,6 +165,47 @@
                                 x:Name="EditThisCustomerBtn" Text="Update Information" Clicked="EditThisCustomerBtn_Clicked"/>
                         </HorizontalStackLayout>
                     </Grid>
+                    
+                </Border>
+                <!-- ADD VEHICLE FORM..........................................................................-->
+                <Border x:Name="AddVehicleForm" IsVisible="false" WidthRequest="400" HeightRequest="400">
+                    <Grid HorizontalOptions="Center" ColumnSpacing="10" RowSpacing="10" Padding="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="50"></RowDefinition>
+                            <RowDefinition Height="50"></RowDefinition>
+                            <RowDefinition Height="50"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Label Text="Add New Customer Vehicle" Grid.ColumnSpan="2" FontAttributes="Bold"/>
+
+                        <Label Grid.Row="1" Text="Year:" HorizontalOptions="End" VerticalOptions="Center"/>
+                        <Picker x:Name="yearPicker" Grid.Row="1" Grid.Column="1"
+                                WidthRequest="300"/>
+
+                        <Label Grid.Row="2" Text="Make:" HorizontalOptions="End" VerticalOptions="Center"/>
+                        <Picker x:Name="makePicker" Grid.Row="2" Grid.Column="1"
+                            WidthRequest="300"/>
+
+                        <Label Grid.Row="3" Text="Model:" HorizontalOptions="End" VerticalOptions="Center"/>
+                        <Picker x:Name="modelPicker" Grid.Row="3" Grid.Column="1"
+                            WidthRequest="300"/>
+
+                        <HorizontalStackLayout Grid.Row="4" Grid.ColumnSpan="2" Spacing="10" Margin="20,15"
+                                    HorizontalOptions="Center">
+                            <Button WidthRequest="100" BackgroundColor="maroon" TextColor="white"
+                                    x:Name="cancelAddVehicle" Text="Cancel"
+                                    Clicked="cancelAddVehicle_Clicked"/>
+                            <Button WidthRequest="200" IsEnabled="false"
+                                    x:Name="AddThisVehicleBtn" Text="Add Vehicle"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+
                 </Border>
             </HorizontalStackLayout>
             <!--CUSTOMER INFORMATION DISPLAY FORM..............................................................-->
@@ -235,6 +276,9 @@
                 </Grid>
 
             </Border>
+            
+            
+            
             <Button x:Name="newAppointmentBtn" MaximumWidthRequest="1400" Margin="100,10"
                     Text="Create New Appontment" BackgroundColor="{StaticResource Tertiary}"
                     TextColor="{StaticResource Black}" IsEnabled="False"
