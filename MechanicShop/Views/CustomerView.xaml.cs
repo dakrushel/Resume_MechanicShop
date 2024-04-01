@@ -19,6 +19,12 @@ public partial class CustomerView : ContentPage
 
         var customers = new ObservableCollection<Customer>(MauiProgram.ShopDB.GetAllCustomers());
         customersCollectionView.ItemsSource = customers;
+
+        //var makeList = new ObservableCollection<string>(MauiProgram.ShopDB.);
+        for (int year = 1995; year <= 2025; year++)
+        {
+            yearPicker.Items.Add(year.ToString());
+        }
     }
 
 

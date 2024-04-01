@@ -190,11 +190,11 @@
 
                         <Label Grid.Row="2" Text="Make:" HorizontalOptions="End" VerticalOptions="Center"/>
                         <Picker x:Name="makePicker" Grid.Row="2" Grid.Column="1"
-                            WidthRequest="300"/>
+                            WidthRequest="300" IsEnabled="False"/>
 
                         <Label Grid.Row="3" Text="Model:" HorizontalOptions="End" VerticalOptions="Center"/>
                         <Picker x:Name="modelPicker" Grid.Row="3" Grid.Column="1"
-                            WidthRequest="300"/>
+                            WidthRequest="300" IsEnabled="False"/>
 
                         <HorizontalStackLayout Grid.Row="4" Grid.ColumnSpan="2" Spacing="10" Margin="20,15"
                                     HorizontalOptions="Center">

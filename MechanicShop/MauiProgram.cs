@@ -35,5 +35,12 @@ namespace MechanicShop
 
             return builder.Build();
         }
+        public static void GenerateYearList()
+        {
+            for (int i = 1995; i <= 2025; i++)
+            {
+                yearList.Add(i);
+            }
+        }
     }
 }
