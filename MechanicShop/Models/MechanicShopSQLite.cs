@@ -1,4 +1,5 @@
-﻿using MechanicShop.Resources;
+﻿
+using MechanicShop.Resources;
 using SQLite;
 using System.Runtime.CompilerServices;
 
@@ -17,7 +18,7 @@ namespace MechanicShop.Models
             this.database.Execute("PRAGMA foreign_keys = ON;");
 
             //For dropping tables, uncomment the next line
-            //this.database.DropTable<RepairOrder>();
+            //this.database.DropTable<VehicleDatabase>();
 
             //Try creating this table
             try
@@ -77,27 +78,20 @@ namespace MechanicShop.Models
 
             try
             {
-                this.database.CreateTable<Ford>();
+                this.database.CreateTable<VehicleDatabase>();
             }
             catch (SQLiteException ex)
             {
                 Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
             }
 
-            try
-            {
-                this.database.CreateTable<Toyota>();
-            }
-            catch (SQLiteException ex)
-            {
-                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
-            }
+          
 
             this.database.Commit();
-            
+
         }
 
-/*----------------------------CUSTOMER ------------------------------------*/
+        /*----------------------------CUSTOMER ------------------------------------*/
         //TESTED 
         public void AddCustomer(Customer customer)
         {
@@ -105,7 +99,7 @@ namespace MechanicShop.Models
         }
 
         //TESTED
-        public void RemoveCustomer(string customerPhoneNumber) 
+        public void RemoveCustomer(string customerPhoneNumber)
         {
             this.database.Delete<Customer>(customerPhoneNumber);
         }
@@ -123,10 +117,10 @@ namespace MechanicShop.Models
             this.database.Update(customer);
         }
 
-/*---------------------------- VEHICLE ------------------------------------*/
+        /*---------------------------- VEHICLE ------------------------------------*/
 
         //TESTED
-        public void AddVehicle(Vehicle vehicle) 
+        public void AddVehicle(Vehicle vehicle)
         {
             this.database.Insert(vehicle);
         }
@@ -138,7 +132,7 @@ namespace MechanicShop.Models
         }
 
         //TESTED
-        public void RemoveVehicle(string VIN) 
+        public void RemoveVehicle(string VIN)
         {
             this.database.Delete<Vehicle>(VIN);
         }
@@ -149,7 +143,7 @@ namespace MechanicShop.Models
         }
 
 
-/*----------------------------TECHNICIAN ------------------------------------*/
+        /*----------------------------TECHNICIAN ------------------------------------*/
         //TESTED
         public void AddTechnician(Technician technician)
         {
@@ -157,7 +151,7 @@ namespace MechanicShop.Models
         }
 
         //TESTED
-        public void UpdateTechnician (Technician technician)
+        public void UpdateTechnician(Technician technician)
         {
             this.database.Update(technician);
         }
@@ -165,7 +159,7 @@ namespace MechanicShop.Models
         //TESTED
         public void RemoveTechnician(string employeeId)
         {
-            this.database.Delete<Technician>(employeeId); 
+            this.database.Delete<Technician>(employeeId);
         }
 
         public List<Technician> GetAllTechnicians()
@@ -173,7 +167,7 @@ namespace MechanicShop.Models
             return this.database.Table<Technician>().ToList();
         }
 
-/*---------------------------- REPAIR ORDER ------------------------------------*/
+        /*---------------------------- REPAIR ORDER ------------------------------------*/
 
         //TESTED
         public void AddRepairOrder(RepairOrder repairOrder)
@@ -184,11 +178,11 @@ namespace MechanicShop.Models
         //TESTED
         public void RemoveRepairOrder(string repairOrderId)
         {
-            this.database.Delete<RepairOrder>(repairOrderId); 
+            this.database.Delete<RepairOrder>(repairOrderId);
         }
 
         //TESTED
-        public void UpdateRepairOrder (RepairOrder repairOrder)
+        public void UpdateRepairOrder(RepairOrder repairOrder)
         {
             this.database.Update(repairOrder);
         }
@@ -199,7 +193,7 @@ namespace MechanicShop.Models
         }
 
 
-/*----------------------------SERVICE JOB ------------------------------------*/
+        /*----------------------------SERVICE JOB ------------------------------------*/
 
         //TESTED
         public void AddServiceJob(ServiceJob job)
@@ -214,26 +208,23 @@ namespace MechanicShop.Models
         }
 
         //TESTED
-        public void RemoveServiceJob(string  serviceJobId) 
+        public void RemoveServiceJob(string serviceJobId)
         {
             this.database.Delete<ServiceJob>(serviceJobId);
         }
 
         public List<ServiceJob> GetAllServiceJobs()
         {
-            return this.database.Table<ServiceJob>().ToList();  
+            return this.database.Table<ServiceJob>().ToList();
         }
 
-/*---------------------------- LIST FOR GUI's ------------------------------------*/
-        
-        public List<Toyota> GetToyotaMakes()
+        /*---------------------------- LIST FOR GUI's ------------------------------------*/
+
+        public List<VehicleDatabase> GetAlLVehicleMakes()
         {
-            return this.database.Table<Toyota>().ToList();
+            return this.database.Table<VehicleDatabase>().ToList();
         }
 
-        public List<Ford> GetFordMakes()
-        {
-            return this.database.Table<Ford>().ToList();
-        }
     }
+
 }
