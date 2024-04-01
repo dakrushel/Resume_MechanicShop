@@ -10,12 +10,12 @@ namespace MechanicShop.Models
         [Required]
         [PrimaryKey]
         public string CustomerPhone { get; set; }
-        // phone will be PK, cannot have 2 accounts with same number
-
 
         public string Name { get; set; }
 
         public string Address { get; set; }
+
+        //All vehicles attached to customer will be affected by changes to customer class
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<Vehicle> CustomerVehicles { get; set; }
@@ -37,10 +37,14 @@ namespace MechanicShop.Models
             return this.Name;
         }
 
-        public void AddVehicle()
+        //Method to create and add vehicle to customer
+        public void AddVehicle(string VIN, string make, string model, string Colour, int year)
         {
-            // construct new VEHICLE OBJ
-            // ADD to list for this customer
+            //Construct vehicle with method inputs
+            Vehicle newCustomerVehicle = new Vehicle(VIN, make, model, Colour, year, this.CustomerPhone);
+            //Add newly constructed vehicle to customers lists of vehicles
+            CustomerVehicles.Add(newCustomerVehicle);
+
         }
 
     }

@@ -16,6 +16,9 @@ namespace MechanicShop.Models
 
             this.database.Execute("PRAGMA foreign_keys = ON;");
 
+            //For dropping tables, uncomment the next line
+            //this.database.DropTable<RepairOrder>();
+
             //Try creating this table
             try
             {
@@ -91,6 +94,7 @@ namespace MechanicShop.Models
             }
 
             this.database.Commit();
+            
         }
 
 /*----------------------------CUSTOMER ------------------------------------*/

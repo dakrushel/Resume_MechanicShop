@@ -18,18 +18,6 @@ namespace MechanicShop.Models
         // NOTE CAN ONLY CREATE APPOINTMENT (INACTIVE)
         // CAN ACTIVATE INTO RO MODE
 
-        /// ATTRIBUTES
-        /// UNIQUE PK of RO number (generated)
-        /// Customer
-        /// Vehicle
-        /// mechanic
-        /// job or jobs
-        /// problem description (notes)
-        /// Date created 
-        /// AppointmentDate
-        /// Date Activated
-        /// Date Closed
-        /// hours (based on job)
 
         // cost maybe will be calculate in GUI based on hours times tech payrate
 
@@ -44,7 +32,13 @@ namespace MechanicShop.Models
 
         public string DateClose { get; set; }
 
-        public int hours { get; set; }
+
+        //This property is NOT in the CTOR as it will need to be calculated based on the jobs
+        public double RepairOrderHours { get; set; }
+
+
+        //This property is NOT in the CTOR as will need to be calculated based on the jobs
+        public double RepairOrderBill {  get; set; }
 
         //Property to act as foreign key
         [ForeignKey(typeof(Vehicle))]
@@ -53,51 +47,125 @@ namespace MechanicShop.Models
         //retrieves object reference from foreign key
         public Vehicle Vehicle { get; set; }
 
-        [ForeignKey(typeof(Employee))]
+        [ForeignKey(typeof(Technician))]
         //Property to act as foreign key 
         public string EmployeeId { get; set; }
         [OneToOne]
         //retrieves object reference from foreign key
-        public Employee Employee { get; set; }
+        public Technician RepairJobTechnician { get; set; }
 
         //Property to act as foreign key
         [ForeignKey(typeof(ServiceJob))]
-        public string JobId { get; set; }
+        public string ServiceJobId { get; set; }
 
         //identifies one to many relationship
         //Sets any changes made to the one will affect the many
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<ServiceJob> RepairOrderServiceJobs { get; set; }
 
-        
+        bool IsActive { get; set; }
 
-        public RepairOrder(string repairOrderId, string description, string dateCreated, string appointmentDate, string dateClose, int hours, string VIN, string employeeId)
+        //Opens connection to Database
+        MechanicShopSQLite ShopDB = new MechanicShopSQLite();
+
+
+        //CTOR: For all variabless accounted for
+        public RepairOrder(string repairOrderId, string description, string dateCreated, string appointmentDate, string VIN, string employeeId)
         {
             this.RepairOrderId = repairOrderId;
             this.RepairOrderDescription = description;
             this.DateCreated = dateCreated;
             this.AppointmentDate = appointmentDate;
-            this.DateClose = dateClose;
-            this.hours = hours;
             this.VIN = VIN;
             this.EmployeeId = employeeId;
+
+            //Automatically sets is Active to False signifying this is NOT an active appointment
+            this.IsActive = false;
+
         }
 
+        //Overload CTOR for no technician assigned
+        public RepairOrder(string repairOrderId, string description, string dateCreated, string appointmentDate, string VIN)
+        {
+            this.RepairOrderId = repairOrderId;
+            this.RepairOrderDescription = description;
+            this.DateCreated = dateCreated;
+            this.AppointmentDate = appointmentDate;
+            this.VIN = VIN;
+
+            //Automatically sets is Active to False signifying this is NOT an active appointment
+            this.IsActive = false;
+
+        }
 
         public RepairOrder() { }
 
 
-
+        //Changes Repair order from appointment to ACTIVE repair order
         public void SetActive()
         {
-            // this turns the APT into RO
+            this.IsActive = true;
         }
 
-        public void AssignTechnician()
+        //Assign technician 
+        public void AssignTechnician(string employeeId)
         {
-            //assign a tech to this job
+            this.EmployeeId = EmployeeId;
         }
 
+        //Assigns a service job based on serviceJobId
+        public void AssignServiceJob (string serviceJobId) 
+        {
+            //Opens the database and finds the service job with the corresponding
+            //serviceJobId and returns it, it is then added to the list for Repair Orders
+            ServiceJob newlyAddedServiceJob = ShopDB.GetAllServiceJobs().
+                Find(x => x.ServiceJobId == serviceJobId);
+
+
+            RepairOrderServiceJobs.Add(newlyAddedServiceJob);
+        }
+
+        public void SetRepairOrderHours()
+        {
+            //initialization for for loop
+            double totalHours = 0;
+
+            //iterates through each job and adds their hours together
+            foreach (var serviceJob in RepairOrderServiceJobs)
+            {
+                totalHours = serviceJob.ServiceJobHours + totalHours;
+            }
+
+            this.RepairOrderHours = totalHours;
+        }
+
+        //Calculating bill for the customer
+        public void CalculateBill()
+        {
+           
+            //Retrieves the Technicians hourly rate 
+            double technicianHourlyRate = RepairJobTechnician.HourlyRate;
+
+            // calculates the cost by mulitplying total hours by the technicians hourly rate
+            double calculateBill = this.RepairOrderHours * technicianHourlyRate;
+            this.RepairOrderBill = calculateBill;
+        }
+
+        // Checkout or billing method 
+        public void CloseAppointment(string appointmentClosedDate)
+        {
+            //Adds the Appointment close date
+            this.DateClose = appointmentClosedDate;
+
+            //Sets the appropriate hours on repair order based service job hours
+            this.SetRepairOrderHours();
+
+            //Calculates bill
+            this.CalculateBill();
+
+            //Changes from ACTIVE repair order to closed repair order
+            this.IsActive = false; 
+        }
 
     }
 }
