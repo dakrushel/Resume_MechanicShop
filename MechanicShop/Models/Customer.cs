@@ -16,6 +16,9 @@ namespace MechanicShop.Models
 
         public string Address { get; set; }
 
+        //Provides access to Database
+        MechanicShopSQLite ShopDB = new MechanicShopSQLite();
+
         //All vehicles attached to customer will be affected by changes to customer class
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]
@@ -29,11 +32,13 @@ namespace MechanicShop.Models
             this.Address = address;
             // Phone has to be unique as it is PK, validate in front end
             this.CustomerPhone = phone;
+            ShopDB.AddCustomer(this);
         }
 
         public Customer() { }
 
-        MechanicShopSQLite ShopDB = new MechanicShopSQLite();
+       
+        //Provides access to Database
         public string GetName()
         {
             return this.Name;
@@ -53,6 +58,7 @@ namespace MechanicShop.Models
             //Add newly constructed vehicle to customers lists of vehicles and to database
             ShopDB.AddVehicle(newCustomerVehicle);
             CustomerVehicles.Add(newCustomerVehicle);
+            ShopDB.UpdateCustomer(this);
         }
 
 
