@@ -11,5 +11,14 @@ namespace MechanicShop.Resources
         public string VehicleMake {  get; set; }
 
         public string VehicleModel { get; set; }
+
+        public VehicleDatabase(string VehicleMake, string VehicleModel)
+        {
+            this.VehicleMake = VehicleMake;
+            this.VehicleModel = VehicleModel;
+        }
+
+        public VehicleDatabase() { }    
+
     }
 }

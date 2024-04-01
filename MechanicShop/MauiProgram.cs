@@ -1,4 +1,5 @@
 ﻿using MechanicShop.Models;
+using MechanicShop.Resources;
 using Microsoft.Extensions.Logging;
 
 namespace MechanicShop
@@ -26,7 +27,11 @@ namespace MechanicShop
 
             test.ServiceJobDescription = "Tire Change"; 
 
+            VehicleDatabase newVehicle = new VehicleDatabase("Toyota", "Camry");
+
             ShopDB = new MechanicShopSQLite();
+
+            ShopDB.RemoveVehicleDatabase("Camry");
 
 
 

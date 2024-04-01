@@ -219,7 +219,22 @@ namespace MechanicShop.Models
         }
 
         /*---------------------------- LIST FOR GUI's ------------------------------------*/
+        
+        //Tested
+        public void AddVehicleDatabse(VehicleDatabase vehicle)
+        {
+            this.database.Insert(vehicle);
+        }
 
+        public void UpdateVehicleDatabase(VehicleDatabase vehicle)
+        { 
+            this.database.Update(vehicle); 
+        }
+
+        public void RemoveVehicleDatabase(string VehicleModel)
+        {
+            this.database.Table<VehicleDatabase>().Delete(x => x.VehicleModel == VehicleModel);
+        }
         public List<VehicleDatabase> GetAlLVehicleMakes()
         {
             return this.database.Table<VehicleDatabase>().ToList();
