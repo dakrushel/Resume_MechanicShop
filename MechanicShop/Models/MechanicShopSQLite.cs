@@ -259,9 +259,9 @@ namespace MechanicShop.Models
             {
                 if (makes.Contains(vehicle.VehicleMake) == false)
                 { 
-                    string vehiclemakeadded = vehicle.VehicleMake;
+                    string vehicleMakeToBeAdded = vehicle.VehicleMake;
 
-                    makes.Add(vehiclemakeadded);
+                    makes.Add(vehicleMakeToBeAdded);
                 }
             }
             return makes;
