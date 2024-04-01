@@ -218,7 +218,7 @@ namespace MechanicShop.Models
             return this.database.Table<ServiceJob>().ToList();
         }
 
-        /*---------------------------- LIST FOR GUI's ------------------------------------*/
+        /*---------------------------- VEHICLE DATABASe ------------------------------------*/
         
         //Tested
         public void AddVehicleDatabse(VehicleDatabase vehicle)
@@ -235,11 +235,18 @@ namespace MechanicShop.Models
         {
             this.database.Delete<VehicleDatabase>(VehicleModel);
         }
-        public List<VehicleDatabase> GetAlLVehicleMakes()
+        public List<VehicleDatabase> GetAlLVehicleDatabase()
         {
             return this.database.Table<VehicleDatabase>().ToList();
         }
 
+        public List<VehicleDatabase> GetAllVehicleByMake(string VehicleMake)
+        {
+            List<VehicleDatabase> VehiclesByMake = this.database.Table<VehicleDatabase>().ToList().
+                Where(x => x.VehicleMake == VehicleMake).ToList();
+
+            return VehiclesByMake;
+        }
     }
 
 }
