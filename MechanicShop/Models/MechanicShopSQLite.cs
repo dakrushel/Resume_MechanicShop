@@ -250,7 +250,7 @@ namespace MechanicShop.Models
 
         public List<VehicleDatabase> GetListOfMakes()
         {
-            List<VehicleDatabase> ListOfMakes = this.database.QueryScalars<VehicleDatabase>("SELECT DISTINCT VehicleMake");
+            List<VehicleDatabase> ListOfMakes = this.database.Query<VehicleDatabase>("SELECT DISTINCT VehicleMake");
             return ListOfMakes;
         }
     }
