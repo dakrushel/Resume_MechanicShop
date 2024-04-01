@@ -47,13 +47,5 @@ namespace MechanicShop.Models
         }
 
         public Vehicle() { }
-
-
-
-
-
-
-        //constructor goes here
-        // input validations will be done on front end
     }
 }

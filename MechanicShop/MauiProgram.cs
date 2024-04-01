@@ -1,4 +1,5 @@
 ﻿using MechanicShop.Models;
+using MechanicShop.Resources;
 using Microsoft.Extensions.Logging;
 
 namespace MechanicShop
@@ -22,10 +23,15 @@ namespace MechanicShop
             Customer Bill = new Customer("Bill", "123 Lane", "124-555-8888");
             Customer Jane = new Customer("Jane", "124 Avenue", "999-000-9999");
 
+            ServiceJob test = new ServiceJob("12A", "Oil Change", 0.5);
+
+            test.ServiceJobDescription = "Tire Change"; 
+
+            VehicleDatabase newVehicle = new VehicleDatabase("Toyota", "Camry");
 
             ShopDB = new MechanicShopSQLite();
 
-            
+            ShopDB.RemoveVehicleDatabase("Camry");
 
 
 
