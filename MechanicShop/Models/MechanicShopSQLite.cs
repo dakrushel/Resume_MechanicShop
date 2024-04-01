@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using MechanicShop.Resources;
+using SQLite;
 using System.Runtime.CompilerServices;
 
 namespace MechanicShop.Models
@@ -15,10 +16,12 @@ namespace MechanicShop.Models
 
             this.database.Execute("PRAGMA foreign_keys = ON;");
 
+            //Try creating this table
             try
             {
                 this.database.CreateTable<Customer>();
             }
+            //Catch statement for any tabless that have been created
             catch (SQLiteException ex)
             {
                 Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
@@ -69,10 +72,28 @@ namespace MechanicShop.Models
                 Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
             }
 
+            try
+            {
+                this.database.CreateTable<Ford>();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+            }
+
+            try
+            {
+                this.database.CreateTable<Toyota>();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+            }
+
             this.database.Commit();
         }
 
-
+/*----------------------------CUSTOMER ------------------------------------*/
         //TESTED 
         public void AddCustomer(Customer customer)
         {
@@ -98,6 +119,8 @@ namespace MechanicShop.Models
             this.database.Update(customer);
         }
 
+/*---------------------------- VEHICLE ------------------------------------*/
+
         //TESTED
         public void AddVehicle(Vehicle vehicle) 
         {
@@ -121,6 +144,8 @@ namespace MechanicShop.Models
             return this.database.Table<Vehicle>().ToList();
         }
 
+
+/*----------------------------TECHNICIAN ------------------------------------*/
         //TESTED
         public void AddTechnician(Technician technician)
         {
@@ -143,6 +168,8 @@ namespace MechanicShop.Models
         {
             return this.database.Table<Technician>().ToList();
         }
+
+/*---------------------------- REPAIR ORDER ------------------------------------*/
 
         //TESTED
         public void AddRepairOrder(RepairOrder repairOrder)
@@ -168,6 +195,8 @@ namespace MechanicShop.Models
         }
 
 
+/*----------------------------SERVICE JOB ------------------------------------*/
+
         //TESTED
         public void AddServiceJob(ServiceJob job)
         {
@@ -191,5 +220,16 @@ namespace MechanicShop.Models
             return this.database.Table<ServiceJob>().ToList();  
         }
 
+/*---------------------------- LIST FOR GUI's ------------------------------------*/
+        
+        public List<Toyota> GetToyotaMakes()
+        {
+            return this.database.Table<Toyota>().ToList();
+        }
+
+        public List<Ford> GetFordMakes()
+        {
+            return this.database.Table<Ford>().ToList();
+        }
     }
 }

@@ -28,8 +28,6 @@ namespace MechanicShop
 
             ShopDB = new MechanicShopSQLite();
 
-            ShopDB.RemoveServiceJob("12A");
-
 
 
 #if DEBUG
