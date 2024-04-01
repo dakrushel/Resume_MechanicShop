@@ -233,7 +233,7 @@ namespace MechanicShop.Models
 
         public void RemoveVehicleDatabase(string VehicleModel)
         {
-            this.database.Table<VehicleDatabase>().Delete(x => x.VehicleModel == VehicleModel);
+            this.database.Delete<VehicleDatabase>(VehicleModel);
         }
         public List<VehicleDatabase> GetAlLVehicleMakes()
         {

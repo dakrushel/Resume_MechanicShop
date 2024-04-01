@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace MechanicShop.Resources
     {
         public string VehicleMake {  get; set; }
 
+        [PrimaryKey]
         public string VehicleModel { get; set; }
 
         public VehicleDatabase(string VehicleMake, string VehicleModel)
