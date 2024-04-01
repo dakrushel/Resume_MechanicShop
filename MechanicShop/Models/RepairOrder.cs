@@ -37,7 +37,7 @@ namespace MechanicShop.Models
         [PrimaryKey, NotNull]
         public string RepairOrderId { get; set; }
 
-        public string Description { get; set; }
+        public string RepairOrderDescription { get; set; }
 
         public string DateCreated { get; set; }
         public string AppointmentDate {  get; set; }
@@ -60,10 +60,21 @@ namespace MechanicShop.Models
         //retrieves object reference from foreign key
         public Employee Employee { get; set; }
 
+        //Property to act as foreign key
+        [ForeignKey(typeof(ServiceJob))]
+        public string JobId { get; set; }
+
+        //identifies one to many relationship
+        //Sets any changes made to the one will affect the many
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        public List<ServiceJob> RepairOrderServiceJobs { get; set; }
+
+        
+
         public RepairOrder(string repairOrderId, string description, string dateCreated, string appointmentDate, string dateClose, int hours, string VIN, string employeeId)
         {
             this.RepairOrderId = repairOrderId;
-            this.Description = description;
+            this.RepairOrderDescription = description;
             this.DateCreated = dateCreated;
             this.AppointmentDate = appointmentDate;
             this.DateClose = dateClose;

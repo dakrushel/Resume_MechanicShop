@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿
+using SQLite;
 using SQLiteNetExtensions.Attributes;
 using System.ComponentModel.DataAnnotations;
 

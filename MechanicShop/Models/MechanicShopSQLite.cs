@@ -60,6 +60,15 @@ namespace MechanicShop.Models
                 Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
             }
 
+            try
+            {
+                this.database.CreateTable<ServiceJob>();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+            }
+
             this.database.Commit();
         }
 
@@ -75,6 +84,7 @@ namespace MechanicShop.Models
         {
             this.database.Delete<Customer>(customerPhoneNumber);
         }
+
 
         public List<Customer> GetAllCustomers()
         {
@@ -156,5 +166,30 @@ namespace MechanicShop.Models
         {
             return this.database.Table<RepairOrder>().ToList();
         }
+
+
+        //TESTED
+        public void AddServiceJob(ServiceJob job)
+        {
+            this.database.Insert(job);
+        }
+
+        //TESTED
+        public void UpdateServiceJob(ServiceJob job)
+        {
+            this.database.Update(job);
+        }
+
+        //TESTED
+        public void RemoveServiceJob(string  serviceJobId) 
+        {
+            this.database.Delete<ServiceJob>(serviceJobId);
+        }
+
+        public List<ServiceJob> GetAllServiceJobs()
+        {
+            return this.database.Table<ServiceJob>().ToList();  
+        }
+
     }
 }
