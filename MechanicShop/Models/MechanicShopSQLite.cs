@@ -248,10 +248,24 @@ namespace MechanicShop.Models
             return VehiclesByMake;
         }
 
-        public List<VehicleDatabase> GetListOfMakes()
+        public List<String> GetListOfMakes()
         {
-            List<VehicleDatabase> ListOfMakes = this.database.Query<VehicleDatabase>("SELECT DISTINCT VehicleMake");
-            return ListOfMakes;
+            /*            List<VehicleDatabase> ListOfMakes = this.database.Query<VehicleDatabase>("SELECT DISTINCT VehicleMake");
+                        return ListOfMakes;*/
+
+            List<String> makes = new List<string>();
+
+            foreach (VehicleDatabase vehicle in this.database.Table<VehicleDatabase>().ToList())
+            {
+                if (makes.Contains(vehicle.VehicleMake) == false)
+                { 
+                    string vehiclemakeadded = vehicle.VehicleMake;
+
+                    makes.Add(vehiclemakeadded);
+                }
+            }
+            return makes;
+
         }
     }
 
