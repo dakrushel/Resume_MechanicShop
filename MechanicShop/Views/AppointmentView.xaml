@@ -4,9 +4,67 @@
              x:Class="MechanicShop.Views.AppointmentView"
              Title="Appointments">
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+        
+            <Label Text="Appointment Scheduling" TextColor="{StaticResource Tertiary}"/>
+            <Border Grid.Row="1" HorizontalOptions="Center" Padding="20">
+                <VerticalStackLayout HorizontalOptions="Center" Spacing="10">
+                    <Label Text="Upcoming Appointments:"/>
+                    <ListView x:Name="activeAppointments"
+                        HeightRequest="200" WidthRequest="400" Background="AliceBlue">
+                        <!--active appointments (not passed date)-->
+                    </ListView>
+
+                    <Label Text="Expired Appointments:" Margin="0,20,0,0"/>
+                    <ListView x:Name="expiredAppointments"
+                        HeightRequest="200" WidthRequest="400" Background="AliceBlue">
+                        <!--active appointments (not passed date)-->
+                    </ListView>
+                
+                    <!--SEARCH APPOINTMENTS-->
+                    <Label Text="Find Appointment:" Margin="0,20,0,0"/>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Customer Name:"
+                               VerticalOptions="Center" HorizontalOptions="End"/>
+                        <Entry x:Name="apptName" WidthRequest="300" Background="White"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Customer Phone:"
+                               VerticalOptions="Center" HorizontalOptions="End"/>
+                        <Entry x:Name="apptPhone" WidthRequest="300" Background="White"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Button x:Name="findAppointment" Text="Find Appointment"/>
+                        <Button/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            
+            </Border>
+
+
+            <Border Grid.Row="1" Grid.Column="1" HorizontalOptions="Center" Padding="20"
+                    HeightRequest="500" WidthRequest="500">
+                <VerticalStackLayout HorizontalOptions="Center" Spacing="10">
+                    <Label Text="Appoiontment Slip"/>
+
+                </VerticalStackLayout>
+
+            </Border>
+        </Grid>
+
+
+
+
+
     </VerticalStackLayout>
 </ContentPage>
