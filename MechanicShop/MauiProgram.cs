@@ -7,7 +7,7 @@ namespace MechanicShop
     public static class MauiProgram
     {
         public static MechanicShopSQLite ShopDB;
-        public static List<int> yearList = new List<int>();
+        public static DateTime Now { get; } = DateTime.Now;
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
@@ -41,12 +41,6 @@ namespace MechanicShop
 
             return builder.Build();
         }
-        public static void GenerateYearList()
-        {
-            for (int i = 1995; i <= 2025; i++)
-            {
-                yearList.Add(i);
-            }
-        }
+        
     }
 }

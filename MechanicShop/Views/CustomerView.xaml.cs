@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using MechanicShop.Models;
+using MechanicShop.Resources;
 using Microsoft.Maui.Controls;
 
 
@@ -21,10 +22,16 @@ public partial class CustomerView : ContentPage
         customersCollectionView.ItemsSource = customers;
 
         //var makeList = new ObservableCollection<string>(MauiProgram.ShopDB.);
+        
+        // Get years for the yearlist picker (in the add vehicle widget)
         for (int year = 1995; year <= 2025; year++)
         {
             yearPicker.Items.Add(year.ToString());
         }
+
+        // get makes for the make picker in the add vehicle widget
+        //List<VehicleDatabase> makes = MauiProgram.ShopDB.GetListOfMakes();
+        //makePicker.ItemsSource = makes;
     }
 
 
@@ -108,7 +115,7 @@ public partial class CustomerView : ContentPage
             cPhoneBox.Text = selectedCustomer.CustomerPhone;
             cEmailBox.Text = selectedCustomer.Address;
         }
-
+        
 
     }
     //----------------------------------------------------------------------------------------
@@ -273,6 +280,7 @@ public partial class CustomerView : ContentPage
     private void MenuItem_Clicked(object sender, EventArgs e)
     {
         //TODO highlight
+        
     }
 
     private void newPhoneBox_TextChanged(object sender, TextChangedEventArgs e)

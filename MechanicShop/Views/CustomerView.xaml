@@ -50,29 +50,28 @@
                         <ListView Grid.ColumnSpan="2" Grid.Row="4" 
                                         x:Name="customersCollectionView" WidthRequest="600"
                                         HeightRequest="200" Background="AliceBlue"
-                                        ItemSelected="customers_ItemSelected">
+                                        ItemSelected="customers_ItemSelected" >
                             <ListView.ItemTemplate>
-                                <DataTemplate>
+                                <DataTemplate>c:\users\school\source\repos\mechanicshop\mechanicshop\views\orderview.xaml.cs
+
                                     <ViewCell>
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="auto"></RowDefinition>
                                             </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="150"></ColumnDefinition>
                                                 <ColumnDefinition Width="100"></ColumnDefinition>
+                                                <ColumnDefinition Width="200"></ColumnDefinition>
                                                 
                                             </Grid.ColumnDefinitions>
-                                            <Label Grid.Column="0" Text="{Binding Name}"></Label>
-                                            
+                                            <Label Grid.Column="1" Text="{Binding Name}"></Label>
+                                            <Label Grid.Column="0" Text="{Binding CustomerPhone}"></Label>
+                                            <Label Grid.Column="2" Text="{Binding Address}"></Label>
                                         </Grid>
-                                        <ViewCell.ContextActions>
-                                            <MenuItem Text="Delete"
-                                                Clicked="MenuItem_Clicked"
-                                                CommandParameter="{Binding .}">
-
-                                            </MenuItem>
-                                        </ViewCell.ContextActions>
+                                        
                                     </ViewCell>
+                                    
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
