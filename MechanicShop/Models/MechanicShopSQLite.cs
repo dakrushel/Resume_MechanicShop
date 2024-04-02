@@ -117,6 +117,12 @@ namespace MechanicShop.Models
             this.database.Update(customer);
         }
 
+        public List<Vehicle> GetCustomerVehicles(string CustomerPhone)
+        {
+            return this.database.Table<Vehicle>().ToList()
+                .Where(x => x.CustomerPhone == CustomerPhone).ToList();
+        }
+
         /*---------------------------- VEHICLE ------------------------------------*/
 
         //TESTED
