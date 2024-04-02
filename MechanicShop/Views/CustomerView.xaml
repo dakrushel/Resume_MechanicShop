@@ -273,7 +273,7 @@
                     </HorizontalStackLayout>
                     
                     <!--CUSTOMER CARS DISPLAY...........................................................................-->
-                    <VerticalStackLayout Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="5"
+                    <VerticalStackLayout Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="4"
                                          HorizontalOptions="End" Spacing="10" Padding="10">
                         <HorizontalStackLayout HorizontalOptions="End" Spacing="40">
                             <Label Text="Customer Vehicles" HorizontalOptions="Center" VerticalOptions="Center"
@@ -310,7 +310,8 @@
                         
                         <!--Selected vehicle information display-->
                         
-                        <Grid x:Name="vehicleInformation" HorizontalOptions="Center" ColumnSpacing="10">
+                        <Grid x:Name="vehicleInformation" HorizontalOptions="Center" ColumnSpacing="10"
+                              VerticalOptions="Center">
                             <Grid.RowDefinitions>
                                 <RowDefinition></RowDefinition>
                                 <RowDefinition></RowDefinition>
@@ -356,20 +357,21 @@
                         </HorizontalStackLayout>
                         
                     </VerticalStackLayout>
-                    
+                    <Button x:Name="newAppointmentBtn" Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2"
+                            
+                            Text="Create New Appontment" BackgroundColor="{StaticResource Tertiary}"
+                            TextColor="{StaticResource Black}" IsEnabled="False"
+                            Clicked="newAppointmentBtn_Clicked"/>
 
                     
 
                 </Grid>
-
+                
             </Border>
             
             
             
-            <Button x:Name="newAppointmentBtn" MaximumWidthRequest="1400" Margin="100,10"
-                    Text="Create New Appontment" BackgroundColor="{StaticResource Tertiary}"
-                    TextColor="{StaticResource Black}" IsEnabled="False"
-                    Clicked="newAppointmentBtn_Clicked"/>
+            
             
         </VerticalStackLayout>
     </ScrollView>

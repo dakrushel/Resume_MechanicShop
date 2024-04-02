@@ -37,6 +37,20 @@ namespace MechanicShop
 
             return builder.Build();
         }
-        
+
+         public static List<string> vehicleColors = new List<string>
+        {
+            "Black",
+            "Blue",
+            "Gray",
+            "Green",
+            "Gold",
+            "Maroon",
+            "Red",
+            "Silver",
+            "White",
+            "Yellow"                     
+        };
+
     }
 }

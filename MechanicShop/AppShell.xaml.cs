@@ -6,9 +6,9 @@ namespace MechanicShop
         public AppShell()
         {
             InitializeComponent();
+            Routing.RegisterRoute(nameof(AppointmentView), typeof(AppointmentView));
 
-            
-            
+
 
         }
         

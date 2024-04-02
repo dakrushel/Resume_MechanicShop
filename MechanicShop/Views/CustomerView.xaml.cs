@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using MechanicShop.Models;
 using MechanicShop.Resources;
 using Microsoft.Maui.Controls;
+using MechanicShop.Services;
 
 
 
@@ -11,7 +12,7 @@ namespace MechanicShop.Views;
 
 public partial class CustomerView : ContentPage
 {
-    public static List<string> colours = new List<string>(["Blue", "Red", "Green"]);
+    
     public CustomerView()
 	{
 		InitializeComponent();
@@ -28,7 +29,7 @@ public partial class CustomerView : ContentPage
         {
             yearPicker.Items.Add(year.ToString());
         }
-        colourPicker.ItemsSource = colours;
+        colourPicker.ItemsSource = MauiProgram.vehicleColors;
 
         // get makes for the make picker in the add vehicle widget
         List<string> makes = MauiProgram.ShopDB.GetListOfMakes();
@@ -71,6 +72,7 @@ public partial class CustomerView : ContentPage
         vehicleInformation.BindingContext = null;
         cVehicleList.ItemsSource = null;
         deleteVehicle.IsEnabled = false;
+        newAppointmentBtn.IsEnabled = false;
     }
     private void ResetAddCustomerForm()
     {
@@ -127,6 +129,7 @@ public partial class CustomerView : ContentPage
             cVehicleList.ItemsSource = vehicles;
             vehicleInformation.BindingContext = null;
             deleteVehicle.IsEnabled = false;
+            newAppointmentBtn.IsEnabled = false;
         }
         
 
@@ -308,6 +311,7 @@ public partial class CustomerView : ContentPage
             MauiProgram.ShopDB.AddVehicle(newVehicle);
             var vehicles = new ObservableCollection<Vehicle>(MauiProgram.ShopDB.GetCustomerVehicles(customerPhone));
             cVehicleList.ItemsSource = vehicles;
+            vehicleInformation.BindingContext = newVehicle;
             ResetAddVehicleForm();
         }
         
@@ -332,9 +336,13 @@ public partial class CustomerView : ContentPage
         ResetCustomerDisplay();
         
     }
-
-    
-
+    private void cVehicleList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        Vehicle? v = e.SelectedItem as Vehicle;
+        vehicleInformation.BindingContext = v;
+        deleteVehicle.IsEnabled = true;
+        newAppointmentBtn.IsEnabled = true;
+    }
     private async void deleteVehicle_Clicked(object sender, EventArgs e)
     {
         bool delete = await DisplayAlert("Confirm Deletion", "Asre you sure you want to perminantly delete this vehicle?", "Delete", "Cancel");
@@ -348,15 +356,24 @@ public partial class CustomerView : ContentPage
                 cVehicleList.ItemsSource = vehicles;
                 vehicleInformation.BindingContext = null;
                 deleteVehicle.IsEnabled = false;
+                newAppointmentBtn.IsEnabled = false;
             }
             
         }
 
     }
 
-    private void newAppointmentBtn_Clicked(object sender, EventArgs e)
+    private async void newAppointmentBtn_Clicked(object sender, EventArgs e)
     {
-
+        Customer? c = customersCollectionView.SelectedItem as Customer;
+        Vehicle? v = cVehicleList?.SelectedItem as Vehicle;
+        if(v != null && c!= null) 
+        {
+            Pass.PassCustomer(c);
+            Pass.PassVehicle(v);
+        }
+        await Shell.Current.GoToAsync("//AppointmentView");
+        
     }
 
     
@@ -382,12 +399,7 @@ public partial class CustomerView : ContentPage
 
 
 
-    private void cVehicleList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
-    {
-        Vehicle? v = e.SelectedItem as Vehicle;
-        vehicleInformation.BindingContext = v;
-        deleteVehicle.IsEnabled = true;
-    }
+    
 
 
     //====================================================================================================
