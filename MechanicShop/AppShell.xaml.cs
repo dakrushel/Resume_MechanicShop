@@ -7,9 +7,10 @@ namespace MechanicShop
         {
             InitializeComponent();
 
-
+            
             
 
         }
+        
     }
 }

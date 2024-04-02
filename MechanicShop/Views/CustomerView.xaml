@@ -52,7 +52,7 @@
                                         HeightRequest="200" Background="AliceBlue"
                                         ItemSelected="customers_ItemSelected" >
                             <ListView.ItemTemplate>
-                                <DataTemplate>c:\users\school\source\repos\mechanicshop\mechanicshop\views\orderview.xaml.cs
+                                <DataTemplate>
 
                                     <ViewCell>
                                         <Grid>
@@ -189,11 +189,11 @@
 
                         <Label Grid.Row="2" Text="Make:" HorizontalOptions="End" VerticalOptions="Center"/>
                         <Picker x:Name="makePicker" Grid.Row="2" Grid.Column="1"
-                            WidthRequest="300" IsEnabled="False"/>
+                            WidthRequest="300" SelectedIndexChanged="makePicker_SelectedIndexChanged"/>
 
                         <Label Grid.Row="3" Text="Model:" HorizontalOptions="End" VerticalOptions="Center"/>
                         <Picker x:Name="modelPicker" Grid.Row="3" Grid.Column="1"
-                            WidthRequest="300" IsEnabled="False"/>
+                            WidthRequest="300" IsEnabled="false"/>
 
                         <HorizontalStackLayout Grid.Row="4" Grid.ColumnSpan="2" Spacing="10" Margin="20,15"
                                     HorizontalOptions="Center">
@@ -258,11 +258,34 @@
                     <!--CUSTOMER CARS...........................................................................-->
                     <Label Grid.Column="2"
                         Text="Customer Vehicles" HorizontalOptions="Center" VerticalOptions="End"/>
-                    <CollectionView  Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="2" 
-                                     WidthRequest="400"
+                    <ListView  Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="2" 
+                                     x:Name="cVehicleList" WidthRequest="400"
                                      HeightRequest="100" Background="AliceBlue" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+
+                                <ViewCell>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="50"></ColumnDefinition>
+                                            <ColumnDefinition Width="50"></ColumnDefinition>
+                                            <ColumnDefinition Width="50"></ColumnDefinition>
+
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Text="{Binding Year}"></Label>
+                                        <Label Grid.Column="1" Text="{Binding Make}"></Label>
+                                        <Label Grid.Column="2" Text="{Binding Model}"></Label>
+                                    </Grid>
+
+                                </ViewCell>
+
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
                         <!--Customer cars collection view-->
-                    </CollectionView>
+                    </ListView>
                     <Button x:Name="addVehicle" Grid.Column="3" Text="Add Vehicle"
                             Clicked="addVehicle_Clicked" />
                     <Button x:Name="editVehicle" Grid.Row="3" Grid.Column="3" Text="Edit Vehicle"

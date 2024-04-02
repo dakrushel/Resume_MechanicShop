@@ -19,6 +19,11 @@
             <Label Text="Appointment Scheduling" TextColor="{StaticResource Tertiary}"/>
             <Border Grid.Row="1" HorizontalOptions="Center" Padding="20">
                 <VerticalStackLayout HorizontalOptions="Center" Spacing="10">
+                    <HorizontalStackLayout Spacing="20" HorizontalOptions="End">
+                        <Label Text="Today's Date is:" FontSize="20"/>
+                        <Label x:Name="DateDisplay" Text="" FontSize="20"/>
+                    </HorizontalStackLayout>
+                    
                     <Label Text="Upcoming Appointments:"/>
                     <ListView x:Name="activeAppointments"
                         HeightRequest="200" WidthRequest="400" Background="AliceBlue">

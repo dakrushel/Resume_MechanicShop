@@ -30,8 +30,8 @@ public partial class CustomerView : ContentPage
         }
 
         // get makes for the make picker in the add vehicle widget
-        //List<VehicleDatabase> makes = MauiProgram.ShopDB.GetListOfMakes();
-        //makePicker.ItemsSource = makes;
+        List<string> makes = MauiProgram.ShopDB.GetListOfMakes();
+        makePicker.ItemsSource = makes;
     }
 
 
@@ -114,6 +114,9 @@ public partial class CustomerView : ContentPage
             cNameBox.Text = selectedCustomer.Name;
             cPhoneBox.Text = selectedCustomer.CustomerPhone;
             cEmailBox.Text = selectedCustomer.Address;
+            // TODO get cars
+            //var vehicles = new ObservableCollection<Vehicle>(selectedCustomer.CustomerVehicles);
+            //customersCollectionView.ItemsSource = vehicles;
         }
         
 
@@ -291,6 +294,22 @@ public partial class CustomerView : ContentPage
 
 
     }
-    
+
+    private void makePicker_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        var picker = (Picker)sender;
+        string? make = picker.SelectedItem.ToString();
+        if (make != null)
+        {
+            List<string> models = new List<string>();
+            List<VehicleDatabase> vehicles = MauiProgram.ShopDB.GetAllVehicleByMake(make);
+            foreach (var vehicle in vehicles)
+            {
+                models.Add(vehicle.VehicleModel);
+            }
+            modelPicker.ItemsSource = models;
+            modelPicker.IsEnabled = true;
+        }
+    }
 }
 
