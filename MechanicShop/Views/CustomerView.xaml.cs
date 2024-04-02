@@ -136,9 +136,9 @@ public partial class CustomerView : ContentPage
     //====================================================================================================
     private async void AddThisCustomerBtn_Clicked(object sender, EventArgs e)
     {
-        string? newCustomerName = newNameBox.Text;
-        string? newPhoneNumber = newPhoneBox.Text;
-        string? newEmail = newEmailBox.Text;
+        string newCustomerName = newNameBox.Text;
+        string newPhoneNumber = newPhoneBox.Text;
+        string newEmail = newEmailBox.Text;
         
 
         // Regular expression pattern for validating email addresses
@@ -165,7 +165,7 @@ public partial class CustomerView : ContentPage
             }
         }
 
-        if (newCustomerName != null && newPhoneNumber != null & newEmail != null)
+        if (newCustomerName != null && newPhoneNumber != null && newEmail != null)
         {
             Customer newCustomer = new Customer(newCustomerName, newEmail, newPhoneNumber);
             //MauiProgram.ShopDB.AddCustomer(newCustomer);
@@ -284,12 +284,12 @@ public partial class CustomerView : ContentPage
     private async void AddThisVehicleBtn_Clicked(object sender, EventArgs e)
     {
         // gather all REQ infor for a new vehicle
-        string customerPhone = cPhoneBox.Text;
-        string newVin = vinEntry.Text;
-        string newYearSt = yearPicker.SelectedItem.ToString();
-        string newMake = makePicker.SelectedItem.ToString();
-        string newModel = modelPicker.SelectedItem.ToString();
-        string newColour = colourPicker.SelectedItem.ToString();
+        string? customerPhone = cPhoneBox.Text;
+        string? newVin = vinEntry.Text;
+        string? newYearSt = yearPicker.SelectedItem.ToString();
+        string? newMake = makePicker.SelectedItem.ToString();
+        string? newModel = modelPicker.SelectedItem.ToString();
+        string? newColour = colourPicker.SelectedItem.ToString();
         // parse the year to an int
         int newYear = 0;
         if (int.TryParse(newYearSt, out int year))
@@ -302,11 +302,15 @@ public partial class CustomerView : ContentPage
             return;
         }
         //make new vehicle
-        Vehicle newVehicle = new Vehicle(newVin, newMake, newModel, newColour, newYear, customerPhone);
-        MauiProgram.ShopDB.AddVehicle(newVehicle);
-        var vehicles = new ObservableCollection<Vehicle>(MauiProgram.ShopDB.GetCustomerVehicles(customerPhone));
-        cVehicleList.ItemsSource = vehicles;
-        ResetAddVehicleForm();
+        if (customerPhone != null && newVin != null && newYear != 0 && newMake != null && newModel != null && newColour != null)
+        {
+            Vehicle newVehicle = new Vehicle(newVin, newMake, newModel, newColour, newYear, customerPhone);
+            MauiProgram.ShopDB.AddVehicle(newVehicle);
+            var vehicles = new ObservableCollection<Vehicle>(MauiProgram.ShopDB.GetCustomerVehicles(customerPhone));
+            cVehicleList.ItemsSource = vehicles;
+            ResetAddVehicleForm();
+        }
+        
     }
     //====================================================================================================
     // CUSTOMER INFORMATION DISPLAY -----------------------------------------------------------
@@ -336,12 +340,16 @@ public partial class CustomerView : ContentPage
         bool delete = await DisplayAlert("Confirm Deletion", "Asre you sure you want to perminantly delete this vehicle?", "Delete", "Cancel");
         if (delete)
         {
-            Vehicle toDelete = cVehicleList.SelectedItem as Vehicle;
-            MauiProgram.ShopDB.RemoveVehicle(toDelete.VIN);
-            var vehicles = new ObservableCollection<Vehicle>(MauiProgram.ShopDB.GetCustomerVehicles(cPhoneBox.Text));
-            cVehicleList.ItemsSource = vehicles;
-            vehicleInformation.BindingContext = null;
-            deleteVehicle.IsEnabled = false;
+            Vehicle? toDelete = cVehicleList.SelectedItem as Vehicle;
+            if (toDelete != null)
+            {
+                MauiProgram.ShopDB.RemoveVehicle(toDelete.VIN);
+                var vehicles = new ObservableCollection<Vehicle>(MauiProgram.ShopDB.GetCustomerVehicles(cPhoneBox.Text));
+                cVehicleList.ItemsSource = vehicles;
+                vehicleInformation.BindingContext = null;
+                deleteVehicle.IsEnabled = false;
+            }
+            
         }
 
     }
