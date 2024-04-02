@@ -82,6 +82,8 @@ namespace MechanicShop.Models
             //Automatically sets is Active to False signifying this is NOT an active appointment
             this.IsActive = false;
 
+            //Adding to Database as object is created
+            ShopDB.AddRepairOrder(this);
         }
 
         //Overload CTOR for no technician assigned
@@ -96,6 +98,8 @@ namespace MechanicShop.Models
             //Automatically sets is Active to False signifying this is NOT an active appointment
             this.IsActive = false;
 
+            //Adding to Database as object is created
+            ShopDB.AddRepairOrder(this);
         }
 
         public RepairOrder() { }
@@ -105,12 +109,18 @@ namespace MechanicShop.Models
         public void SetActive()
         {
             this.IsActive = true;
+
+            //Updating to database
+            ShopDB.UpdateRepairOrder(this);
         }
 
         //Assign technician 
         public void AssignTechnician(string employeeId)
         {
             this.EmployeeId = EmployeeId;
+
+            //Updating to database
+            ShopDB.UpdateRepairOrder(this);
         }
 
         //Assigns a service job based on serviceJobId
@@ -120,9 +130,10 @@ namespace MechanicShop.Models
             //serviceJobId and returns it, it is then added to the list for Repair Orders
             ServiceJob newlyAddedServiceJob = ShopDB.GetAllServiceJobs().
                 Find(x => x.ServiceJobId == serviceJobId);
-
-
             RepairOrderServiceJobs.Add(newlyAddedServiceJob);
+
+            //Updating to database
+            ShopDB.UpdateRepairOrder(this);
         }
 
         public void SetRepairOrderHours()
@@ -137,6 +148,9 @@ namespace MechanicShop.Models
             }
 
             this.RepairOrderHours = totalHours;
+
+            //Updating to database
+            ShopDB.UpdateRepairOrder(this);
         }
 
         //Calculating bill for the customer
@@ -149,6 +163,9 @@ namespace MechanicShop.Models
             // calculates the cost by mulitplying total hours by the technicians hourly rate
             double calculateBill = this.RepairOrderHours * technicianHourlyRate;
             this.RepairOrderBill = calculateBill;
+
+            //Updating to database
+            ShopDB.UpdateRepairOrder(this);
         }
 
         // Checkout or billing method 
@@ -164,7 +181,10 @@ namespace MechanicShop.Models
             this.CalculateBill();
 
             //Changes from ACTIVE repair order to closed repair order
-            this.IsActive = false; 
+            this.IsActive = false;
+
+            //Updating to database
+            ShopDB.UpdateRepairOrder(this);
         }
 
     }
