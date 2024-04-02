@@ -226,7 +226,7 @@
                     </Grid.ColumnDefinitions>
                     <!--CUSTOMER INFORMATION DISPLAY BOXES (READ ONLY)-->
                     <HorizontalStackLayout Grid.ColumnSpan="2" Spacing="40" Padding="5">
-                        <Label  Text="Customer Information:" FontSize="20"
+                        <Label  Text="Customer Information:" FontSize="20" FontAttributes="Bold"
                                 VerticalOptions="Center"/>
                         <Button x:Name="ClearCustomerDisplay" Text="Clear" WidthRequest="100"
                                 Clicked="ClearCustomerDisplay_Clicked"/>
@@ -255,43 +255,97 @@
                                 WidthRequest="250" Clicked="updateCustomerInfo_Clicked"/>
                     </HorizontalStackLayout>
                     
-                    <!--CUSTOMER CARS...........................................................................-->
-                    <Label Grid.Column="2"
-                        Text="Customer Vehicles" HorizontalOptions="Center" VerticalOptions="End"/>
-                    <ListView  Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="2" 
-                                     x:Name="cVehicleList" WidthRequest="400"
-                                     HeightRequest="100" Background="AliceBlue" >
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
+                    <!--CUSTOMER CARS DISPLAY...........................................................................-->
+                    <VerticalStackLayout Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="5"
+                                         HorizontalOptions="End" Spacing="10" Padding="10">
+                        <HorizontalStackLayout HorizontalOptions="End" Spacing="40">
+                            <Label Text="Customer Vehicles" HorizontalOptions="Center" VerticalOptions="Center"
+                                   FontAttributes="Bold" FontSize="18"/>
+                            <Button x:Name="addVehicle" Text="Add Vehicle"
+                                    Clicked="addVehicle_Clicked" HorizontalOptions="End"/>
+                        </HorizontalStackLayout>
+                        
+                        <ListView x:Name="cVehicleList" WidthRequest="400"
+                                HeightRequest="70" Background="AliceBlue" 
+                                  ItemSelected="cVehicleList_ItemSelected">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                                <ColumnDefinition Width="80"></ColumnDefinition>
+                                                <ColumnDefinition Width="100"></ColumnDefinition>
+                                                <ColumnDefinition Width="80"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Text="{Binding Year}"></Label>
+                                            <Label Grid.Column="1" Text="{Binding Make}"></Label>
+                                            <Label Grid.Column="2" Text="{Binding Model}"></Label>
+                                            <Label Grid.Column="3" Text="{Binding Colour}"></Label>
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        
+                        <!--Selected vehicle information display-->
+                        
+                        <Grid x:Name="vehicleInformation" HorizontalOptions="Center" ColumnSpacing="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                <ColumnDefinition Width="80"></ColumnDefinition>
+                                
+                            </Grid.ColumnDefinitions>
+                            <Label Text="Selected Vehicle" FontAttributes="Bold"
+                                   Grid.ColumnSpan="2"
+                                   HorizontalOptions="Start"/>
 
-                                <ViewCell>
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="auto"></RowDefinition>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="50"></ColumnDefinition>
-                                            <ColumnDefinition Width="50"></ColumnDefinition>
-                                            <ColumnDefinition Width="50"></ColumnDefinition>
+                            <Label Grid.Column="0" Grid.Row="1" FontAttributes="Bold"
+                                Text="Year:" HorizontalOptions="End"/>
+                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding Year}"></Label>
 
-                                        </Grid.ColumnDefinitions>
-                                        <Label Grid.Column="0" Text="{Binding Year}"></Label>
-                                        <Label Grid.Column="1" Text="{Binding Make}"></Label>
-                                        <Label Grid.Column="2" Text="{Binding Model}"></Label>
-                                    </Grid>
+                            <Label Grid.Column="0" Grid.Row="2" FontAttributes="Bold"
+                                Text="Make:" HorizontalOptions="End"/>
+                            <Label Grid.Row="2" Grid.Column="1" Text="{Binding Make}"></Label>
 
-                                </ViewCell>
+                            <Label Grid.Column="0" Grid.Row="3" FontAttributes="Bold"
+                                Text="Model:" HorizontalOptions="End"/>
+                            <Label Grid.Row="3" Grid.Column="1" Text="{Binding Model}"></Label>
 
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                        <!--Customer cars collection view-->
-                    </ListView>
-                    <Button x:Name="addVehicle" Grid.Column="3" Text="Add Vehicle"
-                            Clicked="addVehicle_Clicked" />
-                    <Button x:Name="editVehicle" Grid.Row="3" Grid.Column="3" Text="Edit Vehicle"
-                            Clicked="editVehicle_Clicked"/>
-                    <Button x:Name="deleteVehicle" Grid.Row="3" Grid.Column="2" Text="Delete Vehicle"
-                            Clicked="deleteVehicle_Clicked"/>
+                            <Label Grid.Column="0" Grid.Row="4" FontAttributes="Bold"
+                                Text="Colour:" HorizontalOptions="End"/>
+                            <Label Grid.Row="4" Grid.Column="1" Text="{Binding Colour}"></Label>
+                                
+                            <Label Grid.Row="5" Grid.Column="0" Text="VIN:" FontAttributes="Bold"
+                                   HorizontalOptions="End"/>
+                            <Label Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding VIN}"/>
+                            
+                            
+                            
+                            
+                        </Grid>
+
+                        <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
+                            <Button x:Name="deleteVehicle" Text="Delete Vehicle" BackgroundColor="maroon"
+                                    Clicked="deleteVehicle_Clicked" TextColor="white"/>
+                            <Button x:Name="editVehicle" Text="Edit Vehicle" WidthRequest="200"
+                                    Clicked="editVehicle_Clicked"/>
+                            
+                        </HorizontalStackLayout>
+                        
+                    </VerticalStackLayout>
+                    
 
                     
 

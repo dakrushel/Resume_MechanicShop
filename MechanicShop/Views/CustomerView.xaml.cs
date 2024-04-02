@@ -64,6 +64,8 @@ public partial class CustomerView : ContentPage
         cPhoneBox.Text = null;
         cEmailBox.Text = null;
         customerDisplay.IsEnabled = false;
+        vehicleInformation.BindingContext = null;
+        cVehicleList.ItemsSource = null;
     }
     private void ResetAddCustomerForm()
     {
@@ -115,8 +117,8 @@ public partial class CustomerView : ContentPage
             cPhoneBox.Text = selectedCustomer.CustomerPhone;
             cEmailBox.Text = selectedCustomer.Address;
             // TODO get cars
-            //var vehicles = new ObservableCollection<Vehicle>(selectedCustomer.CustomerVehicles);
-            //customersCollectionView.ItemsSource = vehicles;
+            var vehicles = new ObservableCollection<Vehicle>(MauiProgram.ShopDB.GetCustomerVehicles(selectedCustomer.CustomerPhone));
+            cVehicleList.ItemsSource = vehicles;
         }
         
 
@@ -224,6 +226,7 @@ public partial class CustomerView : ContentPage
     private void ClearCustomerDisplay_Clicked(object sender, EventArgs e)
     {
         ResetCustomerDisplay();
+        
     }
 
     private void updateCustomerInfo_Clicked(object sender, EventArgs e)
@@ -310,6 +313,12 @@ public partial class CustomerView : ContentPage
             modelPicker.ItemsSource = models;
             modelPicker.IsEnabled = true;
         }
+    }
+
+    private void cVehicleList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        Vehicle? v = e.SelectedItem as Vehicle;
+        vehicleInformation.BindingContext = v;
     }
 }
 
