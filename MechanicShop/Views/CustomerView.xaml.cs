@@ -11,7 +11,7 @@ namespace MechanicShop.Views;
 
 public partial class CustomerView : ContentPage
 {
-  
+    public static List<string> colours = new List<string>(["Blue", "Red", "Green"]);
     public CustomerView()
 	{
 		InitializeComponent();
@@ -28,14 +28,18 @@ public partial class CustomerView : ContentPage
         {
             yearPicker.Items.Add(year.ToString());
         }
+        colourPicker.ItemsSource = colours;
 
         // get makes for the make picker in the add vehicle widget
         List<string> makes = MauiProgram.ShopDB.GetListOfMakes();
         makePicker.ItemsSource = makes;
+
+        
     }
 
-
+    //====================================================================================================
     // Page formatting upon refreshing page (or clearing a certain form)-------------------------------
+    //====================================================================================================
     protected override void OnAppearing()
     {
         // override initialize to get changes any time the page loads, rather than only
@@ -66,6 +70,7 @@ public partial class CustomerView : ContentPage
         customerDisplay.IsEnabled = false;
         vehicleInformation.BindingContext = null;
         cVehicleList.ItemsSource = null;
+        deleteVehicle.IsEnabled = false;
     }
     private void ResetAddCustomerForm()
     {
@@ -84,8 +89,9 @@ public partial class CustomerView : ContentPage
         searchCustomers.IsEnabled = true;
         customerDisplay.IsEnabled = true;
     }
-    //-----------------------------------------------------------------------------------------
+    //====================================================================================================
     // Customer Search Box---------------------------------------------------------------------
+    //====================================================================================================
     private void clearCustomerSearch_Clicked(object sender, EventArgs e)
     {
         // inactive unless search fields filled in
@@ -119,20 +125,34 @@ public partial class CustomerView : ContentPage
             // TODO get cars
             var vehicles = new ObservableCollection<Vehicle>(MauiProgram.ShopDB.GetCustomerVehicles(selectedCustomer.CustomerPhone));
             cVehicleList.ItemsSource = vehicles;
+            vehicleInformation.BindingContext = null;
+            deleteVehicle.IsEnabled = false;
         }
         
 
     }
-    //----------------------------------------------------------------------------------------
+    //====================================================================================================
     // Add new customer form------------------------------------------------------------------
+    //====================================================================================================
     private async void AddThisCustomerBtn_Clicked(object sender, EventArgs e)
     {
-        //TODO null values and shit, handle it!
         string? newCustomerName = newNameBox.Text;
         string? newPhoneNumber = newPhoneBox.Text;
         string? newEmail = newEmailBox.Text;
-
         
+
+        // Regular expression pattern for validating email addresses
+        string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+
+        // Check if the entered text matches the pattern
+        if (!Regex.IsMatch(newEmail, pattern))
+        {
+            // If the entered text is not a valid email address, clear the entry field
+            newEmailBox.Text = "";
+            await DisplayAlert("Invalid Email Address", "Please Enter a valid Email address", "Ok");
+            return;
+        }
+
         var customers = new ObservableCollection<Customer>(MauiProgram.ShopDB.GetAllCustomers());
         //customersCollectionView.ItemsSource = customers;
         foreach (Customer customer in customers)
@@ -148,7 +168,7 @@ public partial class CustomerView : ContentPage
         if (newCustomerName != null && newPhoneNumber != null & newEmail != null)
         {
             Customer newCustomer = new Customer(newCustomerName, newEmail, newPhoneNumber);
-            MauiProgram.ShopDB.AddCustomer(newCustomer);
+            //MauiProgram.ShopDB.AddCustomer(newCustomer);
             ResetAddCustomerForm();
             ResetSearchWidget();
         }     
@@ -158,11 +178,20 @@ public partial class CustomerView : ContentPage
     {
         addCustomerForm.IsVisible = false;
         searchCustomers.IsEnabled = true;
-
+    }
+    //====================================================================================================
+    // EDIT CUSTOMER INFORMATION FORM----------------------------------------------------------
+    //====================================================================================================
+    private void updateCustomerInfo_Clicked(object sender, EventArgs e)
+    {
+        EditCustomerForm.IsVisible = true;
+        searchCustomers.IsEnabled = false;
+        customerDisplay.IsEnabled = false;
+        editNameBox.Text = cNameBox.Text;
+        editPhoneBox.Text = cPhoneBox.Text;
+        editEmailBox.Text = cEmailBox.Text;
 
     }
-    //-----------------------------------------------------------------------------------------
-    // EDIT CUSTOMER INFORMATION FORM----------------------------------------------------------
     private void cancelEditCustomer_Clicked(object sender, EventArgs e)
     {
         ResetEditCustomerForm();
@@ -170,7 +199,6 @@ public partial class CustomerView : ContentPage
 
     private async void EditThisCustomerBtn_Clicked(object sender, EventArgs e)
     {
-        //TODO why does this not work?
         var customers = new ObservableCollection<Customer>(MauiProgram.ShopDB.GetAllCustomers());
         Customer? toEdit = null;
         foreach (Customer c in customers)
@@ -186,8 +214,17 @@ public partial class CustomerView : ContentPage
             await DisplayAlert("Unable to update Customer", "Could not locate account", "Ok");
             return;
         }
+        string newEmail = editEmailBox.Text;
+        string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+        if (!Regex.IsMatch(newEmail, pattern))
+        {
+            // If the entered text is not a valid email address, clear the entry field
+            editEmailBox.Text = cEmailBox.Text;
+            await DisplayAlert("Invalid Email Address", "Please Enter a valid Email address", "Ok");
+            return;
+        }
         toEdit.Name = editNameBox.Text;
-        toEdit.Address = editEmailBox.Text;
+        toEdit.Address = newEmail;
         MauiProgram.ShopDB.UpdateCustomer(toEdit);
         cNameBox.Text = editNameBox.Text;
         cEmailBox.Text = editEmailBox.Text;
@@ -195,22 +232,85 @@ public partial class CustomerView : ContentPage
         ResetSearchWidget();
     }
 
-    //-----------------------------------------------------------------------------------------
+    //====================================================================================================
     // ADD CUSTOMER VEHICLE FORM---------------------------------------------------------------
-    // TODO: ADD YEAR / MAKE/ MODEL values for PICKERS
+    //====================================================================================================
+    private void addVehicle_Clicked(object sender, EventArgs e)
+    {
+        AddVehicleForm.IsVisible = true;
+        searchCustomers.IsEnabled = false;
+        customerDisplay.IsEnabled = false;
+
+    }
     private void cancelAddVehicle_Clicked(object sender, EventArgs e)
     {
         ResetAddVehicleForm();
+    }
+    private void makePicker_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        AddVehicleForm_Updated();
+        var picker = (Picker)sender;
+        if (picker.SelectedItem == null)
+        {
+            modelPicker.ItemsSource = null;
+            modelPicker.IsEnabled = false;
+            return;
+        }
+        string? make = picker.SelectedItem.ToString();
+        if (make != null)
+        {
+            List<string> models = new List<string>();
+            List<VehicleDatabase> vehicles = MauiProgram.ShopDB.GetAllVehicleByMake(make);
+            foreach (var vehicle in vehicles)
+            {
+                models.Add(vehicle.VehicleModel);
+            }
+            modelPicker.ItemsSource = models;
+            modelPicker.IsEnabled = true;
+        }
     }
     public void ResetAddVehicleForm()
     {
         AddVehicleForm.IsVisible = false;
         searchCustomers.IsEnabled = true;
         customerDisplay.IsEnabled = true;
+        vinEntry.Text = null;
+        yearPicker.SelectedItem = null;
+        colourPicker.SelectedItem = null;
+        makePicker.SelectedItem = null;
+        modelPicker.SelectedItem = null;
         //TODO: Reset picker selections
     }
-    //-----------------------------------------------------------------------------------------
+    private async void AddThisVehicleBtn_Clicked(object sender, EventArgs e)
+    {
+        // gather all REQ infor for a new vehicle
+        string customerPhone = cPhoneBox.Text;
+        string newVin = vinEntry.Text;
+        string newYearSt = yearPicker.SelectedItem.ToString();
+        string newMake = makePicker.SelectedItem.ToString();
+        string newModel = modelPicker.SelectedItem.ToString();
+        string newColour = colourPicker.SelectedItem.ToString();
+        // parse the year to an int
+        int newYear = 0;
+        if (int.TryParse(newYearSt, out int year))
+        {
+            newYear = year;
+        }
+        if (newYear == 0)
+        {
+            await DisplayAlert("Error", "Error adding Vehicle", "Ok");
+            return;
+        }
+        //make new vehicle
+        Vehicle newVehicle = new Vehicle(newVin, newMake, newModel, newColour, newYear, customerPhone);
+        MauiProgram.ShopDB.AddVehicle(newVehicle);
+        var vehicles = new ObservableCollection<Vehicle>(MauiProgram.ShopDB.GetCustomerVehicles(customerPhone));
+        cVehicleList.ItemsSource = vehicles;
+        ResetAddVehicleForm();
+    }
+    //====================================================================================================
     // CUSTOMER INFORMATION DISPLAY -----------------------------------------------------------
+    //====================================================================================================
     private async void deleteCustomer_Clicked(object sender, EventArgs e)
     {
         bool delete = await DisplayAlert("Confirm Deletion", "Are you sure you want to delete this customer?", "Delete", "Cancel");
@@ -229,35 +329,21 @@ public partial class CustomerView : ContentPage
         
     }
 
-    private void updateCustomerInfo_Clicked(object sender, EventArgs e)
-    {
-        EditCustomerForm.IsVisible = true;
-        searchCustomers.IsEnabled = false;
-        customerDisplay.IsEnabled = false;
-        editNameBox.Text = cNameBox.Text;
-        editPhoneBox.Text = cPhoneBox.Text;
-        editEmailBox.Text = cEmailBox.Text;
+    
 
-    }
-    private void addVehicle_Clicked(object sender, EventArgs e)
+    private async void deleteVehicle_Clicked(object sender, EventArgs e)
     {
-        AddVehicleForm.IsVisible = true;
-        searchCustomers.IsEnabled=false;
-        customerDisplay.IsEnabled=false;
-        
-    }
+        bool delete = await DisplayAlert("Confirm Deletion", "Asre you sure you want to perminantly delete this vehicle?", "Delete", "Cancel");
+        if (delete)
+        {
+            Vehicle toDelete = cVehicleList.SelectedItem as Vehicle;
+            MauiProgram.ShopDB.RemoveVehicle(toDelete.VIN);
+            var vehicles = new ObservableCollection<Vehicle>(MauiProgram.ShopDB.GetCustomerVehicles(cPhoneBox.Text));
+            cVehicleList.ItemsSource = vehicles;
+            vehicleInformation.BindingContext = null;
+            deleteVehicle.IsEnabled = false;
+        }
 
-    private void editVehicle_Clicked(object sender, EventArgs e)
-    {
-        // make inactive unless vehicle is selected
-        // Edit in a popup???
-        // Give option to cancel!!!
-    }
-
-    private void deleteVehicle_Clicked(object sender, EventArgs e)
-    {
-        // make inactive unless vehicle is selected
-        // Confirmation message to prevent accidental detetion
     }
 
     private void newAppointmentBtn_Clicked(object sender, EventArgs e)
@@ -283,42 +369,180 @@ public partial class CustomerView : ContentPage
         searchCustomersBtn.IsEnabled = true;
     }
 
-    private void MenuItem_Clicked(object sender, EventArgs e)
-    {
-        //TODO highlight
-        
-    }
 
-    private void newPhoneBox_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        // TODO: VALIDATE PHONE NUMBER ENTRY
-        
-      
+    
 
 
-    }
-
-    private void makePicker_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        var picker = (Picker)sender;
-        string? make = picker.SelectedItem.ToString();
-        if (make != null)
-        {
-            List<string> models = new List<string>();
-            List<VehicleDatabase> vehicles = MauiProgram.ShopDB.GetAllVehicleByMake(make);
-            foreach (var vehicle in vehicles)
-            {
-                models.Add(vehicle.VehicleModel);
-            }
-            modelPicker.ItemsSource = models;
-            modelPicker.IsEnabled = true;
-        }
-    }
 
     private void cVehicleList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
         Vehicle? v = e.SelectedItem as Vehicle;
         vehicleInformation.BindingContext = v;
+        deleteVehicle.IsEnabled = true;
+    }
+
+
+    //====================================================================================================
+    // INPUT VALIDATIONS AND FORM BUTTON TRIGGERS
+    //====================================================================================================
+    private void AddCustomerForm_Updated()
+    {
+        if (newPhoneBox.Text == null)
+        {
+            AddThisCustomerBtn.IsEnabled = false;
+            return;
+        }
+        if (newPhoneBox.Text.Length != 12 || newNameBox.Text == null || newEmailBox.Text == null)
+        {
+            AddThisCustomerBtn.IsEnabled = false;
+            return;
+        }
+        if (newNameBox.Text == "" || !newEmailBox.Text.Contains('@'))
+        {
+            AddThisCustomerBtn.IsEnabled = false;
+            return;
+        }
+        AddThisCustomerBtn.IsEnabled = true;
+    }
+    private void newEmailBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        
+        AddCustomerForm_Updated();
+        
+    }
+    private void newNameBox_TextChanged(object sender, TextChangedEventArgs e)
+    {      
+        var entry = (Entry)sender;
+        if (e.NewTextValue == null || e.NewTextValue == "") { return; }
+        // Regular expression pattern to allow only alphabetic characters, space, hyphen, apostrophe, and period
+        string pattern = @"^[a-zA-ZÀ-ÿ\s'\-\.\,]+$";
+
+        // Check if the entered text matches the pattern
+        if (!Regex.IsMatch(e.NewTextValue, pattern))
+        {
+            // If the entered text contains disallowed characters, remove them
+            var newText = Regex.Replace(e.NewTextValue, @"[^a-zA-ZÀ-ÿ\s'\-\.\,]", "");
+
+            // Update the entry's text with the sanitized text
+            entry.Text = newText;
+            AddCustomerForm_Updated();
+        }
+    }
+    private void phoneEntry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        var entry = (Entry)sender;
+        if (e.NewTextValue == null) { return; }
+        // Remove non-digit characters
+        var newText = new string(e.NewTextValue.Where(char.IsDigit).ToArray());
+        // Limit maximum length to 10 digits
+        if (newText.Length > 10)
+        {
+            newText = newText.Substring(0, 10);
+        }
+        // Automatically insert dashes
+        if (newText.Length > 3)
+        {
+            newText = newText.Insert(3, "-");
+            if (newText.Length > 7)
+            {
+                newText = newText.Insert(7, "-");
+            }
+        }
+        entry.Text = newText;
+    }
+    // New customer phone number entry
+    private void newPhoneBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        AddCustomerForm_Updated();
+        var entry = (Entry)sender;
+        if (e.NewTextValue == null) { return; }
+        // Remove non-digit characters
+        var newText = new string(e.NewTextValue.Where(char.IsDigit).ToArray());
+        // Limit maximum length to 10 digits
+        if (newText.Length > 10)
+        {
+            newText = newText.Substring(0, 10);
+        }
+        // Automatically insert dashes
+        if (newText.Length > 3)
+        {
+            newText = newText.Insert(3, "-");
+            if (newText.Length > 7)
+            {
+                newText = newText.Insert(7, "-");
+            }
+        }
+        entry.Text = newText;
+    }
+
+    //====================================================================================================
+    // Triggers for Add Vehicle Button in new vehicle form
+    //====================================================================================================
+    private void AddVehicleForm_Updated()
+    {
+        if (yearPicker.SelectedItem == null || makePicker.SelectedItem == null || modelPicker.SelectedItem == null || colourPicker.SelectedItem == null || vinEntry.Text == null || vinEntry.Text.Length != 17)
+        {
+            AddThisVehicleBtn.IsEnabled = false;
+            return;
+        }
+
+        AddThisVehicleBtn.IsEnabled = true;
+    }
+
+    private void yearPicker_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        AddVehicleForm_Updated();
+    }
+
+    private void vinEntry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (e.NewTextValue == null || e.NewTextValue == "") { return; }
+        var entry = (Entry)sender;
+        // Convert the entered text to uppercase
+        string newText = e.NewTextValue.ToUpper();
+        // Ensure that the entered text contains only numbers and capital letters
+        string validCharacters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        string filteredText = "";
+        foreach (char c in newText)
+        {
+            if (validCharacters.Contains(c))
+            {
+                filteredText += c;
+            }
+        }
+        // Update the entry's text with the filtered text
+        entry.Text = filteredText;
+        AddVehicleForm_Updated();
+
+    }
+
+    private void modelPicker_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        AddVehicleForm_Updated();
+    }
+
+    private void colourPicker_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        AddVehicleForm_Updated();
+    }
+
+    private void editNameBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        var entry = (Entry)sender;
+        if (e.NewTextValue == null || e.NewTextValue == "") { return; }
+        // Regular expression pattern to allow only alphabetic characters, space, hyphen, apostrophe, and period
+        string pattern = @"^[a-zA-ZÀ-ÿ\s'\-\.\,]+$";
+
+        // Check if the entered text matches the pattern
+        if (!Regex.IsMatch(e.NewTextValue, pattern))
+        {
+            // If the entered text contains disallowed characters, remove them
+            var newText = Regex.Replace(e.NewTextValue, @"[^a-zA-ZÀ-ÿ\s'\-\.\,]", "");
+
+            // Update the entry's text with the sanitized text
+            entry.Text = newText;
+            AddCustomerForm_Updated();
+        }
     }
 }
 

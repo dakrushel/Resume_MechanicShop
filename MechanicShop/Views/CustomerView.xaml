@@ -31,7 +31,7 @@
                                VerticalOptions="Center"/>
                         <Entry x:Name="phoneEntry" Placeholder="000-000-0000" Grid.Row="1" Grid.Column="1" 
                                 WidthRequest="300" MaxLength="12"
-                               TextChanged="SearchTextChanged"/>
+                               TextChanged="phoneEntry_TextChanged"/>
 
                         <Label Grid.Row="2" Text="Customer Name:" HorizontalTextAlignment="End"
                                VerticalOptions="Center"/>
@@ -102,7 +102,8 @@
                         <Label Grid.Row="1"
                             Text="Name:" VerticalOptions="Center" HorizontalOptions="End"/>
                         <Entry x:Name="newNameBox" Grid.Row="1" Grid.Column="1"
-                            WidthRequest="300" MaxLength="30" Placeholder="Customer Name"/>
+                            WidthRequest="300" MaxLength="30" Placeholder="Customer Name"
+                               TextChanged="newNameBox_TextChanged"/>
 
                         <Label Grid.Row="2"
                             Text="Phone:" VerticalOptions="Center" HorizontalOptions="End"/>
@@ -113,14 +114,16 @@
                         <Label Grid.Row="3"
                             Text="Email:" VerticalOptions="Center" HorizontalOptions="End"/>
                         <Entry x:Name="newEmailBox" Grid.Row="3" Grid.Column="1"
-                            WidthRequest="300" MaxLength="30" Placeholder="customer@email.com"/>
+                            WidthRequest="300" MaxLength="30" Placeholder="customer@email.com"
+                               TextChanged="newEmailBox_TextChanged"/>
 
                         <HorizontalStackLayout Grid.Row="4" Grid.ColumnSpan="2" Spacing="10" Margin="20,15"
                                                HorizontalOptions="Center">
                             <Button WidthRequest="100" BackgroundColor="maroon" TextColor="white"
                                 x:Name="cancelAddCustomer" Text="Cancel" Clicked="cancelAddCustomer_Clicked"/>
                             <Button WidthRequest="200"
-                                x:Name="AddThisCustomerBtn" Text="Add Customer" Clicked="AddThisCustomerBtn_Clicked"/>
+                                x:Name="AddThisCustomerBtn" Text="Add Customer" Clicked="AddThisCustomerBtn_Clicked"
+                                    IsEnabled="False"/>
                         </HorizontalStackLayout>
                     </Grid>
                 </Border>
@@ -143,7 +146,8 @@
                         <Label Grid.Row="2"
                             Text="Name:" VerticalOptions="Center" HorizontalOptions="End"/>
                         <Entry x:Name="editNameBox" Grid.Row="2" Grid.Column="1"
-                            WidthRequest="300" MaxLength="30" Placeholder="Customer Name"/>
+                            WidthRequest="300" MaxLength="30" Placeholder="Customer Name"
+                               TextChanged="editNameBox_TextChanged"/>
 
                         <Label Grid.Row="1"
                             Text="Phone:" VerticalOptions="Center" HorizontalOptions="End"/>
@@ -171,9 +175,11 @@
                     <Grid HorizontalOptions="Center" ColumnSpacing="10" RowSpacing="10" Padding="10">
                         <Grid.RowDefinitions>
                             <RowDefinition></RowDefinition>
-                            <RowDefinition Height="50"></RowDefinition>
-                            <RowDefinition Height="50"></RowDefinition>
-                            <RowDefinition Height="50"></RowDefinition>
+                            <RowDefinition Height="40"></RowDefinition>
+                            <RowDefinition Height="40"></RowDefinition>
+                            <RowDefinition Height="40"></RowDefinition>
+                            <RowDefinition Height="40"></RowDefinition>
+                            <RowDefinition Height="40"></RowDefinition>
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
@@ -183,25 +189,36 @@
                         
                         <Label Text="Add New Customer Vehicle" Grid.ColumnSpan="2" FontAttributes="Bold"/>
 
-                        <Label Grid.Row="1" Text="Year:" HorizontalOptions="End" VerticalOptions="Center"/>
-                        <Picker x:Name="yearPicker" Grid.Row="1" Grid.Column="1"
-                                WidthRequest="300"/>
+                        <Label Grid.Row="1" Text="VIN:" HorizontalOptions="End" VerticalOptions="Center"/>
+                        <Entry x:Name="vinEntry" Grid.Row="1" Grid.Column="1" WidthRequest="300"
+                                Placeholder="Enter VIN" MaxLength="17" TextChanged="vinEntry_TextChanged"/>
 
-                        <Label Grid.Row="2" Text="Make:" HorizontalOptions="End" VerticalOptions="Center"/>
-                        <Picker x:Name="makePicker" Grid.Row="2" Grid.Column="1"
+                        <Label Grid.Row="2" Text="Year:" HorizontalOptions="End" VerticalOptions="Center"/>
+                        <Picker x:Name="yearPicker" Grid.Row="2" Grid.Column="1"
+                                WidthRequest="300" SelectedIndexChanged="yearPicker_SelectedIndexChanged"/>
+
+                        <Label Grid.Row="3" Text="Make:" HorizontalOptions="End" VerticalOptions="Center"/>
+                        <Picker x:Name="makePicker" Grid.Row="3" Grid.Column="1"
                             WidthRequest="300" SelectedIndexChanged="makePicker_SelectedIndexChanged"/>
 
-                        <Label Grid.Row="3" Text="Model:" HorizontalOptions="End" VerticalOptions="Center"/>
-                        <Picker x:Name="modelPicker" Grid.Row="3" Grid.Column="1"
-                            WidthRequest="300" IsEnabled="false"/>
+                        <Label Grid.Row="4" Text="Model:" HorizontalOptions="End" VerticalOptions="Center"/>
+                        <Picker x:Name="modelPicker" Grid.Row="4" Grid.Column="1"
+                            WidthRequest="300" IsEnabled="false" SelectedIndexChanged="modelPicker_SelectedIndexChanged"/>
 
-                        <HorizontalStackLayout Grid.Row="4" Grid.ColumnSpan="2" Spacing="10" Margin="20,15"
+                        <Label Grid.Row="5" Text="Colour:" HorizontalOptions="End" VerticalOptions="Center"/>
+                        <Picker x:Name="colourPicker" Grid.Row="5" Grid.Column="1"
+                                WidthRequest="300" SelectedIndexChanged="colourPicker_SelectedIndexChanged"/>
+
+                        
+
+                        <HorizontalStackLayout Grid.Row="6" Grid.ColumnSpan="2" Spacing="10" Margin="20,5"
                                     HorizontalOptions="Center">
                             <Button WidthRequest="100" BackgroundColor="maroon" TextColor="white"
                                     x:Name="cancelAddVehicle" Text="Cancel"
                                     Clicked="cancelAddVehicle_Clicked"/>
                             <Button WidthRequest="200" IsEnabled="false"
-                                    x:Name="AddThisVehicleBtn" Text="Add Vehicle"/>
+                                    x:Name="AddThisVehicleBtn" Text="Add Vehicle"
+                                    Clicked="AddThisVehicleBtn_Clicked"/>
                         </HorizontalStackLayout>
                     </Grid>
 
@@ -304,7 +321,7 @@
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="50"></ColumnDefinition>
-                                <ColumnDefinition Width="80"></ColumnDefinition>
+                                <ColumnDefinition Width="200"></ColumnDefinition>
                                 
                             </Grid.ColumnDefinitions>
                             <Label Text="Selected Vehicle" FontAttributes="Bold"
@@ -330,18 +347,12 @@
                             <Label Grid.Row="5" Grid.Column="0" Text="VIN:" FontAttributes="Bold"
                                    HorizontalOptions="End"/>
                             <Label Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding VIN}"/>
-                            
-                            
-                            
-                            
+                                                       
                         </Grid>
 
                         <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
                             <Button x:Name="deleteVehicle" Text="Delete Vehicle" BackgroundColor="maroon"
-                                    Clicked="deleteVehicle_Clicked" TextColor="white"/>
-                            <Button x:Name="editVehicle" Text="Edit Vehicle" WidthRequest="200"
-                                    Clicked="editVehicle_Clicked"/>
-                            
+                                    Clicked="deleteVehicle_Clicked" TextColor="white" IsEnabled="False"/>
                         </HorizontalStackLayout>
                         
                     </VerticalStackLayout>
