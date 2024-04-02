@@ -17,7 +17,7 @@ namespace MechanicShop.Models
 
             this.database.Execute("PRAGMA foreign_keys = ON;");
 
-            //For dropping tables, uncomment the next line
+            //For dropping tables, uncomment the next line and insert your table name in the <>
             //this.database.DropTable<VehicleDatabase>();
 
             //Try creating this table
@@ -117,11 +117,14 @@ namespace MechanicShop.Models
             this.database.Update(customer);
         }
 
+        //Creates a list that finds all vehicles attached to the inputted
+        //customer phone number
         public List<Vehicle> GetCustomerVehicles(string CustomerPhone)
         {
             return this.database.Table<Vehicle>().ToList()
                 .Where(x => x.CustomerPhone == CustomerPhone).ToList();
         }
+
 
         /*---------------------------- VEHICLE ------------------------------------*/
 
@@ -224,7 +227,7 @@ namespace MechanicShop.Models
             return this.database.Table<ServiceJob>().ToList();
         }
 
-        /*---------------------------- VEHICLE DATABASe ------------------------------------*/
+        /*---------------------------- VEHICLE DATABASE ------------------------------------*/
         
         //Tested
         public void AddVehicleDatabse(VehicleDatabase vehicle)
@@ -252,6 +255,26 @@ namespace MechanicShop.Models
                 Where(x => x.VehicleMake == VehicleMake).ToList();
 
             return VehiclesByMake;
+        }
+
+        public List<String> GetListOfModels()
+        {
+            /*            List<VehicleDatabase> ListOfMakes = this.database.Query<VehicleDatabase>("SELECT DISTINCT VehicleMake");
+                        return ListOfMakes;*/
+
+            List<String> models = new List<string>();
+
+            foreach (VehicleDatabase vehicle in this.database.Table<VehicleDatabase>().ToList())
+            {
+                if (models.Contains(vehicle.VehicleModel) == false)
+                {
+                    string vehicleMakeToBeAdded = vehicle.VehicleModel;
+
+                    models.Add(vehicleMakeToBeAdded);
+                }
+            }
+            return models;
+
         }
 
         public List<String> GetListOfMakes()
