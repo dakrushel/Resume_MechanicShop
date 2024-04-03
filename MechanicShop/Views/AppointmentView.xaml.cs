@@ -9,6 +9,7 @@ public partial class AppointmentView : ContentPage
 	public static string TodayDate = currentDate.ToString("yyyy-MM-dd");
 	public static Customer? c = null;
 	public static Vehicle? v = null;
+    public static RepairOrder? repairOrder = null;
 
 	public AppointmentView()
 	{
@@ -45,5 +46,15 @@ public partial class AppointmentView : ContentPage
     private void Editor_TextChanged(object sender, TextChangedEventArgs e)
     {
         
+    }
+
+    private void removeJobBtn_Clicked(object sender, EventArgs e)
+    {
+
+    }
+
+    private void addJobBtn_Clicked(object sender, EventArgs e)
+    {
+
     }
 }
