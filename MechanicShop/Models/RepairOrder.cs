@@ -22,15 +22,15 @@ namespace MechanicShop.Models
         // cost maybe will be calculate in GUI based on hours times tech payrate
 
         //Primary key is Repair Order ID
-        [PrimaryKey, NotNull]
-        public string RepairOrderId { get; set; }
+        [PrimaryKey, NotNull, ForeignKey(typeof(RepairOrderServiceJobBridge))]
+        public int RepairOrderId { get; set; }
 
         public string RepairOrderDescription { get; set; }
 
         public string DateCreated { get; set; }
         public string AppointmentDate {  get; set; }
 
-        public string DateClose { get; set; }
+        public string? DateClose { get; set; }
 
 
         //This property is NOT in the CTOR as it will need to be calculated based on the jobs
@@ -45,23 +45,22 @@ namespace MechanicShop.Models
         public string VIN {  get; set; }
         [OneToOne]
         //retrieves object reference from foreign key
-        public Vehicle Vehicle { get; set; }
+        public Vehicle? Vehicle { get; set; }
 
         [ForeignKey(typeof(Technician))]
         //Property to act as foreign key 
-        public string EmployeeId { get; set; }
+        public string? EmployeeId { get; set; }
         [OneToOne]
         //retrieves object reference from foreign key
-        public Technician RepairJobTechnician { get; set; }
+        public Technician? RepairJobTechnician { get; set; }
 
-        //Property to act as foreign key
         [ForeignKey(typeof(ServiceJob))]
         public string ServiceJobId { get; set; }
 
         //identifies one to many relationship
         //Sets any changes made to the one will affect the many
         [OneToMany(CascadeOperations = CascadeOperation.All)]
-        public List<ServiceJob> RepairOrderServiceJobs { get; set; }
+        public List<ServiceJob>? ListOfServiceJobs { get; set; }
 
         bool IsActive { get; set; }
 
@@ -70,8 +69,17 @@ namespace MechanicShop.Models
 
 
         //CTOR: For all variabless accounted for
-        public RepairOrder(string repairOrderId, string description, string dateCreated, string appointmentDate, string VIN, string employeeId)
+        public RepairOrder(string description, string dateCreated, string appointmentDate, string VIN, string employeeId)
         {
+
+            Random random = new Random();
+
+            int repairOrderId = random.Next(1000); 
+            while (ShopDB.GetAllRepairOrders().FirstOrDefault(x => x.RepairOrderId == repairOrderId) != default)
+            {
+                repairOrderId = random.Next(1000);
+            }
+
             this.RepairOrderId = repairOrderId;
             this.RepairOrderDescription = description;
             this.DateCreated = dateCreated;
@@ -82,21 +90,35 @@ namespace MechanicShop.Models
             //Automatically sets is Active to False signifying this is NOT an active appointment
             this.IsActive = false;
 
+            this.ListOfServiceJobs = new List<ServiceJob>();
+
             //Adding to Database as object is created
             ShopDB.AddRepairOrder(this);
         }
 
         //Overload CTOR for no technician assigned
-        public RepairOrder(string repairOrderId, string description, string dateCreated, string appointmentDate, string VIN)
+        public RepairOrder(string description, string dateCreated, string appointmentDate, string VIN)
         {
+            Random random = new();
+
+            int repairOrderId = random.Next(1000);
+            while (ShopDB.GetAllRepairOrders().FirstOrDefault(x => x.RepairOrderId == repairOrderId) != default)
+            {
+                repairOrderId = random.Next(1000);
+            }
             this.RepairOrderId = repairOrderId;
             this.RepairOrderDescription = description;
             this.DateCreated = dateCreated;
             this.AppointmentDate = appointmentDate;
             this.VIN = VIN;
 
+
+            this.ListOfServiceJobs = new List<ServiceJob>();
+
             //Automatically sets is Active to False signifying this is NOT an active appointment
             this.IsActive = false;
+
+
 
             //Adding to Database as object is created
             ShopDB.AddRepairOrder(this);
@@ -124,13 +146,20 @@ namespace MechanicShop.Models
         }
 
         //Assigns a service job based on serviceJobId
-        public void AssignServiceJob (string serviceJobId) 
+        public void AssignServiceJob (int serviceJobId) 
         {
             //Opens the database and finds the service job with the corresponding
             //serviceJobId and returns it, it is then added to the list for Repair Orders
-            ServiceJob newlyAddedServiceJob = ShopDB.GetAllServiceJobs().
+            ServiceJob? newlyAddedServiceJob = ShopDB.GetAllServiceJobs().
                 Find(x => x.ServiceJobId == serviceJobId);
-            RepairOrderServiceJobs.Add(newlyAddedServiceJob);
+            if (newlyAddedServiceJob != null)
+            {
+                ListOfServiceJobs?.Add(newlyAddedServiceJob);
+            }
+
+            RepairOrderServiceJobBridge bridgeCreation = new RepairOrderServiceJobBridge(this.RepairOrderId, serviceJobId);
+            ShopDB.AddRepairOrderServiceJobBridge(bridgeCreation);
+
 
             //Updating to database
             ShopDB.UpdateRepairOrder(this);
@@ -142,7 +171,7 @@ namespace MechanicShop.Models
             double totalHours = 0;
 
             //iterates through each job and adds their hours together
-            foreach (var serviceJob in RepairOrderServiceJobs)
+            foreach (var serviceJob in ListOfServiceJobs)
             {
                 totalHours = serviceJob.ServiceJobHours + totalHours;
             }

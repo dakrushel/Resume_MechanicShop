@@ -39,7 +39,6 @@ namespace MechanicShop.Models
 
         public Customer() { }
 
-       
         //Provides access to Database
         public string GetName()
         {

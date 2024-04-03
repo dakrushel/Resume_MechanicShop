@@ -85,7 +85,16 @@ namespace MechanicShop.Models
                 Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
             }
 
-          
+            try
+            {
+                this.database.CreateTable<RepairOrderServiceJobBridge>();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+            }
+
+
 
             this.database.Commit();
 
@@ -98,9 +107,22 @@ namespace MechanicShop.Models
             this.database.Insert(customer);
         }
 
-        //TESTED
+        //Tested
         public void RemoveCustomer(string customerPhoneNumber)
         {
+
+            //retrieve customer for reference in Foreach loop
+            Customer customer = this.database.Get<Customer>(customerPhoneNumber);
+
+            //goes through each vehicle in the database
+            foreach (Vehicle vehicle in this.database.Table<Vehicle>().ToList())
+            {
+                //If vehicle has foreign key of CustomerPhone Delete vehicle
+                if (vehicle.CustomerPhone == customer.CustomerPhone) 
+                {
+                    this.database.Delete<Vehicle>(vehicle.VIN); 
+                }
+            }
             this.database.Delete<Customer>(customerPhoneNumber);
         }
 
@@ -125,6 +147,12 @@ namespace MechanicShop.Models
                 .Where(x => x.CustomerPhone == CustomerPhone).ToList();
         }
 
+        public List<Customer> GetCustomerByName(string customerName)
+        {
+            return this.database.Table<Customer>()
+                .Where(x => x.Name.IndexOf(customerName, StringComparison.OrdinalIgnoreCase) >= 0)
+                .ToList();
+        }
 
         /*---------------------------- VEHICLE ------------------------------------*/
 
@@ -150,7 +178,7 @@ namespace MechanicShop.Models
         {
             return this.database.Table<Vehicle>().ToList();
         }
-
+        
 
         /*----------------------------TECHNICIAN ------------------------------------*/
         //TESTED
@@ -249,6 +277,8 @@ namespace MechanicShop.Models
             return this.database.Table<VehicleDatabase>().ToList();
         }
 
+
+/*        -------------------------------MAKES AND MODELS --------------------------------------*/
         public List<VehicleDatabase> GetAllVehicleByMake(string VehicleMake)
         {
             List<VehicleDatabase> VehiclesByMake = this.database.Table<VehicleDatabase>().ToList().
@@ -292,6 +322,29 @@ namespace MechanicShop.Models
             return makes;
 
         }
+
+/*        ---------------------------- Repair Order Service Job Bridge -------------------------*/
+
+        public List <RepairOrderServiceJobBridge> GetAllRepairOrderServiceJobBridge()
+        {
+            return this.database.Table<RepairOrderServiceJobBridge>().ToList();
+        }
+
+        public void AddRepairOrderServiceJobBridge(RepairOrderServiceJobBridge repairOrderServiceJobBridge)
+        {
+            this.database.Insert(repairOrderServiceJobBridge);
+        }
+
+        public void UpdateRepairOrderServiceJobBridge(RepairOrderServiceJobBridge repairOrderServiceJobBridge)
+        {
+            this.database.Update(repairOrderServiceJobBridge);
+        }
+
+        public void DeleteRepairOrderServiceJobBridge(int repairOrderServiceJobBridgeId)
+        { 
+            this.database.Delete<RepairOrderServiceJobBridge>(repairOrderServiceJobBridgeId);
+        }
     }
+
 
 }
