@@ -6,10 +6,11 @@
     xmlns:local="clr-namespace:MechanicShop.Views"
     Shell.FlyoutBehavior="Locked"
     Shell.FlyoutWidth="220"
-    Shell.TabBarIsVisible="False"
+    Shell.TabBarIsVisible="False" 
     FlyoutBackgroundColor="#814827"
-    Shell.BackgroundColor="#814827"
     Title="Mechanic Shop">
+    <!--FlyoutBackgroundColor="#814827"
+Shell.BackgroundColor="#814827"-->
     
     
     <!--
@@ -51,16 +52,28 @@
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
         <ShellContent
-        Title="Repair Orders"
-        Icon="repairorder.png"  
-        ContentTemplate="{DataTemplate local:OrderView}"
-        Route="MainPage" />
-
-        <ShellContent
         Title="Customers"
         Icon="people.png"
         ContentTemplate="{DataTemplate local:CustomerView}"
-        Route="CustomerView" />
+        Route="MainPage" />
+
+        <ShellContent
+        Title="Appointments"
+        Icon="schedule.png"  
+        ContentTemplate="{DataTemplate local:AppointmentView}"
+        Route="AppointmentView" />
+
+        <ShellContent
+        Title="Repair Orders"
+        Icon="repairorder.png"  
+        ContentTemplate="{DataTemplate local:OrderView}"
+        Route="OrderPage" />
+
+        <ShellContent
+        Title="Technicians"
+        Icon="technician.png"  
+        ContentTemplate="{DataTemplate local:TechView}"
+        Route="TechView" />
     </FlyoutItem>
 
 
@@ -76,6 +89,7 @@
                        VerticalOptions="Center"
                        Margin="0,0,0,10"/>
                 
+
             </StackLayout>
         </DataTemplate>
     </Shell.FlyoutFooterTemplate>

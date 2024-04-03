@@ -1,18 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SQLite;
+using System.ComponentModel.DataAnnotations;
 
 namespace MechanicShop.Models
 {
+
     public class Employee
     {
         //PK IS ID
-        private string Name { get; set; }
-        private string ID { get; set; }
-        private string Phone { get; set; }
-        private string HireDate { get; set; }
-        
+
+        [PrimaryKey, NotNull]
+        public string EmployeeId { get; set; }
+
+        public string Name { get; set; }
+
+        public string EmployeePhone { get; set; }
+
+        public string HireDate { get; set; }
+
+        public Employee(string employeeId, string name, string phone, string HireDate) 
+        {
+            this.EmployeeId = employeeId;
+            this.Name = name;
+            this.EmployeePhone = phone;
+            this.HireDate = HireDate;
+        }
+
+        public Employee() { }
     }
 }
