@@ -32,8 +32,6 @@ namespace MechanicShop.Models
 
         [ForeignKey(typeof(Customer))]
         public string CustomerPhone { get; set; }
-        [ManyToOne]
-        public Customer customer { get; set; }
 
 
         public Vehicle (string VIN, string Make, string Model, string Colour, int Year, string CustomerPhone)
