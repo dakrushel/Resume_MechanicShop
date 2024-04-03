@@ -117,6 +117,11 @@ namespace MechanicShop.Models
             this.database.Delete<Customer>(customerPhoneNumber);
         }
 
+        //Search for customer
+        //Take customer name or phone# as argument
+        //If phone# search by primary key and return cutomer
+        //If name only search by name and return list of matches
+
 
         public List<Customer> GetAllCustomers()
         {

@@ -27,7 +27,7 @@ namespace MechanicShop.Models
 
         public Customer(string name, string address, string phone)
         {
-            // inputs MUST ve validated from front end BEFORE they get here OR ELSE!!!!
+            // inputs MUST be validated from front end BEFORE they get here OR ELSE!!!!
             this.Name = name;
             this.Address = address;
             // Phone has to be unique as it is PK, validate in front end
