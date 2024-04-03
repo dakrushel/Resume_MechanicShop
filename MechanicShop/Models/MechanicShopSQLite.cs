@@ -138,9 +138,11 @@ namespace MechanicShop.Models
                 .Where(x => x.CustomerPhone == CustomerPhone).ToList();
         }
 
-        public Customer GetCustomerByName(string customerName)
+        public List<Customer> GetCustomerByName(string customerName)
         {
-            return this.database.Table<Customer>().First(x => x.Name.Contains(customerName));
+            return this.database.Table<Customer>()
+                .Where(x => x.Name.IndexOf(customerName, StringComparison.OrdinalIgnoreCase) >= 0)
+                .ToList();
         }
 
         /*---------------------------- VEHICLE ------------------------------------*/
