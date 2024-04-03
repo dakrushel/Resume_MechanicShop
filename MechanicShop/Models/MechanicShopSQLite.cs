@@ -98,9 +98,22 @@ namespace MechanicShop.Models
             this.database.Insert(customer);
         }
 
-        //TESTED
+        //Tested
         public void RemoveCustomer(string customerPhoneNumber)
         {
+
+            //retrieve customer for reference in Foreach loop
+            Customer customer = this.database.Get<Customer>(customerPhoneNumber);
+
+            //goes through each vehicle in the database
+            foreach (Vehicle vehicle in this.database.Table<Vehicle>().ToList())
+            {
+                //If vehicle has foreign key of CustomerPhone Delete vehicle
+                if (vehicle.CustomerPhone == customer.CustomerPhone) 
+                {
+                    this.database.Delete<Vehicle>(vehicle.VIN); 
+                }
+            }
             this.database.Delete<Customer>(customerPhoneNumber);
         }
 
@@ -125,6 +138,10 @@ namespace MechanicShop.Models
                 .Where(x => x.CustomerPhone == CustomerPhone).ToList();
         }
 
+        public Customer GetCustomerByName(string customerName)
+        {
+            return this.database.Table<Customer>().First(x => x.Name.Contains(customerName));
+        }
 
         /*---------------------------- VEHICLE ------------------------------------*/
 
@@ -150,7 +167,7 @@ namespace MechanicShop.Models
         {
             return this.database.Table<Vehicle>().ToList();
         }
-
+        
 
         /*----------------------------TECHNICIAN ------------------------------------*/
         //TESTED

@@ -23,7 +23,7 @@ namespace MechanicShop.Models
 
         //Primary key is Repair Order ID
         [PrimaryKey, NotNull]
-        public string RepairOrderId { get; set; }
+        public int RepairOrderId { get; set; }
 
         public string RepairOrderDescription { get; set; }
 
@@ -70,8 +70,17 @@ namespace MechanicShop.Models
 
 
         //CTOR: For all variabless accounted for
-        public RepairOrder(string repairOrderId, string description, string dateCreated, string appointmentDate, string VIN, string employeeId)
+        public RepairOrder(string description, string dateCreated, string appointmentDate, string VIN, string employeeId)
         {
+
+            Random random = new Random();
+
+            int repairOrderId = random.Next(1000); 
+            while (ShopDB.GetAllRepairOrders().FirstOrDefault(x => x.RepairOrderId == repairOrderId) != default)
+            {
+                repairOrderId = random.Next(1000);
+            }
+
             this.RepairOrderId = repairOrderId;
             this.RepairOrderDescription = description;
             this.DateCreated = dateCreated;
@@ -87,8 +96,15 @@ namespace MechanicShop.Models
         }
 
         //Overload CTOR for no technician assigned
-        public RepairOrder(string repairOrderId, string description, string dateCreated, string appointmentDate, string VIN)
+        public RepairOrder(string description, string dateCreated, string appointmentDate, string VIN)
         {
+            Random random = new Random();
+
+            int repairOrderId = random.Next(1000);
+            while (ShopDB.GetAllRepairOrders().FirstOrDefault(x => x.RepairOrderId == repairOrderId) != default)
+            {
+                repairOrderId = random.Next(1000);
+            }
             this.RepairOrderId = repairOrderId;
             this.RepairOrderDescription = description;
             this.DateCreated = dateCreated;
