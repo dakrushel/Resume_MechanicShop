@@ -85,7 +85,16 @@ namespace MechanicShop.Models
                 Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
             }
 
-          
+            try
+            {
+                this.database.CreateTable<RepairOrderServiceJobBridge>();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+            }
+
+
 
             this.database.Commit();
 
@@ -268,6 +277,8 @@ namespace MechanicShop.Models
             return this.database.Table<VehicleDatabase>().ToList();
         }
 
+
+/*        -------------------------------MAKES AND MODELS --------------------------------------*/
         public List<VehicleDatabase> GetAllVehicleByMake(string VehicleMake)
         {
             List<VehicleDatabase> VehiclesByMake = this.database.Table<VehicleDatabase>().ToList().
@@ -311,6 +322,29 @@ namespace MechanicShop.Models
             return makes;
 
         }
+
+/*        ---------------------------- Repair Order Service Job Bridge -------------------------*/
+
+        public List <RepairOrderServiceJobBridge> GetAllRepairOrderServiceJobBridge()
+        {
+            return this.database.Table<RepairOrderServiceJobBridge>().ToList();
+        }
+
+        public void AddRepairOrderServiceJobBridge(RepairOrderServiceJobBridge repairOrderServiceJobBridge)
+        {
+            this.database.Insert(repairOrderServiceJobBridge);
+        }
+
+        public void UpdateRepairOrderServiceJobBridge(RepairOrderServiceJobBridge repairOrderServiceJobBridge)
+        {
+            this.database.Update(repairOrderServiceJobBridge);
+        }
+
+        public void DeleteRepairOrderServiceJobBridge(int repairOrderServiceJobBridgeId)
+        { 
+            this.database.Delete<RepairOrderServiceJobBridge>(repairOrderServiceJobBridgeId);
+        }
     }
+
 
 }
