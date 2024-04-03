@@ -17,7 +17,7 @@ namespace MechanicShop.Models
         public string Address { get; set; }
 
         //Provides access to Database
-        MechanicShopSQLite ShopDB = new MechanicShopSQLite();
+        //MechanicShopSQLite ShopDB = new MechanicShopSQLite();
 
         //All vehicles attached to customer will be affected by changes to customer class
 
@@ -32,7 +32,9 @@ namespace MechanicShop.Models
             this.Address = address;
             // Phone has to be unique as it is PK, validate in front end
             this.CustomerPhone = phone;
-            ShopDB.AddCustomer(this);
+
+            // no need to open multiple connections, slows things down - Chloe
+            MauiProgram.ShopDB.AddCustomer(this);
         }
 
         public Customer() { }
@@ -56,9 +58,9 @@ namespace MechanicShop.Models
             Vehicle newCustomerVehicle = new Vehicle(VIN, make, model, Colour, year, this.CustomerPhone);
             
             //Add newly constructed vehicle to customers lists of vehicles and to database
-            ShopDB.AddVehicle(newCustomerVehicle);
+            MauiProgram.ShopDB.AddVehicle(newCustomerVehicle);
             CustomerVehicles.Add(newCustomerVehicle);
-            ShopDB.UpdateCustomer(this);
+            MauiProgram.ShopDB.UpdateCustomer(this);
         }
 
 

@@ -41,4 +41,9 @@ public partial class AppointmentView : ContentPage
         
         
     }
+
+    private void Editor_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        
+    }
 }

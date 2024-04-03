@@ -23,7 +23,7 @@
 
                     <Label Text="Expired Appointments:" Margin="0,20,0,0"/>
                     <ListView x:Name="expiredAppointments"
-                        HeightRequest="200" WidthRequest="400" Background="AliceBlue">
+                        HeightRequest="100" WidthRequest="400" Background="AliceBlue">
                         <!--active appointments (not passed date)-->
                     </ListView>
                 
@@ -46,8 +46,9 @@
                 </VerticalStackLayout>
             
             </Border>
-
-            <!--APPOINTMENT SLIP WIDGET-->
+            <!--============================================================================================-->
+            <!--APPOINTMENT SLIP WIDGET=====================================================================-->
+            <!--============================================================================================-->
             <Border x:Name="appointmentSlip" HorizontalOptions="Center" Padding="20"
                     HeightRequest="600" WidthRequest="500" IsEnabled="False">
                 <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
@@ -106,8 +107,23 @@
                     </Grid>
                     <Label Text="======================================================="
                            HorizontalOptions="Center"/>
-
                     
+                    <!--REPAIR ORDER PROPERTIES-->
+                    <!--(RepairOrderId : string)-->
+                    <!--(RepairOrderDescription : string)-->
+                    <!--(DateCreated : string)-->
+                    <!--(AppointmentDate : string)-->
+                    <!--(DateClose : string)-->
+                    <!--(RepairOrderHours : double)-->
+                    <!--(RepairOrderBill : double)-->
+                    <!--[FK properties](VIN : string)(Vehicle : Vehicle)(EmplyeeId : string)
+                    (RepairJobTechnician : Technician)(ServiceJobID : string)
+                    (RepairOrderServiceJobs : List<ServiceJob>)-->
+                    <!--CTOR = (ID, description, createDate, apptDate, VIN)-->
+                    <Editor WidthRequest="450" HeightRequest="100" Background="{StaticResource White}" 
+                            x:Name="problemDescriptionEntry" TextChanged="Editor_TextChanged"/>
+
+
                 </VerticalStackLayout>
 
             </Border>
