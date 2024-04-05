@@ -54,9 +54,10 @@ public partial class AppointmentView : ContentPage
             serviceJobMenu.IsVisible = false;
         }
         datePicker.Date = currentDate;
-        
-        
-        
+        var appointments = new ObservableCollection<RepairOrder>(MauiProgram.ShopDB.GetAllRepairOrders());
+        activeAppointments.ItemsSource = appointments;
+
+
     }
 
     private void Editor_TextChanged(object sender, TextChangedEventArgs e)
@@ -82,6 +83,8 @@ public partial class AppointmentView : ContentPage
     {
         appointmentLogs.IsVisible = false;
         serviceJobMenu.IsVisible = true;
+        var allJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.GetAllServiceJobs());
+        serviceJobs.ItemsSource = allJobs;
         addJobBtn.IsEnabled = false;
     }
     private void repairOrderJobs_ItemSelected(object sender, SelectedItemChangedEventArgs e)
