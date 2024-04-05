@@ -1,6 +1,7 @@
 ﻿using SQLite;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,11 +10,11 @@ namespace MechanicShop.Models
 {
     public class RepairOrderServiceJobBridge
     {
-        [PrimaryKey, NotNull]
-        public int RepairJobServiceJobBridgeId {  get; set; }
-
+        [Required]
+        [PrimaryKey]
         public int RepairOrderId { get; set; }
-
+        [Required]
+        [PrimaryKey]
         public int ServiceJobId { get; set; }
 
         //Opens connection to Database
@@ -21,13 +22,6 @@ namespace MechanicShop.Models
 
         public RepairOrderServiceJobBridge(int repairOrderId, int serviceJobId)
         {
-            Random random = new Random();
-
-            int RepairJobServiceJobBridgeId = random.Next(1000);
-            while (ShopDB.GetAllRepairOrderServiceJobBridge().FirstOrDefault(x => x.RepairOrderId == repairOrderId) != default)
-            {
-                repairOrderId = random.Next(1000);
-            }
             this.RepairOrderId = repairOrderId;
             this.ServiceJobId = serviceJobId;
         }

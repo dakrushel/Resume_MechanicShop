@@ -18,7 +18,7 @@ namespace MechanicShop.Models
             this.database.Execute("PRAGMA foreign_keys = ON;");
 
             //For dropping tables, uncomment the next line and insert your table name in the <>
-            //this.database.DropTable<VehicleDatabase>();
+
 
             //Try creating this table
             try
@@ -43,15 +43,6 @@ namespace MechanicShop.Models
             try
             {
                 this.database.CreateTable<Vehicle>();
-            }
-            catch (SQLiteException ex)
-            {
-                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
-            }
-
-            try
-            {
-                this.database.CreateTable<Employee>();
             }
             catch (SQLiteException ex)
             {
@@ -125,7 +116,6 @@ namespace MechanicShop.Models
             }
             this.database.Delete<Customer>(customerPhoneNumber);
         }
-
 
         public List<Customer> GetAllCustomers()
         {
