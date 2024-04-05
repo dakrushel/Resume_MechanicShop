@@ -10,8 +10,6 @@ namespace MechanicShop.Models
 {
     public class RepairOrderServiceJobBridge
     {
-        //[PrimaryKey, NotNull]
-        //public int RepairJobServiceJobBridgeId {  get; set; }
         [Required]
         [PrimaryKey]
         public int RepairOrderId { get; set; }
@@ -24,13 +22,6 @@ namespace MechanicShop.Models
 
         public RepairOrderServiceJobBridge(int repairOrderId, int serviceJobId)
         {
-            //Random random = new Random();
-
-            //int RepairJobServiceJobBridgeId = random.Next(1000);
-            //while (ShopDB.GetAllRepairOrderServiceJobBridge().FirstOrDefault(x => x.RepairOrderId == repairOrderId) != default)
-            //{
-            //    repairOrderId = random.Next(1000);
-            //}
             this.RepairOrderId = repairOrderId;
             this.ServiceJobId = serviceJobId;
         }

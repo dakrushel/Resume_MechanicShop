@@ -17,22 +17,19 @@ namespace MechanicShop.Models
 
         public double ServiceJobHours { get; set; }
 
-        //Opens connection to database
-        MechanicShopSQLite ShopDB = new MechanicShopSQLite();
 
         public ServiceJob(string jobId, string jobDescription, double hours)
         {
             Random random = new Random();
 
             int serviceJobId = random.Next(1000);
-            while (ShopDB.GetAllServiceJobs().FirstOrDefault(x => x.ServiceJobId == serviceJobId) != default)
+            while (MauiProgram.ShopDB.GetAllServiceJobs().FirstOrDefault(x => x.ServiceJobId == serviceJobId) != default)
             {
                 serviceJobId = random.Next(1000);
             }
             this.ServiceJobId = serviceJobId;
             this.ServiceJobDescription = jobDescription;
-            this.ServiceJobHours = hours;
-              
+            this.ServiceJobHours = hours;   
         }
 
         public ServiceJob() { }
