@@ -39,8 +39,7 @@ namespace MechanicShop.Models
         public double RepairOrderHours { get; set; }
 
 
-        //This property is NOT in the CTOR as will need to be calculated based on the jobs
-        public double RepairOrderBill {  get; set; }
+        public string CustomerName {  get; set; }
 
         //Property to act as foreign key
         [ForeignKey(typeof(Vehicle))]
@@ -76,6 +75,8 @@ namespace MechanicShop.Models
             this.VIN = VIN;
             this.EmployeeId = employeeId;
 
+            this.CustomerName = MauiProgram.ShopDB.GetCustomerNameViaVIN(VIN);
+
             //Automatically sets is Active to False signifying this is NOT an active appointment
             this.IsActive = false;
 
@@ -100,6 +101,8 @@ namespace MechanicShop.Models
             this.DateCreated = dateCreated;
             this.AppointmentDate = appointmentDate;
             this.VIN = VIN;
+
+            this.CustomerName = MauiProgram.ShopDB.GetCustomerNameViaVIN(VIN);
 
 
             this.ListOfServiceJobs = new List<ServiceJob>();
