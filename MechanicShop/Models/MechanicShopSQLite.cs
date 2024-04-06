@@ -18,7 +18,7 @@ namespace MechanicShop.Models
             this.database.Execute("PRAGMA foreign_keys = ON;");
 
             //For dropping tables, uncomment the next line and insert your table name in the <>
-
+            //this.database.DropTable<RepairOrder>();
 
             //Try creating this table
             try
@@ -217,6 +217,30 @@ namespace MechanicShop.Models
         public List<RepairOrder> GetAllRepairOrders()
         {
             return this.database.Table<RepairOrder>().ToList();
+        }
+
+        public List<RepairOrder> GetRepairOrdersThatAreNOTActive()
+        {
+            return this.database.Table<RepairOrder>()
+                .Where(x => x.IsActive == false).ToList();
+        }
+
+        public List<RepairOrder> GetRepairOrdersThatAreActive()
+        {
+            return this.database.Table<RepairOrder>()
+                .Where(x => x.IsActive == true).ToList();
+        }
+
+        //TODO: For Logic layer this method would need checks to ensure that repairOrderId is valid
+        public string GetRepairOrderCustomer(int repairOrderId)
+        {
+            RepairOrder targetRepairOrder = this.database.Table<RepairOrder>().First(x => x.RepairOrderId == repairOrderId);
+
+            Vehicle targetVehicle = this.database.Table<Vehicle>().First(x => x.VIN == targetRepairOrder.VIN);
+
+            Customer customer = this.database.Table<Customer>().First(x => x.CustomerPhone == targetVehicle.CustomerPhone);
+
+            return customer.Name;
         }
 
 
