@@ -61,7 +61,7 @@ public partial class AppointmentView : ContentPage
             serviceJobMenu.IsVisible = false;
             problemDescriptionEntry.Text = null;
         }
-        datePicker.Date = currentDate.AddDays(-1 );
+        datePicker.Date = currentDate.AddDays(7);
 
         //var appointments = new ObservableCollection<RepairOrder>(MauiProgram.ShopDB.GetAllRepairOrders());       
         //activeAppointments.ItemsSource = appointments;
@@ -187,10 +187,9 @@ public partial class AppointmentView : ContentPage
         
     }
 
+    private void appointments_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        appointmentSlip.IsEnabled = true;
 
-
-
-    
-
-    
+    }
 }
