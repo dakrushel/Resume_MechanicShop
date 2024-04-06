@@ -377,9 +377,6 @@ public partial class CustomerView : ContentPage
     }
 
     
-
-    
-
     private void SearchTextChanged(object sender, TextChangedEventArgs e)
     {
         if(nameEntry.Text == null && phoneEntry.Text == null)

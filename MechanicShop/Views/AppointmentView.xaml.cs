@@ -1,6 +1,7 @@
 using MechanicShop.Services;
 using MechanicShop.Models;
 using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 
 namespace MechanicShop.Views;
 
@@ -62,18 +63,22 @@ public partial class AppointmentView : ContentPage
         }
         datePicker.Date = currentDate.AddDays(-1 );
 
-
-        var appointments = new ObservableCollection<RepairOrder>(MauiProgram.ShopDB.GetAllRepairOrders());
-        
-        activeAppointments.ItemsSource = appointments;
+        //var appointments = new ObservableCollection<RepairOrder>(MauiProgram.ShopDB.GetAllRepairOrders());       
+        //activeAppointments.ItemsSource = appointments;
+        AppointmentViewService.refreshAppointments();
+        activeAppointments.ItemsSource = AppointmentViewService.upcomingAppointments;
+        expiredAppointments.ItemsSource = AppointmentViewService.expiredAppointments;
 
 
     }
-
-    private void Editor_TextChanged(object sender, TextChangedEventArgs e)
+    private void RefreshROJobs()
     {
-        
+        repairOrderJobs.ItemsSource = thisJobs;
+        removeJobBtn.Text = "Remove Job";
+        removeJobBtn.IsEnabled = false;
     }
+
+
     //======================================================================================
     //+++APPOINTMENT SLIP+++
     //======================================================================================
@@ -107,7 +112,42 @@ public partial class AppointmentView : ContentPage
         }
         
     }
+    private void Editor_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        var editor = (Editor)sender;
+        if (string.IsNullOrEmpty(e.NewTextValue)) { return; }
+        // Regular expression pattern to match disallowed characters
+        string pattern = @"[^a-zA-ZÀ-ÿ\s'\-.,\d]";
 
+        // Check if the entered text contains disallowed characters
+        if (Regex.IsMatch(e.NewTextValue, pattern))
+        {
+            // If disallowed characters are found, remove them
+            var newText = Regex.Replace(e.NewTextValue, pattern, "");
+
+            // Update the entry's text with the sanitized text
+            editor.Text = newText;
+        }
+    }
+    private void scheduleAppointment_Clicked(object sender, EventArgs e)
+    {
+        //gather information needed for appointment
+        string? description = problemDescriptionEntry.Text;
+        string? createDate = TodayDate;
+        string? appointmentDate = datePicker.Date.ToString("yyyy-MM-dd");
+        string? VIN = v?.VIN;
+        string? customerName = c?.Name;
+
+        if (createDate != null && appointmentDate != null && VIN != null && customerName != null)
+        {
+            RepairOrder newAppointment = new RepairOrder(description, createDate, appointmentDate, VIN, customerName);
+            foreach (ServiceJob job in thisJobs)
+            {
+                newAppointment.AssignServiceJob(job.ServiceJobId);
+            }
+            OnAppearing();
+        }
+    }
     //======================================================================================
     //+++Service Job Menu+++
     //======================================================================================
@@ -150,30 +190,7 @@ public partial class AppointmentView : ContentPage
 
 
 
-    private void RefreshROJobs()
-    {
-        repairOrderJobs.ItemsSource = thisJobs;
-        removeJobBtn.Text = "Remove Job";
-        removeJobBtn.IsEnabled = false;
-    }
+    
 
-    private void scheduleAppointment_Clicked(object sender, EventArgs e)
-    {
-        //gather information needed for appointment
-        string? description = problemDescriptionEntry.Text;
-        string? createDate = TodayDate;
-        string? appointmentDate = datePicker.Date.ToString("yyyy-MM-dd");
-        string? VIN = v?.VIN;
-
-        if (description != null && createDate != null && appointmentDate != null && VIN != null)
-        {
-            RepairOrder newAppointment = new RepairOrder(description, createDate, appointmentDate, VIN);
-            foreach (ServiceJob job in thisJobs)
-            {
-                newAppointment.AssignServiceJob(job.ServiceJobId);
-            }
-            OnAppearing();
-        }
-        
-    }
+    
 }

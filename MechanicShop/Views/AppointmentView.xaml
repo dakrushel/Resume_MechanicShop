@@ -89,7 +89,7 @@
 
                                             </Grid.ColumnDefinitions>
                                             <Label Grid.Column="0" Text="{Binding RepairOrderId}" HorizontalOptions="Center"/>
-                                            <Label Grid.Column="1" Text="--Put customer name here--"/>
+                                            <Label Grid.Column="1" Text="{Binding CustomerName}"/>
                                             <Label Grid.Column="2" Text="{Binding AppointmentDate}" HorizontalOptions="Start"/>
                                         </Grid>
                                     </ViewCell>
@@ -114,7 +114,7 @@
 
                                             </Grid.ColumnDefinitions>
                                             <Label Grid.Column="0" Text="{Binding RepairOrderId}" HorizontalOptions="Center"/>
-                                            <Label Grid.Column="1" Text="--Put customer name here--"/>
+                                            <Label Grid.Column="1" Text="{Binding CustomerName}"/>
                                             <Label Grid.Column="2" Text="{Binding AppointmentDate}" HorizontalOptions="Start"/>
                                         </Grid>
                                     </ViewCell>
@@ -227,7 +227,8 @@
                         <!--(RepairOrderDescription : string)-->
                         <Label Text="Problem Description:"/>
                         <Editor WidthRequest="450" HeightRequest="100" Background="{StaticResource White}" 
-                                x:Name="problemDescriptionEntry" TextChanged="Editor_TextChanged"/>
+                                x:Name="problemDescriptionEntry" TextChanged="Editor_TextChanged"
+                                Placeholder="Enter problem description here"/>
 
                         <!--REPAIR ORDER JOBS (For currently displayed repair order)-->
                         <Label Text="Jobs:" Margin="0,5,0,0"/>
