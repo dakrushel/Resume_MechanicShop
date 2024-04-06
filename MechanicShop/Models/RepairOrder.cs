@@ -32,15 +32,14 @@ namespace MechanicShop.Models
         public string DateCreated { get; set; }
         public string AppointmentDate {  get; set; }
 
-        public string CustomerName { get; set; }
+        public string DateClose { get; set; }
 
 
         //This property is NOT in the CTOR as it will need to be calculated based on the jobs
         public double RepairOrderHours { get; set; }
 
 
-        //This property is NOT in the CTOR as will need to be calculated based on the jobs
-        //public double RepairOrderBill {  get; set; }
+        public string CustomerName {  get; set; }
 
         //Property to act as foreign key
         [ForeignKey(typeof(Vehicle))]
@@ -58,35 +57,37 @@ namespace MechanicShop.Models
 
         //Opens connection to Database
         //CTOR: For all variabless accounted for
-        //public RepairOrder(string description, string dateCreated, string appointmentDate, string VIN, string employeeId)
-        //{
+        public RepairOrder(string description, string dateCreated, string appointmentDate, string VIN, string employeeId)
+        {
 
-        //    Random random = new Random();
+            Random random = new Random();
 
-        //    int repairOrderId = random.Next(1000); 
-        //    while (MauiProgram.ShopDB.GetAllRepairOrders().FirstOrDefault(x => x.RepairOrderId == repairOrderId) != default)
-        //    {
-        //        repairOrderId = random.Next(1000);
-        //    }
+            int repairOrderId = random.Next(1000); 
+            while (MauiProgram.ShopDB.GetAllRepairOrders().FirstOrDefault(x => x.RepairOrderId == repairOrderId) != default)
+            {
+                repairOrderId = random.Next(1000);
+            }
 
-        //    this.RepairOrderId = repairOrderId;
-        //    this.RepairOrderDescription = description;
-        //    this.DateCreated = dateCreated;
-        //    this.AppointmentDate = appointmentDate;
-        //    this.VIN = VIN;
-        //    this.EmployeeId = employeeId;
+            this.RepairOrderId = repairOrderId;
+            this.RepairOrderDescription = description;
+            this.DateCreated = dateCreated;
+            this.AppointmentDate = appointmentDate;
+            this.VIN = VIN;
+            this.EmployeeId = employeeId;
 
-        //    //Automatically sets is Active to False signifying this is NOT an active appointment
-        //    this.IsActive = false;
+            this.CustomerName = MauiProgram.ShopDB.GetCustomerNameViaVIN(VIN);
 
-        //    this.ListOfServiceJobs = new List<ServiceJob>();
+            //Automatically sets is Active to False signifying this is NOT an active appointment
+            this.IsActive = false;
 
-        //    //Adding to Database as object is created
-        //    MauiProgram.ShopDB.AddRepairOrder(this);
-        //}
+            this.ListOfServiceJobs = new List<ServiceJob>();
+
+            //Adding to Database as object is created
+            MauiProgram.ShopDB.AddRepairOrder(this);
+        }
 
         //Overload CTOR for no technician assigned
-        public RepairOrder(string description, string dateCreated, string appointmentDate, string VIN, string customerName)
+        public RepairOrder(string description, string dateCreated, string appointmentDate, string VIN)
         {
             Random random = new();
 
@@ -100,7 +101,8 @@ namespace MechanicShop.Models
             this.DateCreated = dateCreated;
             this.AppointmentDate = appointmentDate;
             this.VIN = VIN;
-            this.CustomerName = customerName;
+
+            this.CustomerName = MauiProgram.ShopDB.GetCustomerNameViaVIN(VIN);
 
 
             this.ListOfServiceJobs = new List<ServiceJob>();

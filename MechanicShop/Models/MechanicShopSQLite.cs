@@ -168,7 +168,22 @@ namespace MechanicShop.Models
         {
             return this.database.Table<Vehicle>().ToList();
         }
-        
+
+        //TODO: For Logic layer this method would need checks to ensure that repairOrderId is valid
+        public string GetCustomerNameViaVIN(string VIN)
+        {
+            Vehicle targetVehicle = this.database.Table<Vehicle>().First(x => x.VIN == VIN);
+
+            Customer customer = this.database.Table<Customer>().First(x => x.CustomerPhone == targetVehicle.CustomerPhone);
+
+            return customer.Name;
+        }
+
+        public Vehicle GetVehicleByVIN(string VIN)
+        {
+            return this.database.Table<Vehicle>().First(x => x.VIN == VIN); 
+        }
+
 
         /*----------------------------TECHNICIAN ------------------------------------*/
         //TESTED
@@ -231,17 +246,6 @@ namespace MechanicShop.Models
                 .Where(x => x.IsActive == true).ToList();
         }
 
-        //TODO: For Logic layer this method would need checks to ensure that repairOrderId is valid
-        public string GetRepairOrderCustomer(int repairOrderId)
-        {
-            RepairOrder targetRepairOrder = this.database.Table<RepairOrder>().First(x => x.RepairOrderId == repairOrderId);
-
-            Vehicle targetVehicle = this.database.Table<Vehicle>().First(x => x.VIN == targetRepairOrder.VIN);
-
-            Customer customer = this.database.Table<Customer>().First(x => x.CustomerPhone == targetVehicle.CustomerPhone);
-
-            return customer.Name;
-        }
 
 
         /*----------------------------SERVICE JOB ------------------------------------*/
