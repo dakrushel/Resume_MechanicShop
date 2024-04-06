@@ -1,13 +1,18 @@
 using MechanicShop.Services;
 using MechanicShop.Models;
 using System.Collections.ObjectModel;
+
 namespace MechanicShop.Views;
 
 
 public partial class AppointmentView : ContentPage
 {
+    //Date variables
 	public static DateTime currentDate = DateTime.Now;
+    public static DateTime MaxDate = currentDate.AddDays(30);
 	public static string TodayDate = currentDate.ToString("yyyy-MM-dd");
+
+    // Page temp variables (for currently displayed repair order)
 	public static Customer? c = null;
 	public static Vehicle? v = null;
     public static RepairOrder? repairOrder = null;   
@@ -20,6 +25,7 @@ public partial class AppointmentView : ContentPage
 
         var allJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.GetAllServiceJobs());
         serviceJobs.ItemsSource = allJobs;
+        
     }
     protected override void OnAppearing()
     {
@@ -52,9 +58,13 @@ public partial class AppointmentView : ContentPage
             appointmentLogs.IsVisible = true;
             appointmentLogs.IsEnabled = true;
             serviceJobMenu.IsVisible = false;
+            problemDescriptionEntry.Text = null;
         }
-        datePicker.Date = currentDate;
+        datePicker.Date = currentDate.AddDays(-1 );
+
+
         var appointments = new ObservableCollection<RepairOrder>(MauiProgram.ShopDB.GetAllRepairOrders());
+        
         activeAppointments.ItemsSource = appointments;
 
 

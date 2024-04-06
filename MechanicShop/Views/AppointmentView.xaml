@@ -84,13 +84,13 @@
                                             </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="50"></ColumnDefinition>
-                                                <ColumnDefinition Width="340"></ColumnDefinition>
-                                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                                <ColumnDefinition Width="240"></ColumnDefinition>
+                                                <ColumnDefinition Width="100"></ColumnDefinition>
 
                                             </Grid.ColumnDefinitions>
                                             <Label Grid.Column="0" Text="{Binding RepairOrderId}" HorizontalOptions="Center"/>
-                                            <Label Grid.Column="1" Text="{Binding }"/>
-                                            <Label Grid.Column="2" Text="fix this" HorizontalOptions="Start"/>
+                                            <Label Grid.Column="1" Text="--Put customer name here--"/>
+                                            <Label Grid.Column="2" Text="{Binding AppointmentDate}" HorizontalOptions="Start"/>
                                         </Grid>
                                     </ViewCell>
                                 </DataTemplate>
@@ -100,7 +100,26 @@
                         <Label Text="Expired Appointments:" Margin="0,20,0,0"/>
                         <ListView x:Name="expiredAppointments"
                                 HeightRequest="100" WidthRequest="400" Background="AliceBlue">
-                            <!--active appointments (not passed date)-->
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                                <ColumnDefinition Width="240"></ColumnDefinition>
+                                                <ColumnDefinition Width="100"></ColumnDefinition>
+
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Text="{Binding RepairOrderId}" HorizontalOptions="Center"/>
+                                            <Label Grid.Column="1" Text="--Put customer name here--"/>
+                                            <Label Grid.Column="2" Text="{Binding AppointmentDate}" HorizontalOptions="Start"/>
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
                         </ListView>
 
                         <!--SEARCH APPOINTMENTS-->
