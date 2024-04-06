@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,10 +28,11 @@ namespace MechanicShop.Models
 
         public string RepairOrderDescription { get; set; }
 
+        
         public string DateCreated { get; set; }
         public string AppointmentDate {  get; set; }
 
-        public string? DateClose { get; set; }
+        public string DateClose { get; set; }
 
 
         //This property is NOT in the CTOR as it will need to be calculated based on the jobs
@@ -52,7 +54,7 @@ namespace MechanicShop.Models
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<ServiceJob>? ListOfServiceJobs { get; set; }
 
-        bool IsActive { get; set; }
+        public bool IsActive { get; set; }
 
         //Opens connection to Database
         //CTOR: For all variabless accounted for
@@ -143,7 +145,8 @@ namespace MechanicShop.Models
             {
                 ListOfServiceJobs?.Add(newlyAddedServiceJob);
             }
-
+            
+            //create new entry into bridging table between service jobs and repair orders
             RepairOrderServiceJobBridge bridgeCreation = new RepairOrderServiceJobBridge(this.RepairOrderId, serviceJobId);
             MauiProgram.ShopDB.AddRepairOrderServiceJobBridge(bridgeCreation);
 
