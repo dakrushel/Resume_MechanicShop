@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MechanicShop.Models
 {
-    public class GenerateInvoice
+    public class GenerateInvoice //Denver
     {
         //Getters and setters
         public string RepairOrderOutput { get; set; }
@@ -36,8 +36,10 @@ namespace MechanicShop.Models
         //        $"            VIN: {rO.VIN}\n\n";
         //}
 
+        //Close and save method. Must output RepairOrder to a txt file and remove it from the database
         public void SaveInvoiceDelRO(RepairOrder rO)
         {
+            //Write RO to txt
             this.RepairOrderOutput =
                 $"==================================================================\n" +
                 $"               REPAIR ORDER {rO.RepairOrderId}\n" +
@@ -60,9 +62,9 @@ namespace MechanicShop.Models
             {
                 sw.Write(this.RepairOrderOutput); 
             }
-        }
-        //Output txt
 
-        //Remove Repair Order from system
+            //Delete RO from database RepairOrder, Customer, Vehicle, ServiceJob, Technician
+            MauiProgram.ShopDB.RemoveRepairOrder(rO.RepairOrderId.ToString());
+        }
     }
 }

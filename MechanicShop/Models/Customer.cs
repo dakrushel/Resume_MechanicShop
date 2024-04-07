@@ -60,7 +60,16 @@ namespace MechanicShop.Models
             ShopDB.UpdateCustomer(this);
         }
 
+        //RemoveCustomer method must check if customer has an active appointment or repair order before removal from database
+        public bool RemoveCustomerChecker (string phoneNum) //Denver
+        {
+            //If customer with phone# of phoneNum has a scheduled appointment or active Repair Order
+            return false;
 
+            //If cusomter with phone# of phoneNum has no scheduled appointments or active Repair Orders
+            MauiProgram.ShopDB.RemoveCustomer(phoneNum);
+            return true;
+        }
 
 
     }
