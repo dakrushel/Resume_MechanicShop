@@ -38,6 +38,9 @@ public partial class AppointmentView : ContentPage
             //widgets
             appointmentSlip.IsEnabled = true;
             appointmentLogs.IsEnabled = false;
+            apptOptions.IsVisible = false;
+            scheduleAppointment.IsVisible = true;
+            
 
             // page temp objects
             c = Pass.RetreiveCustomer();         
@@ -45,7 +48,9 @@ public partial class AppointmentView : ContentPage
 
             //Binding Contexts
             cInformation.BindingContext = c;
-            vInformation.BindingContext = v;           
+            vInformation.BindingContext = v; 
+            
+
         }
         else 
         { 
@@ -59,12 +64,13 @@ public partial class AppointmentView : ContentPage
             appointmentLogs.IsVisible = true;
             appointmentLogs.IsEnabled = true;
             serviceJobMenu.IsVisible = false;
-            problemDescriptionEntry.Text = null;
+            
         }
-        reschedule.IsVisible = false;
-        datePicker.Date = currentDate.AddDays(7);
-
+        problemDescriptionEntry.Text = null;
         
+        datePicker.Date = currentDate.AddDays(7);
+       
+
         RefreshAppointments();
 
 
@@ -74,6 +80,7 @@ public partial class AppointmentView : ContentPage
         AppointmentViewService.refreshAppointments();
         activeAppointments.ItemsSource = AppointmentViewService.upcomingAppointments;
         expiredAppointments.ItemsSource = AppointmentViewService.expiredAppointments;
+        updateAppt.IsEnabled = false;
     }
     private void RefreshROJobs()
     {
@@ -101,7 +108,7 @@ public partial class AppointmentView : ContentPage
             problemDescriptionEntry.Text = repairOrder.RepairOrderDescription;
             datePicker.Date = DateTime.Parse(repairOrder.AppointmentDate);
             //initialize reschedule button
-            reschedule.IsVisible = true;
+            
             //populate list of jobs assigned to this appointment
             thisJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.
                 GetServiceJobListByRepairOrderId(repairOrder.RepairOrderId));
@@ -109,7 +116,8 @@ public partial class AppointmentView : ContentPage
 
             // swap buttons
             scheduleAppointment.IsVisible = false;
-            makeRO.IsVisible = true;
+            apptOptions.IsVisible = true;
+            updateAppt.IsEnabled = false;
         }
     }
     private void clearSearchForm_Clicked(object sender, EventArgs e)
@@ -164,40 +172,107 @@ public partial class AppointmentView : ContentPage
     
     private void scheduleAppointment_Clicked(object sender, EventArgs e)
     {
+        appointmentLogs.IsVisible = true;
+        serviceJobMenu.IsVisible = false;
+        addJobBtn.IsEnabled = true;
         //gather information needed for appointment
         string? description = problemDescriptionEntry.Text;
         string? createDate = TodayDate;
         string? appointmentDate = datePicker.Date.ToString("yyyy-MM-dd");
         string? VIN = v?.VIN;
-        
 
+        if (datePicker.Date < currentDate.AddDays(-1))
+        {
+            NotifyDateError();
+            return;
+        }
         if (createDate != null && appointmentDate != null && VIN != null)
         {
             RepairOrder newAppointment = new RepairOrder(description, createDate, appointmentDate, VIN);
             foreach (ServiceJob job in thisJobs)
             {
-                newAppointment.AssignServiceJob(job.ServiceJobId);
+                //TODO
+                //newAppointment.AssignServiceJob(job.ServiceJobId);
+            }
+            repairOrder = newAppointment;
+           
+            appointmentLogs.IsEnabled = true;
+            RefreshAppointments();
+            
+            
+            // swap out button set
+            scheduleAppointment.IsVisible = false;
+            apptOptions.IsVisible = true;
+        }
+    }
+
+
+    
+    private async void deleteAppt_Clicked(object sender, EventArgs e)
+    {
+        if (repairOrder != null)
+        {
+            // confirmation message to prevent accidental deletion
+            bool delete = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this appointment?", "Delete Appointment", "Cancel");
+            if (delete)
+            {
+                // delete the appointment
+                MauiProgram.ShopDB.RemoveRepairOrder(repairOrder.RepairOrderId);
+                // refresh the page
+                OnAppearing();
             }
         }
     }
-
-
-    private void reschedule_Clicked(object sender, EventArgs e)
+    private void updateAppt_Clicked(object sender, EventArgs e)
     {
-        string? appointmentDate = datePicker.Date.ToString("yyyy-MM-dd");
-        if (appointmentDate != null && repairOrder != null)
+        updateAppt.IsEnabled = false;
+        if (repairOrder != null)
         {
-            repairOrder.AppointmentDate = appointmentDate;
+            //update problem description
+            repairOrder.RepairOrderDescription = problemDescriptionEntry.Text;
+
+            // update appointment date
+            if (datePicker.Date < currentDate.AddDays(-1))
+            {
+                NotifyDateError();
+                return;
+            }
+            string? appointmentDate = datePicker.Date.ToString("yyyy-MM-dd");
+            if (appointmentDate != null)
+            {
+                repairOrder.AppointmentDate = appointmentDate;           
+            }
+
+            // TODO Clear job list and rebuild based on current thisJobs
+
             MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
-            reschedule.IsEnabled = false;
             RefreshAppointments();
         }
     }
-
-    private void Button_Clicked(object sender, EventArgs e)
+    private async void NotifyDateError()
     {
-
+        await DisplayAlert("Invalid Date", "Cannot scedule appointment with a past date", "Ok");
     }
+    private void datePicker_DateSelected(object sender, DateChangedEventArgs e)
+    {
+        if (repairOrder != null)
+        {
+            
+            DateTime roDate = DateTime.Parse(repairOrder.AppointmentDate);
+            if (roDate != datePicker.Date && datePicker.Date >= currentDate.AddDays(-1))
+            {
+                AppointmentDetailsChanged();
+                return;
+            }
+        }
+    }
+    private void AppointmentDetailsChanged()
+    {
+        updateAppt.IsEnabled = true;
+        
+    }
+
+
     //======================================================================================
     //+++Service Job Menu+++
     //======================================================================================
@@ -303,26 +378,16 @@ public partial class AppointmentView : ContentPage
             // Update the entry's text with the sanitized text
             editor.Text = newText;
         }
+        updateAppt.IsEnabled = true;
     }
 
-    private void datePicker_DateSelected(object sender, DateChangedEventArgs e)
-    {
+    
 
-        if (repairOrder != null)
-        {
-            
-            DateTime roDate = DateTime.Parse(repairOrder.AppointmentDate);
-            if (roDate != datePicker.Date && datePicker.Date >= currentDate)
-            {
-                reschedule.IsEnabled = true;
-                return;
-            }
-        }
-        reschedule.IsEnabled = false;
-    }
 
     private void makeRO_Clicked(object sender, EventArgs e)
     {
 
     }
+
+    
 }

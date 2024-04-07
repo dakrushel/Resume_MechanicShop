@@ -271,9 +271,7 @@
                             <Label Text="Appointment Date:" VerticalOptions="Center" FontSize="16"/>
                             <DatePicker x:Name="datePicker" FontAttributes="Bold" FontSize="18"
                                         DateSelected="datePicker_DateSelected"/>
-                            <Button x:Name="reschedule" Text="Reschedule" HorizontalOptions="End"
-                                    VerticalOptions="Center" IsEnabled="false" IsVisible="false"
-                                    Clicked="reschedule_Clicked"/>
+                            
                         </HorizontalStackLayout>
                         <!--SHEDULE APPOINTMENT BUTTON-->
                         <Button Text="Schedule Appointment" IsEnabled="true" TextColor="black"
@@ -282,10 +280,18 @@
 
 
                         <!--CONVERT TO RO BUTTON-->
-                        <Button Text="Convert to Repair Order" TextColor="black"
-                                Background="{StaticResource Tertiary}" x:Name="makeRO"
-                                IsVisible="false"
-                                Clicked="makeRO_Clicked"/>
+                        <HorizontalStackLayout x:Name="apptOptions" IsVisible="false" 
+                                               Spacing="10" HorizontalOptions="Center">
+                            <Button x:Name="deleteAppt" Text="Delete" BackgroundColor="maroon"
+                                    TextColor="white" WidthRequest="100"
+                                    Clicked="deleteAppt_Clicked"/>
+                            <Button x:Name="updateAppt" Text="Update Details" WidthRequest="130"
+                                    Clicked="updateAppt_Clicked" IsEnabled="False"/>
+                            <Button Text="Convert to Repair Order" TextColor="black"
+                                    Background="{StaticResource Tertiary}" x:Name="makeRO"
+                                    Clicked="makeRO_Clicked" HorizontalOptions="FillAndExpand"/>
+                        </HorizontalStackLayout>
+                        
 
 
                     </VerticalStackLayout>

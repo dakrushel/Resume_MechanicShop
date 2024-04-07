@@ -222,7 +222,7 @@ namespace MechanicShop.Models
         }
 
         //TESTED
-        public void RemoveRepairOrder(string repairOrderId)
+        public void RemoveRepairOrder(int repairOrderId)
         {
             this.database.Delete<RepairOrder>(repairOrderId);
         }
