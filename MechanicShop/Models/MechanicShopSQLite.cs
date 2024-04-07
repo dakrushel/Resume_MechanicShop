@@ -225,7 +225,11 @@ namespace MechanicShop.Models
             return this.database.Table<RepairOrder>().ToList();
         }
 
-
+        public List<RepairOrder> GetRepairOrderByVIN(string vin)
+        {
+            return this.database.Table<RepairOrder>().ToList()
+                .Where(x => x.VIN == vin).ToList();
+        }
         /*----------------------------SERVICE JOB ------------------------------------*/
 
         //TESTED

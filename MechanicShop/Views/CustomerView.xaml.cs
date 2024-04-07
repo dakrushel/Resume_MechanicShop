@@ -373,7 +373,7 @@ public partial class CustomerView : ContentPage
             Pass.PassVehicle(v);
         }
         await Shell.Current.GoToAsync("//AppointmentView");
-        
+
     }
 
     

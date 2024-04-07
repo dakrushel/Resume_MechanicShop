@@ -63,7 +63,7 @@ namespace MechanicShop.Models
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<ServiceJob> RepairOrderServiceJobs { get; set; }
 
-        bool IsActive { get; set; }
+        public bool IsActive { get; set; } //Denver switched this to public
 
         //Opens connection to Database
         MechanicShopSQLite ShopDB = new MechanicShopSQLite();
