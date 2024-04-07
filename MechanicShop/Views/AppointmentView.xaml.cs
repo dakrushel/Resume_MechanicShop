@@ -64,13 +64,16 @@ public partial class AppointmentView : ContentPage
         reschedule.IsVisible = false;
         datePicker.Date = currentDate.AddDays(7);
 
-        //var appointments = new ObservableCollection<RepairOrder>(MauiProgram.ShopDB.GetAllRepairOrders());       
-        //activeAppointments.ItemsSource = appointments;
+        
+        RefreshAppointments();
+
+
+    }
+    private void RefreshAppointments()
+    {
         AppointmentViewService.refreshAppointments();
         activeAppointments.ItemsSource = AppointmentViewService.upcomingAppointments;
         expiredAppointments.ItemsSource = AppointmentViewService.expiredAppointments;
-
-
     }
     private void RefreshROJobs()
     {
@@ -89,13 +92,20 @@ public partial class AppointmentView : ContentPage
         //expiredAppointments.SelectedItem = null;
         if (repairOrder != null)
         {
+            // set local variables
             c = MauiProgram.ShopDB.GetACustomerByName(repairOrder.CustomerName);
             v = MauiProgram.ShopDB.GetVehicleByVIN(repairOrder.VIN);
+            // bind info to appointmenmt slip
             cInformation.BindingContext = c;
             vInformation.BindingContext = v;
             problemDescriptionEntry.Text = repairOrder.RepairOrderDescription;
             datePicker.Date = DateTime.Parse(repairOrder.AppointmentDate);
+            //initialize reschedule button
             reschedule.IsVisible = true;
+            //populate list of jobs assigned to this appointment
+            thisJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.
+                GetServiceJobListByRepairOrderId(repairOrder.RepairOrderId));
+            repairOrderJobs.ItemsSource = thisJobs;
         }
     }
     private void clearSearchForm_Clicked(object sender, EventArgs e)
@@ -119,7 +129,12 @@ public partial class AppointmentView : ContentPage
         {
             thisJobs.Remove(toRemove);
             RefreshROJobs();
-        }     
+        }
+        if (repairOrder != null && toRemove != null)
+        {
+            RepairOrderServiceJobBridge rsjb = new RepairOrderServiceJobBridge(repairOrder.RepairOrderId, toRemove.ServiceJobId);
+            MauiProgram.ShopDB.DeleteRepairOrderServiceJobBridge(rsjb);
+        }
         removeJobBtn.IsEnabled = false;
     }
 
@@ -160,6 +175,24 @@ public partial class AppointmentView : ContentPage
             }
         }
     }
+
+
+    private void reschedule_Clicked(object sender, EventArgs e)
+    {
+        string? appointmentDate = datePicker.Date.ToString("yyyy-MM-dd");
+        if (appointmentDate != null && repairOrder != null)
+        {
+            repairOrder.AppointmentDate = appointmentDate;
+            MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
+            reschedule.IsEnabled = false;
+            RefreshAppointments();
+        }
+    }
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+
+    }
     //======================================================================================
     //+++Service Job Menu+++
     //======================================================================================
@@ -195,6 +228,12 @@ public partial class AppointmentView : ContentPage
             thisJobs.Add(sj);
             addThisJob.IsEnabled = false;
             RefreshROJobs();
+
+            if (repairOrder != null)
+            {
+                RepairOrderServiceJobBridge rsjb = new RepairOrderServiceJobBridge(repairOrder.RepairOrderId, sj.ServiceJobId);
+                MauiProgram.ShopDB.AddRepairOrderServiceJobBridge(rsjb);
+            }
         }
         
     }
@@ -275,4 +314,6 @@ public partial class AppointmentView : ContentPage
         }
         reschedule.IsEnabled = false;
     }
+
+   
 }

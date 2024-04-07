@@ -272,12 +272,21 @@
                             <DatePicker x:Name="datePicker" FontAttributes="Bold" FontSize="18"
                                         DateSelected="datePicker_DateSelected"/>
                             <Button x:Name="reschedule" Text="Reschedule" HorizontalOptions="End"
-                                    VerticalOptions="Center" IsEnabled="false" IsVisible="false"/>
+                                    VerticalOptions="Center" IsEnabled="false" IsVisible="false"
+                                    Clicked="reschedule_Clicked"/>
                         </HorizontalStackLayout>
                         <!--SHEDULE APPOINTMENT BUTTON-->
                         <Button Text="Schedule Appointment" IsEnabled="true" TextColor="black"
                                 x:Name="scheduleAppointment" Background="{StaticResource Tertiary}"
                                 Clicked="scheduleAppointment_Clicked"/>
+
+
+                        <!--CONVERT TO RO BUTTON-->
+                        <Button Text="Convert to Repair Order" TextColor="black"
+                                Background="{StaticResource Tertiary}" x:Name="makeRO"
+                                />
+
+
                     </VerticalStackLayout>
 
                 </Border>
