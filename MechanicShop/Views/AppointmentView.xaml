@@ -284,7 +284,8 @@
                         <!--CONVERT TO RO BUTTON-->
                         <Button Text="Convert to Repair Order" TextColor="black"
                                 Background="{StaticResource Tertiary}" x:Name="makeRO"
-                                />
+                                IsVisible="false"
+                                Clicked="makeRO_Clicked"/>
 
 
                     </VerticalStackLayout>

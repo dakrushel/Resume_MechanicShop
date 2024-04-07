@@ -106,6 +106,10 @@ public partial class AppointmentView : ContentPage
             thisJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.
                 GetServiceJobListByRepairOrderId(repairOrder.RepairOrderId));
             repairOrderJobs.ItemsSource = thisJobs;
+
+            // swap buttons
+            scheduleAppointment.IsVisible = false;
+            makeRO.IsVisible = true;
         }
     }
     private void clearSearchForm_Clicked(object sender, EventArgs e)
@@ -132,7 +136,8 @@ public partial class AppointmentView : ContentPage
         }
         if (repairOrder != null && toRemove != null)
         {
-            RepairOrderServiceJobBridge rsjb = new RepairOrderServiceJobBridge(repairOrder.RepairOrderId, toRemove.ServiceJobId);
+            //TODO
+            //RepairOrderServiceJobBridge rsjb = new RepairOrderServiceJobBridge(repairOrder.RepairOrderId, toRemove.ServiceJobId);
             //MauiProgram.ShopDB.DeleteRepairOrderServiceJobBridge(rsjb);
         }
         removeJobBtn.IsEnabled = false;
@@ -231,8 +236,9 @@ public partial class AppointmentView : ContentPage
 
             if (repairOrder != null)
             {
-                RepairOrderServiceJobBridge rsjb = new RepairOrderServiceJobBridge(repairOrder.RepairOrderId, sj.ServiceJobId);
-                MauiProgram.ShopDB.AddRepairOrderServiceJobBridge(rsjb);
+                //TODO
+                //RepairOrderServiceJobBridge rsjb = new RepairOrderServiceJobBridge(repairOrder.RepairOrderId, sj.ServiceJobId);
+                //MauiProgram.ShopDB.AddRepairOrderServiceJobBridge(rsjb);
             }
         }
         
@@ -315,5 +321,8 @@ public partial class AppointmentView : ContentPage
         reschedule.IsEnabled = false;
     }
 
-   
+    private void makeRO_Clicked(object sender, EventArgs e)
+    {
+
+    }
 }
