@@ -362,6 +362,22 @@ namespace MechanicShop.Models
         { 
             this.database.Delete<RepairOrderServiceJobBridge>(repairOrderServiceJobBridgeId);
         }
+
+        public List<ServiceJob> GetServiceJobListByRepairOrderId(int repairOrderId)
+        {
+            List<ServiceJob> serviceJobs = new List<ServiceJob>();
+
+            foreach (RepairOrderServiceJobBridge var in this.database.Table<RepairOrderServiceJobBridge>().ToList()) 
+            {
+                if (var.RepairOrderId == repairOrderId)
+                {
+                    ServiceJob serviceJob = this.database.Table<ServiceJob>().First(x => x.ServiceJobId ==var.ServiceJobId); 
+                    serviceJobs.Add(serviceJob);
+                }
+            }
+
+            return serviceJobs;
+        }
     }
 
 
