@@ -98,6 +98,7 @@ public partial class CustomerView : ContentPage
     {
         // inactive unless search fields filled in
         ResetSearchWidget();
+        
     }
     private void searchCustoemrsBtn_Clicked(object sender, EventArgs e)
     {
@@ -334,7 +335,7 @@ public partial class CustomerView : ContentPage
     private void ClearCustomerDisplay_Clicked(object sender, EventArgs e)
     {
         ResetCustomerDisplay();
-        
+        customersCollectionView.SelectedItem = null;
     }
     private void cVehicleList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {

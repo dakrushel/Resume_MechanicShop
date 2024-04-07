@@ -143,6 +143,10 @@ namespace MechanicShop.Models
                 .Where(x => x.Name.IndexOf(customerName, StringComparison.OrdinalIgnoreCase) >= 0)
                 .ToList();
         }
+        public Customer GetACustomerByName(string customerName)
+        {
+            return this.database.Table<Customer>().First(x => x.Name == customerName);
+        }
 
         /*---------------------------- VEHICLE ------------------------------------*/
 

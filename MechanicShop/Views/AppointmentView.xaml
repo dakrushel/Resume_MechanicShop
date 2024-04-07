@@ -129,16 +129,22 @@
                         <HorizontalStackLayout Spacing="10">
                             <Label Text="Customer Name:"
                                     VerticalOptions="Center" HorizontalOptions="End"/>
-                            <Entry x:Name="apptName" WidthRequest="300" Background="White"/>
+                            <Entry x:Name="apptName" WidthRequest="300" Background="White"
+                                   TextChanged="apptName_TextChanged"/>
                         </HorizontalStackLayout>
                         <HorizontalStackLayout Spacing="10">
                             <Label Text="Customer Phone:"
                                     VerticalOptions="Center" HorizontalOptions="End"/>
-                            <Entry x:Name="apptPhone" WidthRequest="300" Background="White"/>
+                            <Entry x:Name="apptPhone" WidthRequest="300" Background="White"
+                                   TextChanged="apptPhone_TextChanged"/>
                         </HorizontalStackLayout>
+                        
                         <HorizontalStackLayout Spacing="10">
-                            <Button x:Name="findAppointment" Text="Find Appointment"/>
-                            <Button/>
+                            <Button x:Name="clearSearchForm" Text="Clear Search"
+                                    Clicked="clearSearchForm_Clicked"/>
+                            <Button x:Name="findAppointment" Text="Find Appointment"
+                                    Clicked="findAppointment_Clicked"/>
+                            
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
                 </Border>
@@ -261,9 +267,12 @@
                             <Label x:Name="priceEstimate" VerticalOptions="Center"/>
                         </HorizontalStackLayout>
                         <!--DATE INFORMATION-->
-                        <HorizontalStackLayout>
-                            <Label Text="Select Appointment Date:" VerticalOptions="Center" FontSize="16"/>
-                            <DatePicker x:Name="datePicker" FontAttributes="Bold" FontSize="18"/>
+                        <HorizontalStackLayout WidthRequest="450">
+                            <Label Text="Appointment Date:" VerticalOptions="Center" FontSize="16"/>
+                            <DatePicker x:Name="datePicker" FontAttributes="Bold" FontSize="18"
+                                        DateSelected="datePicker_DateSelected"/>
+                            <Button x:Name="reschedule" Text="Reschedule" HorizontalOptions="End"
+                                    VerticalOptions="Center" IsEnabled="false" IsVisible="false"/>
                         </HorizontalStackLayout>
                         <!--SHEDULE APPOINTMENT BUTTON-->
                         <Button Text="Schedule Appointment" IsEnabled="true" TextColor="black"

@@ -61,6 +61,7 @@ public partial class AppointmentView : ContentPage
             serviceJobMenu.IsVisible = false;
             problemDescriptionEntry.Text = null;
         }
+        reschedule.IsVisible = false;
         datePicker.Date = currentDate.AddDays(7);
 
         //var appointments = new ObservableCollection<RepairOrder>(MauiProgram.ShopDB.GetAllRepairOrders());       
@@ -77,12 +78,40 @@ public partial class AppointmentView : ContentPage
         removeJobBtn.Text = "Remove Job";
         removeJobBtn.IsEnabled = false;
     }
+    //======================================================================================
+    //+++APPOINTMENT LISTS+++
+    //======================================================================================
+    private void appointments_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        appointmentSlip.IsEnabled = true;
+        repairOrder = e.SelectedItem as RepairOrder;
+        //activeAppointments.SelectedItem = null;
+        //expiredAppointments.SelectedItem = null;
+        if (repairOrder != null)
+        {
+            c = MauiProgram.ShopDB.GetACustomerByName(repairOrder.CustomerName);
+            v = MauiProgram.ShopDB.GetVehicleByVIN(repairOrder.VIN);
+            cInformation.BindingContext = c;
+            vInformation.BindingContext = v;
+            problemDescriptionEntry.Text = repairOrder.RepairOrderDescription;
+            datePicker.Date = DateTime.Parse(repairOrder.AppointmentDate);
+            reschedule.IsVisible = true;
+        }
+    }
+    private void clearSearchForm_Clicked(object sender, EventArgs e)
+    {
+        apptName.Text = null;
+        apptPhone.Text = null;
+    }
 
-
+    private void findAppointment_Clicked(object sender, EventArgs e)
+    {
+        //TODO
+    }
     //======================================================================================
     //+++APPOINTMENT SLIP+++
     //======================================================================================
-
+    
     private void removeJobBtn_Clicked(object sender, EventArgs e)
     {
         ServiceJob? toRemove = repairOrderJobs.SelectedItem as ServiceJob;
@@ -112,23 +141,7 @@ public partial class AppointmentView : ContentPage
         }
         
     }
-    private void Editor_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        var editor = (Editor)sender;
-        if (string.IsNullOrEmpty(e.NewTextValue)) { return; }
-        // Regular expression pattern to match disallowed characters
-        string pattern = @"[^a-zA-ZÀ-ÿ\s'\-.,\d]";
-
-        // Check if the entered text contains disallowed characters
-        if (Regex.IsMatch(e.NewTextValue, pattern))
-        {
-            // If disallowed characters are found, remove them
-            var newText = Regex.Replace(e.NewTextValue, pattern, "");
-
-            // Update the entry's text with the sanitized text
-            editor.Text = newText;
-        }
-    }
+    
     private void scheduleAppointment_Clicked(object sender, EventArgs e)
     {
         //gather information needed for appointment
@@ -136,16 +149,15 @@ public partial class AppointmentView : ContentPage
         string? createDate = TodayDate;
         string? appointmentDate = datePicker.Date.ToString("yyyy-MM-dd");
         string? VIN = v?.VIN;
-        string? customerName = c?.Name;
+        
 
-        if (createDate != null && appointmentDate != null && VIN != null && customerName != null)
+        if (createDate != null && appointmentDate != null && VIN != null)
         {
-            RepairOrder newAppointment = new RepairOrder(description, createDate, appointmentDate, VIN, customerName);
+            RepairOrder newAppointment = new RepairOrder(description, createDate, appointmentDate, VIN);
             foreach (ServiceJob job in thisJobs)
             {
                 newAppointment.AssignServiceJob(job.ServiceJobId);
             }
-            OnAppearing();
         }
     }
     //======================================================================================
@@ -187,9 +199,80 @@ public partial class AppointmentView : ContentPage
         
     }
 
-    private void appointments_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    
+    //====================================================================================================
+    // INPUT VALIDATORS
+    //====================================================================================================
+    private void apptName_TextChanged(object sender, TextChangedEventArgs e)
     {
-        appointmentSlip.IsEnabled = true;
+        var entry = (Entry)sender;
+        if (e.NewTextValue == null || e.NewTextValue == "") { return; }
+        // Regular expression pattern to allow only alphabetic characters, space, hyphen, apostrophe, and period
+        string pattern = @"^[a-zA-ZÀ-ÿ\s'\-\.\,]+$";
 
+        // Check if the entered text matches the pattern
+        if (!Regex.IsMatch(e.NewTextValue, pattern))
+        {
+            // If the entered text contains disallowed characters, remove them
+            var newText = Regex.Replace(e.NewTextValue, @"[^a-zA-ZÀ-ÿ\s'\-\.\,]", "");
+
+            // Update the entry's text with the sanitized text
+            entry.Text = newText;
+        }
+    }
+    private void apptPhone_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        var entry = (Entry)sender;
+        if (e.NewTextValue == null) { return; }
+        // Remove non-digit characters
+        var newText = new string(e.NewTextValue.Where(char.IsDigit).ToArray());
+        // Limit maximum length to 10 digits
+        if (newText.Length > 10)
+        {
+            newText = newText.Substring(0, 10);
+        }
+        // Automatically insert dashes
+        if (newText.Length > 3)
+        {
+            newText = newText.Insert(3, "-");
+            if (newText.Length > 7)
+            {
+                newText = newText.Insert(7, "-");
+            }
+        }
+        entry.Text = newText;
+    }
+    private void Editor_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        var editor = (Editor)sender;
+        if (string.IsNullOrEmpty(e.NewTextValue)) { return; }
+        // Regular expression pattern to match disallowed characters
+        string pattern = @"[^a-zA-ZÀ-ÿ\s'\-.,\d]";
+
+        // Check if the entered text contains disallowed characters
+        if (Regex.IsMatch(e.NewTextValue, pattern))
+        {
+            // If disallowed characters are found, remove them
+            var newText = Regex.Replace(e.NewTextValue, pattern, "");
+
+            // Update the entry's text with the sanitized text
+            editor.Text = newText;
+        }
+    }
+
+    private void datePicker_DateSelected(object sender, DateChangedEventArgs e)
+    {
+
+        if (repairOrder != null)
+        {
+            
+            DateTime roDate = DateTime.Parse(repairOrder.AppointmentDate);
+            if (roDate != datePicker.Date && datePicker.Date >= currentDate)
+            {
+                reschedule.IsEnabled = true;
+                return;
+            }
+        }
+        reschedule.IsEnabled = false;
     }
 }
