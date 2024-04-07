@@ -60,10 +60,15 @@ public partial class TechView : ContentPage
         }
         updateTech.IsEnabled = false;
     }
-    private void deleteTech_Clicked(object sender, EventArgs e)
+    private async void deleteTech_Clicked(object sender, EventArgs e)
     {
         if (t != null)
         {
+            bool delete = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this Technician?", "Delete Technician", "Cancel");
+            if (!delete)
+            {
+                return;
+            }
             MauiProgram.ShopDB.RemoveTechnician(t.EmployeeId);
             OnAppearing();
         }
