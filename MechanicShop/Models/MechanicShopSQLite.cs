@@ -18,7 +18,7 @@ namespace MechanicShop.Models
             this.database.Execute("PRAGMA foreign_keys = ON;");
 
             //For dropping tables, uncomment the next line and insert your table name in the <>
-            //this.database.DropTable<RepairOrder>();
+            //this.database.DropTable<RepairOrderServiceJobBridge>();
 
             //Try creating this table
             try
