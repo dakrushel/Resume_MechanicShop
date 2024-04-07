@@ -133,7 +133,7 @@ public partial class AppointmentView : ContentPage
         if (repairOrder != null && toRemove != null)
         {
             RepairOrderServiceJobBridge rsjb = new RepairOrderServiceJobBridge(repairOrder.RepairOrderId, toRemove.ServiceJobId);
-            MauiProgram.ShopDB.DeleteRepairOrderServiceJobBridge(rsjb);
+            //MauiProgram.ShopDB.DeleteRepairOrderServiceJobBridge(rsjb);
         }
         removeJobBtn.IsEnabled = false;
     }
