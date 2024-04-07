@@ -365,13 +365,16 @@ namespace MechanicShop.Models
 
         public List<ServiceJob> GetServiceJobListByRepairOrderId(int repairOrderId)
         {
+            //New list of service jobs
             List<ServiceJob> serviceJobs = new List<ServiceJob>();
 
+            //Goes through each row of data in the Repair order service job bridge table
             foreach (RepairOrderServiceJobBridge var in this.database.Table<RepairOrderServiceJobBridge>().ToList()) 
             {
+                //if the line of data matches the repair order id, find the ServiceJob based on the service Job Id and add it to the list
                 if (var.RepairOrderId == repairOrderId)
                 {
-                    ServiceJob serviceJob = this.database.Table<ServiceJob>().First(x => x.ServiceJobId ==var.ServiceJobId); 
+                    ServiceJob serviceJob = this.database.Table<ServiceJob>().First(x => x.ServiceJobId == var.ServiceJobId); 
                     serviceJobs.Add(serviceJob);
                 }
             }
@@ -379,6 +382,6 @@ namespace MechanicShop.Models
             return serviceJobs;
         }
     }
-
+   
 
 }
