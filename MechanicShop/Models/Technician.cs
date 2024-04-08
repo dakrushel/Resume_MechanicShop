@@ -8,7 +8,7 @@ namespace MechanicShop.Models
     [Table("Technician")]
     public class Technician
     {
-        [PrimaryKey, NotNull]
+        [PrimaryKey, NotNull, AutoIncrement]
         public string EmployeeId { get; set; }
 
         public string Specialization { get; set; }
