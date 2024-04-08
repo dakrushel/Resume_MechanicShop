@@ -245,4 +245,9 @@ public partial class TechView : ContentPage
 
 
     }
+
+    private void updateShopSettings_Clicked(object sender, EventArgs e)
+    {
+
+    }
 }

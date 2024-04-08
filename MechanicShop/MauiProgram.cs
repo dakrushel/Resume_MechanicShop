@@ -28,7 +28,8 @@ namespace MechanicShop
             ShopDB = new MechanicShopSQLite();
 
             
-            
+
+
 
 
 #if DEBUG

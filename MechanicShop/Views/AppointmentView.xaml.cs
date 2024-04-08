@@ -136,6 +136,7 @@ public partial class AppointmentView : ContentPage
     
     private void removeJobBtn_Clicked(object sender, EventArgs e)
     {
+        AppointmentDetailsChanged();
         ServiceJob? toRemove = repairOrderJobs.SelectedItem as ServiceJob;
         if (toRemove != null)
         {
@@ -296,6 +297,7 @@ public partial class AppointmentView : ContentPage
     }
     private void addThisJob_Clicked(object sender, EventArgs e)
     {
+        AppointmentDetailsChanged();
         ServiceJob? sj = thisJob.BindingContext as ServiceJob;
         if (sj != null)
         {

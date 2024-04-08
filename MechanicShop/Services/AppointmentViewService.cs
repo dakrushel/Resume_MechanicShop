@@ -22,7 +22,7 @@ namespace MechanicShop.Services
             foreach (var appointment in appointments)
             {
                 DateTime appointmentDate = DateTime.Parse(appointment.AppointmentDate);
-                if (appointmentDate < AppointmentView.currentDate)
+                if (appointmentDate < AppointmentView.currentDate.AddDays(-1))
                 {
                     expiredAppointments.Add(appointment);
                 }

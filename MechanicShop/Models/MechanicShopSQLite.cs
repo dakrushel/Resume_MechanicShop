@@ -231,11 +231,11 @@ namespace MechanicShop.Models
         public void RemoveRepairOrder(int repairOrderId)
         {
             //For loop to delete each RepairOrderServiceJob attached to the repair order
-            foreach (RepairOrderServiceJobBridge var in this.database.Table<RepairOrderServiceJobBridge>().ToList())
+            foreach (RepairOrderServiceJobBridge ro in this.database.Table<RepairOrderServiceJobBridge>().ToList())
             {
-                if (var.RepairOrderId == repairOrderId)
+                if (ro.RepairOrderId == repairOrderId)
                 {
-                    this.database.Delete<RepairOrderServiceJobBridge>(var.RepairOrderServiceJobBridgeId); 
+                    this.database.Delete<RepairOrderServiceJobBridge>(ro.RepairOrderServiceJobBridgeId); 
                 }
             }
             this.database.Delete<RepairOrder>(repairOrderId);
