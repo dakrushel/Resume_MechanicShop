@@ -46,7 +46,8 @@
                 <Border WidthRequest="350" HeightRequest="280">
                     <VerticalStackLayout Spacing="10" Padding="20">
                         <Label Text="Shop Settings" FontSize="30"/>
-                        <Grid HorizontalOptions="Center" ColumnSpacing="10" RowSpacing="10">
+                        <Grid x:Name="settingsMenu" 
+                            HorizontalOptions="Center" ColumnSpacing="10" RowSpacing="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
@@ -58,15 +59,19 @@
                             </Grid.ColumnDefinitions>
                             <Label Text="Labour Rate:" HorizontalOptions="End"
                                    VerticalOptions="Center"/>
-                            <Entry x:Name="shopRate" Grid.Column="1"/>
+                            <Entry x:Name="shopRate" Grid.Column="1"
+                                   Text="{Binding ShopHourlyRate}"
+                                   TextChanged="shopRate_TextChanged"/>
 
                             <Label Text="Shop Supplies:" HorizontalOptions="End"
                                    VerticalOptions="Center" Grid.Row="1"/>
-                            <Entry x:Name="shipSupplies" Grid.Column="1" Grid.Row="1"/>
+                            <Entry x:Name="shopSupplies" Grid.Column="1" Grid.Row="1"
+                                   Text="{Binding ShopSupplyCost}"
+                                   TextChanged="shopSupplies_TextChanged"/>
 
                             <Button Grid.Row="2" Grid.ColumnSpan="2" Margin="0,30,0,0"
                                     x:Name="updateShopSettings" Text="Update Shop Settings"
-                                    IsEnabled="False" Clicked=""/>
+                                    IsEnabled="False" Clicked="updateShopSettings_Clicked"/>
                             
 
                         </Grid>

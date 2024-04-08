@@ -8,9 +8,13 @@ public partial class TechView : ContentPage
 {
     public static bool formValid = false;
     public static Technician? t = null;
+    public static ShopSettings? shopSettings = null;
 	public TechView()
 	{
 		InitializeComponent();
+
+        shopSettings = MauiProgram.ShopDB.GetShopSettings();
+        settingsMenu.BindingContext = shopSettings;
 	}
     protected override void OnAppearing()
     {
@@ -35,6 +39,7 @@ public partial class TechView : ContentPage
 
         techOptions.IsVisible = true;
         addTech.IsVisible = false;
+        updateShopSettings.IsEnabled = false;
 
 
     }
@@ -248,6 +253,35 @@ public partial class TechView : ContentPage
 
     private void updateShopSettings_Clicked(object sender, EventArgs e)
     {
-
+        updateShopSettings.IsEnabled = false;
+        if (shopRate.Text != null && shopSupplies.Text != null && shopSettings != null)
+        {
+            shopSettings.ShopHourlyRate = double.Parse(shopRate.Text);
+            shopSettings.ShopSupplyCost = double.Parse(shopSupplies.Text);
+            MauiProgram.ShopDB.UpdateShopSettings(shopSettings);
+        }
+        
     }
+
+    private void shopRate_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        shopSettingsChanged();
+    }
+    private void shopSettingsChanged()
+    {
+        if (shopRate.Text != null && shopSupplies.Text != null)
+        {
+            updateShopSettings.IsEnabled = true;
+            return;
+        }
+        updateShopSettings.IsEnabled = false;
+            
+    }
+
+    private void shopSupplies_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        shopSettingsChanged();
+    }
+
+   
 }
