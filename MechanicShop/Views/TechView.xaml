@@ -47,23 +47,23 @@
                     <VerticalStackLayout Spacing="10" Padding="20">
                         <Label Text="Shop Settings" FontSize="30"/>
                         <Grid x:Name="settingsMenu" 
-                            HorizontalOptions="Center" ColumnSpacing="10" RowSpacing="10">
+                            HorizontalOptions="Center"  RowSpacing="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="190"/>
                             </Grid.ColumnDefinitions>
-                            <Label Text="Labour Rate:" HorizontalOptions="End"
+                            <Label Text="Labour Rate: $" HorizontalOptions="End"
                                    VerticalOptions="Center"/>
                             <Entry x:Name="shopRate" Grid.Column="1"
                                    Text="{Binding ShopHourlyRate}"
                                    TextChanged="shopRate_TextChanged"/>
 
-                            <Label Text="Shop Supplies:" HorizontalOptions="End"
+                            <Label Text="Shop Supplies: $" HorizontalOptions="End"
                                    VerticalOptions="Center" Grid.Row="1"/>
                             <Entry x:Name="shopSupplies" Grid.Column="1" Grid.Row="1"
                                    Text="{Binding ShopSupplyCost}"
@@ -88,7 +88,7 @@
                                 Text="Clear" WidthRequest="100" Clicked="clearTechForm_Clicked"/>
                     </HorizontalStackLayout>
                     
-                    <Grid ColumnSpacing="10" RowSpacing="10" HorizontalOptions="Center"
+                    <Grid RowSpacing="10" HorizontalOptions="Center"
                           x:Name="techInfo">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
@@ -106,27 +106,27 @@
                         
 
                         <Label Text="Technician Name:" VerticalOptions="Center" HorizontalOptions="End"
-                               Grid.Row="0"/>
+                               Grid.Row="0" Margin="0,0,10,0"/>
                         <Entry Grid.Column="1" Grid.Row="0" VerticalOptions="Center"
                                Placeholder="Employee Name" WidthRequest="220"
                                x:Name="techName" Text="{Binding Name}"
                                TextChanged="techName_TextChanged"/>
 
                         <Label Text="Phone Number:" VerticalOptions="Center" HorizontalOptions="End"
-                                Grid.Row="1"/>
+                                Grid.Row="1" Margin="0,0,10,0"/>
                         <Entry Grid.Column="1" Grid.Row="1" VerticalOptions="Center"
                                 Placeholder="Employee Phone" WidthRequest="220"
                                x:Name="techPhone" Text="{Binding EmployeePhone}"
                                TextChanged="techPhone_TextChanged"/>
 
                         <Label Text="Specialization:" VerticalOptions="Center" HorizontalOptions="End"
-                                Grid.Row="2"/>
+                                Grid.Row="2" Margin="0,0,10,0"/>
                         <Entry Grid.Column="1" Grid.Row="2" VerticalOptions="Center"
                                 Placeholder="Specialization" WidthRequest="220"
                                x:Name="techSpecial" Text="{Binding Specialization}"
                                TextChanged="techSpecial_TextChanged"/>
 
-                        <Label Text="Hourly Rate:" VerticalOptions="Center" HorizontalOptions="End"
+                        <Label Text="Hourly Rate: $" VerticalOptions="Center" HorizontalOptions="End"
                                     Grid.Row="3"/>
                         <Entry Grid.Column="1" Grid.Row="3" VerticalOptions="Center"
                                 Placeholder="Pay Rate" WidthRequest="220"
@@ -137,12 +137,12 @@
                                Grid.Row="4" Grid.ColumnSpan="2" HorizontalOptions="Center"/>
 
                         <Label Text="Employee Id:" VerticalOptions="Center" HorizontalOptions="End"
-                               Grid.Row="5"/>
+                               Grid.Row="5" Margin="0,0,10,0"/>
                         <Entry Grid.Column="1" Grid.Row="5" IsReadOnly="True" Placeholder="Auto Generated"
                                 x:Name="techID" WidthRequest="220" Text="{Binding EmployeeId}"/>
 
                         <Label Text="Hire Date:" VerticalOptions="Center" HorizontalOptions="End"
-                                Grid.Row="6"/>
+                                Grid.Row="6" Margin="0,0,10,0"/>
                         <Entry Grid.Column="1" Grid.Row="6" VerticalOptions="Center"
                                 Placeholder="Auto Generated" WidthRequest="220" IsReadOnly="True"
                                 x:Name="techHireDate" Text="{Binding HireDate}"/> 

@@ -406,20 +406,9 @@ namespace MechanicShop.Models
             this.database.Update(repairOrderServiceJobBridge);
         }
 
-        public void DeleteRepairOrderServiceJobBridge(int repairOrderServiceJobBridgeId)
+        public void DeleteRepairOrderServiceJobBridge(int repairOrderId)
         {
-            var bridgesToDelete = this.database.Table<RepairOrderServiceJobBridge>().Where(bridge => bridge.RepairOrderId == repairOrderId).ToList();
-
-            foreach (var bridge in bridgesToDelete)
-            {
-                this.database.Delete<RepairOrderServiceJobBridge>(bridge.Id);
-            }
-            var bridgesToDelete = this.database.Table<RepairOrderServiceJobBridge>().Where(bridge => bridge.RepairOrderId == repairOrderId).ToList();
-
-            foreach (var bridge in bridgesToDelete)
-            {
-                this.database.Delete<RepairOrderServiceJobBridge>(bridge.Id);
-            }
+           
         }
 
         public List<ServiceJob> GetServiceJobListByRepairOrderId(int repairOrderId)

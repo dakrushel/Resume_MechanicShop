@@ -12,9 +12,7 @@ public partial class TechView : ContentPage
 	public TechView()
 	{
 		InitializeComponent();
-
-        shopSettings = MauiProgram.ShopDB.GetShopSettings();
-        settingsMenu.BindingContext = shopSettings;
+        updateShopSettings.IsEnabled = false;
 	}
     protected override void OnAppearing()
     {
@@ -41,6 +39,8 @@ public partial class TechView : ContentPage
         addTech.IsVisible = false;
         updateShopSettings.IsEnabled = false;
 
+        shopSettings = MauiProgram.ShopDB.GetShopSettings();
+        settingsMenu.BindingContext = shopSettings;
 
     }
     private void RefreshTechList()
@@ -266,6 +266,21 @@ public partial class TechView : ContentPage
     private void shopRate_TextChanged(object sender, TextChangedEventArgs e)
     {
         shopSettingsChanged();
+        var entry = (Entry)sender;
+        if (e.NewTextValue == null) { return; }
+        // Remove non-digit characters
+        var newText = new string(e.NewTextValue.Where(char.IsDigit).ToArray());
+        // Limit maximum length to 5 digits
+        if (newText.Length > 5)
+        {
+            newText = newText.Substring(0, 5);
+        }
+        // Automatically insert decimal
+        if (newText.Length >= 3 && newText.Length <= 5 && newText.IndexOf('.') == -1)
+        {
+            newText = newText.Insert(newText.Length - 2, ".");
+        }
+        entry.Text = newText;
     }
     private void shopSettingsChanged()
     {
@@ -281,6 +296,21 @@ public partial class TechView : ContentPage
     private void shopSupplies_TextChanged(object sender, TextChangedEventArgs e)
     {
         shopSettingsChanged();
+        var entry = (Entry)sender;
+        if (e.NewTextValue == null) { return; }
+        // Remove non-digit characters
+        var newText = new string(e.NewTextValue.Where(char.IsDigit).ToArray());
+        // Limit maximum length to 5 digits
+        if (newText.Length > 5)
+        {
+            newText = newText.Substring(0, 5);
+        }
+        // Automatically insert decimal
+        if (newText.Length >= 3 && newText.Length <= 5 && newText.IndexOf('.') == -1)
+        {
+            newText = newText.Insert(newText.Length - 2, ".");
+        }
+        entry.Text = newText;
     }
 
    
