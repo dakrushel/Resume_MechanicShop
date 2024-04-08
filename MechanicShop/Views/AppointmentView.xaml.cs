@@ -192,7 +192,7 @@ public partial class AppointmentView : ContentPage
             foreach (ServiceJob job in thisJobs)
             {
                 //TODO
-                //newAppointment.AssignServiceJob(job.ServiceJobId);
+                newAppointment.AssignServiceJob(job.ServiceJobId);
             }
             repairOrder = newAppointment;
            
@@ -215,10 +215,8 @@ public partial class AppointmentView : ContentPage
             // confirmation message to prevent accidental deletion
             bool delete = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this appointment?", "Delete Appointment", "Cancel");
             if (delete)
-            {
-                // delete the appointment
-                MauiProgram.ShopDB.RemoveRepairOrder(repairOrder.RepairOrderId);
-                // refresh the page
+            {              
+                MauiProgram.ShopDB.RemoveRepairOrder(repairOrder.RepairOrderId);                
                 OnAppearing();
             }
         }
