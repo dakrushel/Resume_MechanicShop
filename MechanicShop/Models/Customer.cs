@@ -16,6 +16,8 @@ namespace MechanicShop.Models
 
         public string Address { get; set; }
 
+        //Provides access to Database
+        MechanicShopSQLite ShopDB = new MechanicShopSQLite();
 
         //All vehicles attached to customer will be affected by changes to customer class
 

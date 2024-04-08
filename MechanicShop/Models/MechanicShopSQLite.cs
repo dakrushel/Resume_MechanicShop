@@ -149,6 +149,10 @@ namespace MechanicShop.Models
                 .Where(x => x.Name.IndexOf(customerName, StringComparison.OrdinalIgnoreCase) >= 0)
                 .ToList();
         }
+        public Customer GetACustomerByName(string customerName)
+        {
+            return this.database.Table<Customer>().First(x => x.Name == customerName);
+        }
 
         /*---------------------------- VEHICLE ------------------------------------*/
 
@@ -224,7 +228,7 @@ namespace MechanicShop.Models
         }
 
         //TESTED
-        public void RemoveRepairOrder(string repairOrderId)
+        public void RemoveRepairOrder(int repairOrderId)
         {
             this.database.Delete<RepairOrder>(repairOrderId);
         }
