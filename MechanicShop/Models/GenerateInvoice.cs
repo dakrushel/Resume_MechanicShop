@@ -37,7 +37,7 @@ namespace MechanicShop.Models
         //}
 
         //Close and save method. Must output RepairOrder to a txt file and remove it from the database
-        public void SaveInvoiceDelRO(RepairOrder rO)
+/*        public void SaveInvoiceDelRO(RepairOrder rO)
         {
             //Write RO to txt
             this.RepairOrderOutput =
@@ -65,6 +65,6 @@ namespace MechanicShop.Models
 
             //Delete RO from database RepairOrder, Customer, Vehicle, ServiceJob, Technician
             MauiProgram.ShopDB.RemoveRepairOrder(rO.RepairOrderId.ToString());
-        }
+        }*/
     }
 }
