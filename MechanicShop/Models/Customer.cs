@@ -32,7 +32,7 @@ namespace MechanicShop.Models
             this.Address = address;
             // Phone has to be unique as it is PK, validate in front end
             this.CustomerPhone = phone;
-            ShopDB.AddCustomer(this);
+            MauiProgram.ShopDB.AddCustomer(this);
         }
 
         public Customer() { }
@@ -55,9 +55,9 @@ namespace MechanicShop.Models
             Vehicle newCustomerVehicle = new Vehicle(VIN, make, model, Colour, year, this.CustomerPhone);
             
             //Add newly constructed vehicle to customers lists of vehicles and to database
-            ShopDB.AddVehicle(newCustomerVehicle);
+            MauiProgram.ShopDB.AddVehicle(newCustomerVehicle);
             CustomerVehicles.Add(newCustomerVehicle);
-            ShopDB.UpdateCustomer(this);
+            MauiProgram.ShopDB.UpdateCustomer(this);
         }
 
         //RemoveCustomer method must check if customer has an active appointment or repair order before removal from database

@@ -229,7 +229,7 @@
                 
                 <Grid HorizontalOptions="Center" ColumnSpacing="10" RowSpacing="10">
                     <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="60"></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
@@ -246,7 +246,7 @@
                         <Label  Text="Customer Information:" FontSize="20" FontAttributes="Bold"
                                 VerticalOptions="Center"/>
                         <Button x:Name="ClearCustomerDisplay" Text="Clear" WidthRequest="100"
-                                Clicked="ClearCustomerDisplay_Clicked"/>
+                                Clicked="ClearCustomerDisplay_Clicked" />
                     </HorizontalStackLayout>
                     
                     

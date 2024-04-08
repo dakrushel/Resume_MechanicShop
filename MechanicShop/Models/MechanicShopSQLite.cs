@@ -18,7 +18,7 @@ namespace MechanicShop.Models
             this.database.Execute("PRAGMA foreign_keys = ON;");
 
             //For dropping tables, uncomment the next line and insert your table name in the <>
-            //this.database.DropTable<VehicleDatabase>();
+            //this.database.DropTable<RepairOrderServiceJobBridge>();
 
             //Try creating this table
             try
@@ -43,15 +43,6 @@ namespace MechanicShop.Models
             try
             {
                 this.database.CreateTable<Vehicle>();
-            }
-            catch (SQLiteException ex)
-            {
-                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
-            }
-
-            try
-            {
-                this.database.CreateTable<Employee>();
             }
             catch (SQLiteException ex)
             {
@@ -85,7 +76,16 @@ namespace MechanicShop.Models
                 Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
             }
 
-          
+            try
+            {
+                this.database.CreateTable<RepairOrderServiceJobBridge>();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+            }
+
+
 
             this.database.Commit();
 
@@ -117,12 +117,6 @@ namespace MechanicShop.Models
             this.database.Delete<Customer>(customerPhoneNumber);
         }
 
-        //Search for customer
-        //Take customer name or phone# as argument
-        //If phone# search by primary key and return cutomer
-        //If name only search by name and return list of matches
-
-
         public List<Customer> GetAllCustomers()
         {
             return this.database.Table<Customer>().ToList();
@@ -149,6 +143,10 @@ namespace MechanicShop.Models
                 .Where(x => x.Name.IndexOf(customerName, StringComparison.OrdinalIgnoreCase) >= 0)
                 .ToList();
         }
+        public Customer GetACustomerByName(string customerName)
+        {
+            return this.database.Table<Customer>().First(x => x.Name == customerName);
+        }
 
         /*---------------------------- VEHICLE ------------------------------------*/
 
@@ -174,7 +172,22 @@ namespace MechanicShop.Models
         {
             return this.database.Table<Vehicle>().ToList();
         }
-        
+
+        //TODO: For Logic layer this method would need checks to ensure that repairOrderId is valid
+        public string GetCustomerNameViaVIN(string VIN)
+        {
+            Vehicle targetVehicle = this.database.Table<Vehicle>().First(x => x.VIN == VIN);
+
+            Customer customer = this.database.Table<Customer>().First(x => x.CustomerPhone == targetVehicle.CustomerPhone);
+
+            return customer.Name;
+        }
+
+        public Vehicle GetVehicleByVIN(string VIN)
+        {
+            return this.database.Table<Vehicle>().First(x => x.VIN == VIN); 
+        }
+
 
         /*----------------------------TECHNICIAN ------------------------------------*/
         //TESTED
@@ -209,7 +222,7 @@ namespace MechanicShop.Models
         }
 
         //TESTED
-        public void RemoveRepairOrder(string repairOrderId)
+        public void RemoveRepairOrder(int repairOrderId)
         {
             this.database.Delete<RepairOrder>(repairOrderId);
         }
@@ -225,11 +238,20 @@ namespace MechanicShop.Models
             return this.database.Table<RepairOrder>().ToList();
         }
 
-        public List<RepairOrder> GetRepairOrderByVIN(string vin)
+        public List<RepairOrder> GetRepairOrdersThatAreNOTActive()
         {
-            return this.database.Table<RepairOrder>().ToList()
-                .Where(x => x.VIN == vin).ToList();
+            return this.database.Table<RepairOrder>()
+                .Where(x => x.IsActive == false).ToList();
         }
+
+        public List<RepairOrder> GetRepairOrdersThatAreActive()
+        {
+            return this.database.Table<RepairOrder>()
+                .Where(x => x.IsActive == true).ToList();
+        }
+
+
+
         /*----------------------------SERVICE JOB ------------------------------------*/
 
         //TESTED
@@ -277,6 +299,8 @@ namespace MechanicShop.Models
             return this.database.Table<VehicleDatabase>().ToList();
         }
 
+
+/*        -------------------------------MAKES AND MODELS --------------------------------------*/
         public List<VehicleDatabase> GetAllVehicleByMake(string VehicleMake)
         {
             List<VehicleDatabase> VehiclesByMake = this.database.Table<VehicleDatabase>().ToList().
@@ -320,6 +344,48 @@ namespace MechanicShop.Models
             return makes;
 
         }
+
+/*        ---------------------------- Repair Order Service Job Bridge -------------------------*/
+
+        public List <RepairOrderServiceJobBridge> GetAllRepairOrderServiceJobBridge()
+        {
+            return this.database.Table<RepairOrderServiceJobBridge>().ToList();
+        }
+
+        public void AddRepairOrderServiceJobBridge(RepairOrderServiceJobBridge repairOrderServiceJobBridge)
+        {
+            this.database.Insert(repairOrderServiceJobBridge);
+        }
+
+        public void UpdateRepairOrderServiceJobBridge(RepairOrderServiceJobBridge repairOrderServiceJobBridge)
+        {
+            this.database.Update(repairOrderServiceJobBridge);
+        }
+
+        public void DeleteRepairOrderServiceJobBridge(int repairOrderServiceJobBridgeId)
+        { 
+            this.database.Delete<RepairOrderServiceJobBridge>(repairOrderServiceJobBridgeId);
+        }
+
+        public List<ServiceJob> GetServiceJobListByRepairOrderId(int repairOrderId)
+        {
+            //New list of service jobs
+            List<ServiceJob> serviceJobs = new List<ServiceJob>();
+
+            //Goes through each row of data in the Repair order service job bridge table
+            foreach (RepairOrderServiceJobBridge var in this.database.Table<RepairOrderServiceJobBridge>().ToList()) 
+            {
+                //if the line of data matches the repair order id, find the ServiceJob based on the service Job Id and add it to the list
+                if (var.RepairOrderId == repairOrderId)
+                {
+                    ServiceJob serviceJob = this.database.Table<ServiceJob>().First(x => x.ServiceJobId == var.ServiceJobId); 
+                    serviceJobs.Add(serviceJob);
+                }
+            }
+
+            return serviceJobs;
+        }
     }
+   
 
 }
