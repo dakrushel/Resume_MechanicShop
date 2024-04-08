@@ -98,11 +98,12 @@ public partial class CustomerView : ContentPage
     {
         // inactive unless search fields filled in
         ResetSearchWidget();
+        
     }
     private void searchCustoemrsBtn_Clicked(object sender, EventArgs e)
     {
         // TODO: this method!
-        // inactive unless searfh fields are filled in
+        // inactive unless search fields are filled in
         // Pairs down collectionview to only items matching search terms
     }
     private void addCustomer_Clicked(object sender, EventArgs e)
@@ -334,7 +335,7 @@ public partial class CustomerView : ContentPage
     private void ClearCustomerDisplay_Clicked(object sender, EventArgs e)
     {
         ResetCustomerDisplay();
-        
+        customersCollectionView.SelectedItem = null;
     }
     private void cVehicleList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
@@ -345,7 +346,7 @@ public partial class CustomerView : ContentPage
     }
     private async void deleteVehicle_Clicked(object sender, EventArgs e)
     {
-        bool delete = await DisplayAlert("Confirm Deletion", "Asre you sure you want to perminantly delete this vehicle?", "Delete", "Cancel");
+        bool delete = await DisplayAlert("Confirm Deletion", "Are you sure you want to perminantly delete this vehicle?", "Delete", "Cancel");
         if (delete)
         {
             Vehicle? toDelete = cVehicleList.SelectedItem as Vehicle;
@@ -373,13 +374,10 @@ public partial class CustomerView : ContentPage
             Pass.PassVehicle(v);
         }
         await Shell.Current.GoToAsync("//AppointmentView");
-        
+
     }
 
     
-
-    
-
     private void SearchTextChanged(object sender, TextChangedEventArgs e)
     {
         if(nameEntry.Text == null && phoneEntry.Text == null)

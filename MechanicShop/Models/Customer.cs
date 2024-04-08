@@ -16,6 +16,8 @@ namespace MechanicShop.Models
 
         public string Address { get; set; }
 
+        //Provides access to Database
+        MechanicShopSQLite ShopDB = new MechanicShopSQLite();
 
         //All vehicles attached to customer will be affected by changes to customer class
 
@@ -25,7 +27,7 @@ namespace MechanicShop.Models
 
         public Customer(string name, string address, string phone)
         {
-            // inputs MUST ve validated from front end BEFORE they get here OR ELSE!!!!
+            // inputs MUST be validated from front end BEFORE they get here OR ELSE!!!!
             this.Name = name;
             this.Address = address;
             // Phone has to be unique as it is PK, validate in front end
@@ -58,8 +60,38 @@ namespace MechanicShop.Models
             MauiProgram.ShopDB.UpdateCustomer(this);
         }
 
+        //RemoveCustomer method must check if customer has an active appointment or repair order before removal from database
+        public bool RemoveCustomerChecker(string phoneNum) //Denver
+        {
+            //If customer with phone# of phoneNum has a scheduled appointment or active Repair Order, return false
 
+            //Variables:
+            List<RepairOrder> customerROs = new List<RepairOrder>();
+            List<Vehicle> custVehicles = MauiProgram.ShopDB.GetCustomerVehicles(phoneNum);
 
+            if (custVehicles.Count > 0)
+            {
+                List<RepairOrder> tempRO = new List<RepairOrder>();
+                foreach (Vehicle v in custVehicles)
+                {
+                    tempRO.AddRange(MauiProgram.ShopDB.GetRepairOrderByVIN(v.VIN));
+                }
+                foreach (RepairOrder ro in tempRO)
+                {
+                    if (ro.IsActive && ro.DateClose == null)
+                    {
+                        customerROs.Add(ro);
+                    }
+                }
+                if (customerROs.Count > 0) { return false; }
 
+                else
+                {
+                    //MauiProgram.ShopDB.RemoveCustomer(phoneNum);
+                    return true;
+                }
+            }
+            else { return true; }
+        }
     }
 }

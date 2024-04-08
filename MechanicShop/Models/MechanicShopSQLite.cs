@@ -117,6 +117,12 @@ namespace MechanicShop.Models
             this.database.Delete<Customer>(customerPhoneNumber);
         }
 
+        //Search for customer
+        //Take customer name or phone# as argument
+        //If phone# search by primary key and return cutomer
+        //If name only search by name and return list of matches
+
+
         public List<Customer> GetAllCustomers()
         {
             return this.database.Table<Customer>().ToList();
@@ -142,6 +148,10 @@ namespace MechanicShop.Models
             return this.database.Table<Customer>()
                 .Where(x => x.Name.IndexOf(customerName, StringComparison.OrdinalIgnoreCase) >= 0)
                 .ToList();
+        }
+        public Customer GetACustomerByName(string customerName)
+        {
+            return this.database.Table<Customer>().First(x => x.Name == customerName);
         }
 
         /*---------------------------- VEHICLE ------------------------------------*/
@@ -217,10 +227,30 @@ namespace MechanicShop.Models
             this.database.Insert(repairOrder);
         }
 
-        //TESTED
-        public void RemoveRepairOrder(string repairOrderId)
+
+        public void RemoveRepairOrder(int repairOrderId)
         {
+            //For loop to delete each RepairOrderServiceJob attached to the repair order
+            foreach (RepairOrderServiceJobBridge var in this.database.Table<RepairOrderServiceJobBridge>().ToList())
+            {
+                if (var.RepairOrderId == repairOrderId)
+                {
+                    this.database.Delete<RepairOrderServiceJobBridge>(var.RepairOrderServiceJobBridgeId); 
+                }
+            }
             this.database.Delete<RepairOrder>(repairOrderId);
+        }
+
+        //Removes all RepairOrderServiceJobBridge rows associated with the repair order without deleting the repair order
+        public void RemoveRepairOrderServiceJobBridgeAttachedToRepairOrder(int repairOrderId)
+        {
+            foreach (RepairOrderServiceJobBridge var in this.database.Table<RepairOrderServiceJobBridge>().ToList())
+            {
+                if (var.RepairOrderId == repairOrderId)
+                {
+                    this.database.Delete<RepairOrderServiceJobBridge>(var.RepairOrderServiceJobBridgeId);
+                }
+            }
         }
 
         //TESTED
