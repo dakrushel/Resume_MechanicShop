@@ -227,10 +227,30 @@ namespace MechanicShop.Models
             this.database.Insert(repairOrder);
         }
 
-        //TESTED
+
         public void RemoveRepairOrder(int repairOrderId)
         {
+            //For loop to delete each RepairOrderServiceJob attached to the repair order
+            foreach (RepairOrderServiceJobBridge var in this.database.Table<RepairOrderServiceJobBridge>().ToList())
+            {
+                if (var.RepairOrderId == repairOrderId)
+                {
+                    this.database.Delete<RepairOrderServiceJobBridge>(var.RepairOrderServiceJobBridgeId); 
+                }
+            }
             this.database.Delete<RepairOrder>(repairOrderId);
+        }
+
+        //Removes all RepairOrderServiceJobBridge rows associated with the repair order without deleting the repair order
+        public void RemoveRepairOrderServiceJobBridgeAttachedToRepairOrder(int repairOrderId)
+        {
+            foreach (RepairOrderServiceJobBridge var in this.database.Table<RepairOrderServiceJobBridge>().ToList())
+            {
+                if (var.RepairOrderId == repairOrderId)
+                {
+                    this.database.Delete<RepairOrderServiceJobBridge>(var.RepairOrderServiceJobBridgeId);
+                }
+            }
         }
 
         //TESTED
