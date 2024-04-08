@@ -18,7 +18,7 @@ namespace MechanicShop.Models
             this.database.Execute("PRAGMA foreign_keys = ON;");
 
             //For dropping tables, uncomment the next line and insert your table name in the <>
-            //this.database.DropTable<RepairOrderServiceJobBridge>();
+            //this.database.DropTable<RepairOrder>();
 
             //Try creating this table
             try
@@ -28,7 +28,7 @@ namespace MechanicShop.Models
             //Catch statement for any tabless that have been created
             catch (SQLiteException ex)
             {
-                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+                Console.WriteLine("Error creating table: " + ex.Message);
             }
 
             try
@@ -37,7 +37,7 @@ namespace MechanicShop.Models
             }
             catch (SQLiteException ex)
             {
-                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+                Console.WriteLine("Error creating table: " + ex.Message);
             }
 
             try
@@ -46,7 +46,7 @@ namespace MechanicShop.Models
             }
             catch (SQLiteException ex)
             {
-                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+                Console.WriteLine("Error creating table: " + ex.Message);
             }
 
             try
@@ -55,7 +55,7 @@ namespace MechanicShop.Models
             }
             catch (SQLiteException ex)
             {
-                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+                Console.WriteLine("Error creating table: " + ex.Message);
             }
 
             try
@@ -64,7 +64,7 @@ namespace MechanicShop.Models
             }
             catch (SQLiteException ex)
             {
-                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+                Console.WriteLine("Error creating table: " + ex.Message);
             }
 
             try
@@ -73,7 +73,7 @@ namespace MechanicShop.Models
             }
             catch (SQLiteException ex)
             {
-                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+                Console.WriteLine("Error creating table: " + ex.Message);
             }
 
             try
@@ -82,9 +82,18 @@ namespace MechanicShop.Models
             }
             catch (SQLiteException ex)
             {
-                Console.WriteLine("Error creating RepairOrder table: " + ex.Message);
+                Console.WriteLine("Error creating table: " + ex.Message);
             }
 
+            try
+            {
+                this.database.CreateTable<ShopSettings>();
+            }
+            //Catch statement for any tabless that have been created
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating table: " + ex.Message);
+            }
 
 
             this.database.Commit();
@@ -154,6 +163,7 @@ namespace MechanicShop.Models
             return this.database.Table<Customer>().First(x => x.Name == customerName);
         }
 
+
         /*---------------------------- VEHICLE ------------------------------------*/
 
         //TESTED
@@ -180,13 +190,13 @@ namespace MechanicShop.Models
         }
 
         //TODO: For Logic layer this method would need checks to ensure that repairOrderId is valid
-        public string GetCustomerNameViaVIN(string VIN)
+        public Customer GetCustomerViaVIN(string VIN)
         {
             Vehicle targetVehicle = this.database.Table<Vehicle>().First(x => x.VIN == VIN);
 
             Customer customer = this.database.Table<Customer>().First(x => x.CustomerPhone == targetVehicle.CustomerPhone);
 
-            return customer.Name;
+            return customer;
         }
 
         public Vehicle GetVehicleByVIN(string VIN)
@@ -230,12 +240,13 @@ namespace MechanicShop.Models
 
         public void RemoveRepairOrder(int repairOrderId)
         {
+            List<RepairOrderServiceJobBridge> listToCheck = this.database.Table<RepairOrderServiceJobBridge>().ToList();
             //For loop to delete each RepairOrderServiceJob attached to the repair order
-            foreach (RepairOrderServiceJobBridge ro in this.database.Table<RepairOrderServiceJobBridge>().ToList())
+            foreach (RepairOrderServiceJobBridge objectToCheck in listToCheck)
             {
-                if (ro.RepairOrderId == repairOrderId)
+                if (objectToCheck.RepairOrderId == repairOrderId)
                 {
-                    this.database.Delete<RepairOrderServiceJobBridge>(ro.RepairOrderServiceJobBridgeId); 
+                    this.database.Delete<RepairOrderServiceJobBridge>(objectToCheck.RepairOrderServiceJobBridgeId); 
                 }
             }
             this.database.Delete<RepairOrder>(repairOrderId);
@@ -252,6 +263,8 @@ namespace MechanicShop.Models
                 }
             }
         }
+
+
 
         //TESTED
         public void UpdateRepairOrder(RepairOrder repairOrder)
@@ -274,6 +287,11 @@ namespace MechanicShop.Models
         {
             return this.database.Table<RepairOrder>()
                 .Where(x => x.IsActive == true).ToList();
+        }
+
+        public RepairOrder GetRepairOrderByVIN(string VIN)
+        {
+            return this.database.Table<RepairOrder>().First(x => x.VIN == VIN);
         }
 
 
@@ -411,7 +429,23 @@ namespace MechanicShop.Models
 
             return serviceJobs;
         }
+
+        /*        ---------------------------- Job Settings -------------------------*/
+        
+
+
+        public void UpdateShopSettings (ShopSettings shop)
+        {
+            this.database.Update(shop);
+        }
+
+        public ShopSettings GetShopSettings()
+        {
+            return this.database.Table<ShopSettings>().First();
+        }
+
+
     }
-   
+
 
 }

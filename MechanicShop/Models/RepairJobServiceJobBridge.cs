@@ -23,9 +23,7 @@ namespace MechanicShop.Models
 
         public RepairOrderServiceJobBridge(int repairOrderId, int serviceJobId)
         {
-            
 
-            
             this.RepairOrderId = repairOrderId;
             this.ServiceJobId = serviceJobId;
         }
