@@ -9,6 +9,7 @@ namespace MechanicShop
         public static MechanicShopSQLite ShopDB;
         public static DateTime currentDate = DateTime.Now;
         public static string dateString = currentDate.ToString("yyyy-MM-dd");
+
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();

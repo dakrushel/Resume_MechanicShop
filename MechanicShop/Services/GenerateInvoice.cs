@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MechanicShop.Models;
 
-namespace MechanicShop.Models
+namespace MechanicShop.Services
 {
-    public class GenerateInvoice //Denver
+    public static class GenerateInvoice //Denver
     {
         //Getters and setters
-        public string RepairOrderOutput { get; set; }
+        public static string RepairOrderOutput { get; set; }
 
         //Ctors
-        public GenerateInvoice() { }
+        //public GenerateInvoice() { }
         //public GenerateInvoice(RepairOrder rO)
         //{
         //    //Retrieve RepairOrder (create temp RO?)
@@ -37,10 +38,10 @@ namespace MechanicShop.Models
         //}
 
         //Close and save method. Must output RepairOrder to a txt file and remove it from the database
-        public void SaveInvoiceDelRO(RepairOrder rO)
+        public static void SaveInvoiceDelRO(RepairOrder rO)
         {
             //Write RO to txt
-            this.RepairOrderOutput =
+            RepairOrderOutput =
                 $"==================================================================\n" +
                 $"               REPAIR ORDER {rO.RepairOrderId}\n" +
                 $"    ----------------------------------------------------------\n" +
@@ -60,11 +61,16 @@ namespace MechanicShop.Models
 
             using (StreamWriter sw = new StreamWriter(Constant.RepairOrderPath))
             {
-                sw.Write(this.RepairOrderOutput); 
+                sw.Write(RepairOrderOutput);
             }
 
             //Delete RO from database RepairOrder, Customer, Vehicle, ServiceJob, Technician
             MauiProgram.ShopDB.RemoveRepairOrder(rO.RepairOrderId.ToString());
+
+            //List<RepairOrder> tempOrders = MauiProgram.ShopDB.GetRepairOrderByVIN("123T");
+            //RepairOrder tempRO = tempOrders[0];
+            //MauiProgram.ShopDB.AddRepairOrder(tempRO);
+            //GenerateInvoice.SaveInvoiceDelRO(tempRO);
         }
     }
 }
