@@ -28,7 +28,7 @@ namespace MechanicShop.Models
             //Catch statement for any tabless that have been created
             catch (SQLiteException ex)
             {
-                
+                Console.WriteLine("Error creating table: " + ex.Message);
             }
 
             try
@@ -37,7 +37,7 @@ namespace MechanicShop.Models
             }
             catch (SQLiteException ex)
             {
-
+                Console.WriteLine("Error creating table: " + ex.Message);
             }
 
             try
@@ -46,7 +46,7 @@ namespace MechanicShop.Models
             }
             catch (SQLiteException ex)
             {
-
+                Console.WriteLine("Error creating table: " + ex.Message);
             }
 
             try
@@ -55,7 +55,7 @@ namespace MechanicShop.Models
             }
             catch (SQLiteException ex)
             {
-
+                Console.WriteLine("Error creating table: " + ex.Message);
             }
 
             try
@@ -64,7 +64,7 @@ namespace MechanicShop.Models
             }
             catch (SQLiteException ex)
             {
-
+                Console.WriteLine("Error creating table: " + ex.Message);
             }
 
             try
@@ -73,7 +73,7 @@ namespace MechanicShop.Models
             }
             catch (SQLiteException ex)
             {
-
+                Console.WriteLine("Error creating table: " + ex.Message);
             }
 
             try
@@ -82,9 +82,18 @@ namespace MechanicShop.Models
             }
             catch (SQLiteException ex)
             {
-
+                Console.WriteLine("Error creating table: " + ex.Message);
             }
 
+            try
+            {
+                this.database.CreateTable<ShopSettings>();
+            }
+            //Catch statement for any tabless that have been created
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error creating table: " + ex.Message);
+            }
 
 
             this.database.Commit();
@@ -255,6 +264,8 @@ namespace MechanicShop.Models
             }
         }
 
+
+
         //TESTED
         public void UpdateRepairOrder(RepairOrder repairOrder)
         {
@@ -418,7 +429,23 @@ namespace MechanicShop.Models
 
             return serviceJobs;
         }
+
+        /*        ---------------------------- Job Settings -------------------------*/
+        
+
+
+        public void UpdateShopSettings (ShopSettings shop)
+        {
+            this.database.Update(shop);
+        }
+
+        public ShopSettings GetShopSettings()
+        {
+            return this.database.Table<ShopSettings>().First();
+        }
+
+
     }
-   
+
 
 }
