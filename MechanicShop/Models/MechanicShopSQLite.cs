@@ -232,6 +232,10 @@ namespace MechanicShop.Models
             return this.database.Table<Technician>().ToList();
         }
 
+        public Technician GetTechnician(string employeeId) //Denver
+        {
+            return this.database.Table<Technician>().First(x => x.EmployeeId == employeeId);
+        }
         /*---------------------------- REPAIR ORDER ------------------------------------*/
 
         //TESTED
@@ -304,6 +308,13 @@ namespace MechanicShop.Models
             return this.database.Table<RepairOrder>().First(x => x.RepairOrderId == PK);
         }
 
+
+
+        public List<RepairOrder> GetRepairOrdersByVIN(string vin) //Denver
+        {
+            return this.database.Table<RepairOrder>().ToList()
+                .Where(x => x.VIN == vin).ToList();
+        }
 
 
         /*----------------------------SERVICE JOB ------------------------------------*/

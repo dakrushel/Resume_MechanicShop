@@ -61,21 +61,25 @@ namespace MechanicShop.Models
         }
 
         //RemoveCustomer method must check if customer has an active appointment or repair order before removal from database
-        public bool RemoveCustomerChecker(string phoneNum) //Denver
+        public static bool RemoveCustomerChecker(string phoneNum) //Denver
         {
-            //If customer with phone# of phoneNum has a scheduled appointment or active Repair Order, return false
+            //If customer with phone# of phoneNum has a scheduled appointment or active Repair Order, return true
+            //Call removecustomer method
 
             //Variables:
             List<RepairOrder> customerROs = new List<RepairOrder>();
             List<Vehicle> custVehicles = MauiProgram.ShopDB.GetCustomerVehicles(phoneNum);
 
+            //If the customer has 1 or more vehicles, check if there are outstanding ROs
             if (custVehicles.Count > 0)
             {
+                //Create a list of ROs for each vehicle belonging to the customer
                 List<RepairOrder> tempRO = new List<RepairOrder>();
                 foreach (Vehicle v in custVehicles)
                 {
-                    //tempRO.Add(MauiProgram.ShopDB.GetRepairOrderByVIN(v.VIN));
+                    tempRO.AddRange(MauiProgram.ShopDB.GetRepairOrdersByVIN(v.VIN));
                 }
+                //Check to see if any of those ROs are active or not closed and add them to customerROs
                 foreach (RepairOrder ro in tempRO)
                 {
                     if (ro.IsActive && ro.DateClose == null)
