@@ -49,7 +49,7 @@ namespace MechanicShop.Models
 
         [ForeignKey(typeof(Technician))]
         //Property to act as foreign key 
-        public string? EmployeeId { get; set; }
+        public int? EmployeeId { get; set; }
 
         [ForeignKey(typeof(RepairOrderServiceJobBridge))]
         public int RepairOrderServiceJobBridgeId { get; set; }
@@ -62,7 +62,7 @@ namespace MechanicShop.Models
 
         //Opens connection to Database
         //CTOR: For all variabless accounted for
-        public RepairOrder(string description, string dateCreated, string appointmentDate, string VIN, string employeeId)
+        public RepairOrder(string description, string dateCreated, string appointmentDate, string VIN, int employeeId)
         {
 
             this.RepairOrderDescription = description;

@@ -8,9 +8,11 @@ public partial class TechView : ContentPage
 {
     public static bool formValid = false;
     public static Technician? t = null;
+    public static ShopSettings? shopSettings = null;
 	public TechView()
 	{
 		InitializeComponent();
+        updateShopSettings.IsEnabled = false;
 	}
     protected override void OnAppearing()
     {
@@ -35,7 +37,10 @@ public partial class TechView : ContentPage
 
         techOptions.IsVisible = true;
         addTech.IsVisible = false;
+        updateShopSettings.IsEnabled = false;
 
+        shopSettings = MauiProgram.ShopDB.GetShopSettings();
+        settingsMenu.BindingContext = shopSettings;
 
     }
     private void RefreshTechList()
@@ -106,7 +111,13 @@ public partial class TechView : ContentPage
             // need EmployeeId
             string date = AppointmentView.TodayDate;
 
-            //TODO make technician (need ID)
+            if (name != null && phone != null && special != null && date != null)
+            {
+                Technician newTech = new Technician(name, phone, date, special, rate);
+                MauiProgram.ShopDB.AddTechnician(newTech);
+                OnAppearing();
+            }
+
         }
     }
     private void FormChanged()
@@ -245,4 +256,68 @@ public partial class TechView : ContentPage
 
 
     }
+
+    private void updateShopSettings_Clicked(object sender, EventArgs e)
+    {
+        updateShopSettings.IsEnabled = false;
+        if (shopRate.Text != null && shopSupplies.Text != null && shopSettings != null)
+        {
+            shopSettings.ShopHourlyRate = double.Parse(shopRate.Text);
+            shopSettings.ShopSupplyCost = double.Parse(shopSupplies.Text);
+            MauiProgram.ShopDB.UpdateShopSettings(shopSettings);
+        }
+        
+    }
+
+    private void shopRate_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        shopSettingsChanged();
+        var entry = (Entry)sender;
+        if (e.NewTextValue == null) { return; }
+        // Remove non-digit characters
+        var newText = new string(e.NewTextValue.Where(char.IsDigit).ToArray());
+        // Limit maximum length to 5 digits
+        if (newText.Length > 5)
+        {
+            newText = newText.Substring(0, 5);
+        }
+        // Automatically insert decimal
+        if (newText.Length >= 3 && newText.Length <= 5 && newText.IndexOf('.') == -1)
+        {
+            newText = newText.Insert(newText.Length - 2, ".");
+        }
+        entry.Text = newText;
+    }
+    private void shopSettingsChanged()
+    {
+        if (shopRate.Text != null && shopSupplies.Text != null)
+        {
+            updateShopSettings.IsEnabled = true;
+            return;
+        }
+        updateShopSettings.IsEnabled = false;
+            
+    }
+
+    private void shopSupplies_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        shopSettingsChanged();
+        var entry = (Entry)sender;
+        if (e.NewTextValue == null) { return; }
+        // Remove non-digit characters
+        var newText = new string(e.NewTextValue.Where(char.IsDigit).ToArray());
+        // Limit maximum length to 5 digits
+        if (newText.Length > 5)
+        {
+            newText = newText.Substring(0, 5);
+        }
+        // Automatically insert decimal
+        if (newText.Length >= 3 && newText.Length <= 5 && newText.IndexOf('.') == -1)
+        {
+            newText = newText.Insert(newText.Length - 2, ".");
+        }
+        entry.Text = newText;
+    }
+
+   
 }

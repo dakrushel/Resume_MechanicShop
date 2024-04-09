@@ -11,6 +11,8 @@ namespace MechanicShop.Services
 {
     public static class AppointmentViewService
     {
+
+        //FOR APPOINTMENTS PAGE
         public static ObservableCollection<RepairOrder> upcomingAppointments = new ObservableCollection<RepairOrder>();
         public static ObservableCollection<RepairOrder> expiredAppointments = new ObservableCollection<RepairOrder>();
         public static void refreshAppointments()
@@ -22,7 +24,7 @@ namespace MechanicShop.Services
             foreach (var appointment in appointments)
             {
                 DateTime appointmentDate = DateTime.Parse(appointment.AppointmentDate);
-                if (appointmentDate < AppointmentView.currentDate)
+                if (appointmentDate < AppointmentView.currentDate.AddDays(-1))
                 {
                     expiredAppointments.Add(appointment);
                 }
@@ -32,6 +34,51 @@ namespace MechanicShop.Services
                 }
             }
         }
+
+
+        //FOR REPAIR ORDERS PAGE
+        public static ObservableCollection<RepairOrder> unassigned = new ObservableCollection<RepairOrder>();
+        public static ObservableCollection<RepairOrder> inProgress = new ObservableCollection<RepairOrder>();
+        public static void refreshROs()
+        {
+            unassigned.Clear();
+            inProgress.Clear();
+            List<RepairOrder> roList = MauiProgram.ShopDB.GetRepairOrdersThatAreActive();
+
+            foreach (var ro in roList)
+            {
+                if (ro.EmployeeId == null)
+                {
+                    unassigned.Add(ro);
+                }
+                else
+                {
+                    inProgress.Add(ro);
+                }
+            }
+        }
+
+        // Get a list of technicians that are not currently assigned to any repair orders.
+        public static ObservableCollection<Technician> openTechnicians = new ObservableCollection<Technician>();
+        public static void RefreshOpenTechnicians()
+        {
+            openTechnicians.Clear();
+            List<Technician> techList = MauiProgram.ShopDB.GetAllTechnicians();
+
+            foreach (var tech in techList)
+            {
+                foreach (var ro in MauiProgram.ShopDB.GetAllRepairOrders())
+                {
+                    if (ro.EmployeeId == tech.EmployeeId) 
+                    {
+                        continue;
+                    }
+                    
+                }
+                openTechnicians.Add(tech);
+            }
+        }
+        
 
         
     }

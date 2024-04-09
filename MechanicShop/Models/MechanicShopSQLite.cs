@@ -222,7 +222,7 @@ namespace MechanicShop.Models
         }
 
         //TESTED
-        public void RemoveTechnician(string employeeId)
+        public void RemoveTechnician(int employeeId)
         {
             this.database.Delete<Technician>(employeeId);
         }
@@ -416,9 +416,9 @@ namespace MechanicShop.Models
             this.database.Update(repairOrderServiceJobBridge);
         }
 
-        public void DeleteRepairOrderServiceJobBridge(int repairOrderServiceJobBridgeId)
-        { 
-            this.database.Delete<RepairOrderServiceJobBridge>(repairOrderServiceJobBridgeId);
+        public void DeleteRepairOrderServiceJobBridge(int BridgePK)
+        {
+            this.database.Delete<RepairOrderServiceJobBridge>(BridgePK);
         }
 
         public List<ServiceJob> GetServiceJobListByRepairOrderId(int repairOrderId)

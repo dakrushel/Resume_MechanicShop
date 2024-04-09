@@ -74,7 +74,7 @@ namespace MechanicShop.Models
                 List<RepairOrder> tempRO = new List<RepairOrder>();
                 foreach (Vehicle v in custVehicles)
                 {
-                    tempRO.Add(MauiProgram.ShopDB.GetRepairOrderByVIN(v.VIN));
+                    //tempRO.Add(MauiProgram.ShopDB.GetRepairOrderByVIN(v.VIN));
                 }
                 foreach (RepairOrder ro in tempRO)
                 {

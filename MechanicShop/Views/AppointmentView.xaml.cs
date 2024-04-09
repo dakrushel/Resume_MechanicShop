@@ -45,6 +45,7 @@ public partial class AppointmentView : ContentPage
             // page temp objects
             c = Pass.RetreiveCustomer();         
             v = Pass.RetrieveVehicle();
+            
 
             //Binding Contexts
             cInformation.BindingContext = c;
@@ -57,7 +58,7 @@ public partial class AppointmentView : ContentPage
             // page temp objects
             cInformation.BindingContext = null;
             vInformation.BindingContext = null;
-            thisJobs.Clear();
+            
 
             // Widgets
             appointmentSlip.IsEnabled = false;
@@ -66,6 +67,7 @@ public partial class AppointmentView : ContentPage
             serviceJobMenu.IsVisible = false;
             
         }
+        thisJobs.Clear();
         problemDescriptionEntry.Text = null;
         
         datePicker.Date = currentDate.AddDays(7);
@@ -95,8 +97,7 @@ public partial class AppointmentView : ContentPage
     {
         appointmentSlip.IsEnabled = true;
         repairOrder = e.SelectedItem as RepairOrder;
-        //activeAppointments.SelectedItem = null;
-        //expiredAppointments.SelectedItem = null;
+        
         if (repairOrder != null)
         {
             // set local variables
@@ -136,6 +137,7 @@ public partial class AppointmentView : ContentPage
     
     private void removeJobBtn_Clicked(object sender, EventArgs e)
     {
+        AppointmentDetailsChanged();
         ServiceJob? toRemove = repairOrderJobs.SelectedItem as ServiceJob;
         if (toRemove != null)
         {
@@ -215,10 +217,8 @@ public partial class AppointmentView : ContentPage
             // confirmation message to prevent accidental deletion
             bool delete = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this appointment?", "Delete Appointment", "Cancel");
             if (delete)
-            {
-                // delete the appointment
-                MauiProgram.ShopDB.RemoveRepairOrder(repairOrder.RepairOrderId);
-                // refresh the page
+            {              
+                MauiProgram.ShopDB.RemoveRepairOrder(repairOrder.RepairOrderId);                
                 OnAppearing();
             }
         }
@@ -298,6 +298,7 @@ public partial class AppointmentView : ContentPage
     }
     private void addThisJob_Clicked(object sender, EventArgs e)
     {
+        AppointmentDetailsChanged();
         ServiceJob? sj = thisJob.BindingContext as ServiceJob;
         if (sj != null)
         {
@@ -384,9 +385,17 @@ public partial class AppointmentView : ContentPage
     
 
 
-    private void makeRO_Clicked(object sender, EventArgs e)
+    private async void makeRO_Clicked(object sender, EventArgs e)
     {
-
+        if (repairOrder != null && c != null && v != null)
+        {
+            repairOrder.IsActive = true;
+            MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
+            //Pass.PassCustomer(c);
+            //Pass.PassVehicle(v);
+            //Pass.PassRO(repairOrder);
+            await Shell.Current.GoToAsync("//OrderView");
+        }
     }
 
     
