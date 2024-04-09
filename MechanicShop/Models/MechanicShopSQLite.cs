@@ -222,7 +222,7 @@ namespace MechanicShop.Models
         }
 
         //TESTED
-        public void RemoveTechnician(string employeeId)
+        public void RemoveTechnician(int employeeId)
         {
             this.database.Delete<Technician>(employeeId);
         }

@@ -111,7 +111,12 @@ public partial class TechView : ContentPage
             // need EmployeeId
             string date = AppointmentView.TodayDate;
 
-            //TODO make technician (need ID)
+            if (name != null && phone != null && special != null && date != null)
+            {
+                Technician newTech = new Technician(name, phone, date, special, rate);
+                MauiProgram.ShopDB.AddTechnician(newTech);
+                OnAppearing();
+            }
 
         }
     }
