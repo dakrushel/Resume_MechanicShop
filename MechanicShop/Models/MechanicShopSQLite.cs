@@ -427,9 +427,9 @@ namespace MechanicShop.Models
             this.database.Update(repairOrderServiceJobBridge);
         }
 
-        public void DeleteRepairOrderServiceJobBridge(int repairOrderId)
+        public void DeleteRepairOrderServiceJobBridge(int BridgePK)
         {
-           
+            this.database.Delete<RepairOrderServiceJobBridge>(BridgePK);
         }
 
         public List<ServiceJob> GetServiceJobListByRepairOrderId(int repairOrderId)
