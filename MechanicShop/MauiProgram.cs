@@ -48,6 +48,15 @@ namespace MechanicShop
             PrintToTxt($"RemoveCustomerChecker: {Customer.RemoveCustomerChecker("555-555-5555")}");
             PrintToTxt($"RemoveVehicleChecker: {Vehicle.RemoveVehicleChecker(testVehicle)}");
 
+            //List<Customer> filteredCustomers = ShopDB.GetCustomerByName("LOR");
+            //if (filteredCustomers.Count > 0)
+            //{
+            //    foreach (Customer c in filteredCustomers)
+            //    {
+            //        PrintToTxt(c.ToString());
+            //    }
+            //}
+
 
 #if DEBUG
             builder.Logging.AddDebug();
