@@ -23,7 +23,7 @@ namespace MechanicShop.Models
         // cost maybe will be calculate in GUI based on hours times tech payrate
 
         //Primary key is Repair Order ID
-        [PrimaryKey, NotNull, ForeignKey(typeof(RepairOrderServiceJobBridge))]
+        [PrimaryKey, NotNull, ForeignKey(typeof(RepairOrderServiceJobBridge)), AutoIncrement]
         public int RepairOrderId { get; set; }
 
         public string RepairOrderDescription { get; set; }
@@ -51,6 +51,9 @@ namespace MechanicShop.Models
         //Property to act as foreign key 
         public string? EmployeeId { get; set; }
 
+        [ForeignKey(typeof(RepairOrderServiceJobBridge))]
+        public int RepairOrderServiceJobBridgeId { get; set; }
+
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<ServiceJob>? ListOfServiceJobs { get; set; }
@@ -62,15 +65,6 @@ namespace MechanicShop.Models
         public RepairOrder(string description, string dateCreated, string appointmentDate, string VIN, string employeeId)
         {
 
-            Random random = new Random();
-
-            int repairOrderId = random.Next(1000); 
-            while (MauiProgram.ShopDB.GetAllRepairOrders().FirstOrDefault(x => x.RepairOrderId == repairOrderId) != default)
-            {
-                repairOrderId = random.Next(1000);
-            }
-
-            this.RepairOrderId = repairOrderId;
             this.RepairOrderDescription = description;
             this.DateCreated = dateCreated;
             this.AppointmentDate = appointmentDate;
@@ -96,14 +90,7 @@ namespace MechanicShop.Models
         //Overload CTOR for no technician assigned
         public RepairOrder(string description, string dateCreated, string appointmentDate, string VIN)
         {
-            Random random = new();
-
-            int repairOrderId = random.Next(1000);
-            while (MauiProgram.ShopDB.GetAllRepairOrders().FirstOrDefault(x => x.RepairOrderId == repairOrderId) != default)
-            {
-                repairOrderId = random.Next(1000);
-            }
-            this.RepairOrderId = repairOrderId;
+   
             this.RepairOrderDescription = description;
             this.DateCreated = dateCreated;
             this.AppointmentDate = appointmentDate;
@@ -119,8 +106,6 @@ namespace MechanicShop.Models
 
             //Automatically sets is Active to False signifying this is NOT an active appointment
             this.IsActive = false;
-
-
 
             //Adding to Database as object is created
             MauiProgram.ShopDB.AddRepairOrder(this);
@@ -152,13 +137,13 @@ namespace MechanicShop.Models
         {
             //Opens the database and finds the service job with the corresponding
             //serviceJobId and returns it, it is then added to the list for Repair Orders
-            ServiceJob? newlyAddedServiceJob = MauiProgram.ShopDB.GetAllServiceJobs().
+/*            ServiceJob? newlyAddedServiceJob = MauiProgram.ShopDB.GetAllServiceJobs().
                 Find(x => x.ServiceJobId == serviceJobId);
 
             if (newlyAddedServiceJob != null)
             {
                 ListOfServiceJobs?.Add(newlyAddedServiceJob);
-            }
+            }*/
             
             //create new entry into bridging table between service jobs and repair orders
             RepairOrderServiceJobBridge bridgeCreation = new RepairOrderServiceJobBridge(this.RepairOrderId, serviceJobId);

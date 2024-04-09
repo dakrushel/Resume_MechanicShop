@@ -313,8 +313,8 @@ public partial class AppointmentView : ContentPage
             if (repairOrder != null)
             {
                 //TODO
-                //RepairOrderServiceJobBridge rsjb = new RepairOrderServiceJobBridge(repairOrder.RepairOrderId, sj.ServiceJobId);
-                //MauiProgram.ShopDB.AddRepairOrderServiceJobBridge(rsjb);
+                RepairOrderServiceJobBridge rsjb = new RepairOrderServiceJobBridge(repairOrder.RepairOrderId, sj.ServiceJobId);
+                MauiProgram.ShopDB.AddRepairOrderServiceJobBridge(rsjb);
             }
         }
         
