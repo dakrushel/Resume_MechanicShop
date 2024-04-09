@@ -43,7 +43,12 @@ namespace MechanicShop.Services
         public static void SaveInvoiceDelRO(RepairOrder rO)
         {
             Vehicle tempVehicle = MauiProgram.ShopDB.GetVehicleByVIN(rO.VIN);
-            //Technician tempTech = MauiProgram.ShopDB.GetTechnician(rO.EmployeeId);
+            Technician tempTech = new Technician();
+            if (rO.EmployeeId != null)
+            {
+                string id = rO.EmployeeId.ToString();
+                tempTech = MauiProgram.ShopDB.GetTechnician(Int32.Parse(id));
+            }
             //Write RO to txt
             RepairOrderOutput =
                 $"==================================================================\n" +
@@ -61,7 +66,7 @@ namespace MechanicShop.Services
                 $"    {rO.DateCreated}         {rO.AppointmentDate}\t   {rO.DateClose}\n\n" +
                 $"    ----------------------------------------------------------\n" +
                 $"    Employee ID: {rO.EmployeeId}\n" +
-                //$"     Technician: {tempTech.Name}" +
+                $"     Technician: {tempTech.Name}\n" +
                 $"          Hours: {rO.RepairOrderHours}\n";
 
             //Generate NEW txt file for each Invoice (based on Customer Name and RO ID)
