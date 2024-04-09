@@ -250,6 +250,11 @@ namespace MechanicShop.Models
                 .Where(x => x.IsActive == true).ToList();
         }
 
+        public List<RepairOrder> GetRepairOrdersByVIN(string vin)
+        {
+            return this.database.Table<RepairOrder>().ToList()
+                .Where(x => x.VIN == vin).ToList();
+        }
 
 
         /*----------------------------SERVICE JOB ------------------------------------*/

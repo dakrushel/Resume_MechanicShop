@@ -7,11 +7,15 @@
     {
 
         public const string DatabaseFilename = @"..\..\..\..\..\Resources\Raw\MechanicShopTest.db3";
-        public const string RepairOrderFilename = @"..\..\..\..\..\Resources\Raw\RepairOrder.txt";
+
+        //Not actually a constant but this is where it was when repairOrderFilename was a constant
+        public static string repairOrderFilename = @"..\..\..\..\..\Resources\Raw\";
+
 
         public static string DatabasePath =>
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DatabaseFilename);
         public static string RepairOrderPath => 
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, RepairOrderFilename);
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, repairOrderFilename);
+
     }
 }

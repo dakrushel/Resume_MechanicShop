@@ -115,7 +115,6 @@ public partial class CustomerView : ContentPage
         newPhoneBox.Text = phoneEntry.Text;
         searchCustomers.IsEnabled = false;
 
-
     }
     private void customers_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {

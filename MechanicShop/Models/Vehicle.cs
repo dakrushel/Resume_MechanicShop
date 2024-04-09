@@ -45,5 +45,39 @@ namespace MechanicShop.Models
         }
 
         public Vehicle() { }
+
+        public static bool RemoveVehicleChecker(Vehicle vehicle) //Denver
+        {
+            //Start with a list of all ROs that a vehicle has
+            List<RepairOrder> tempRO = MauiProgram.ShopDB.GetRepairOrdersByVIN(vehicle.VIN);
+            List<RepairOrder> activeRO = new List<RepairOrder>();
+            //If tempRO isn't empty, run sort block
+            if (tempRO.Count > 0)
+            {
+                
+                foreach (RepairOrder r in tempRO)
+                {
+                    if (r.IsActive == true)
+                    {
+                        activeRO.Add(r);
+                    }
+                }
+                if (activeRO.Count > 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    //MauiProgram.ShopDB.RemoveVehicle(vehicle.VIN);
+                    return true;
+                }
+            }
+            //Otherwise return true
+            else
+            {
+                //MauiProgram.ShopDB.RemoveVehicle(vehicle.VIN);
+                return true;
+            }
+        }
     }
 }

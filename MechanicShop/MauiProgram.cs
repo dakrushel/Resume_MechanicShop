@@ -1,6 +1,8 @@
 ﻿using MechanicShop.Models;
 using MechanicShop.Resources;
+using MechanicShop.Services;
 using Microsoft.Extensions.Logging;
+using System.Security.Cryptography.X509Certificates;
 
 namespace MechanicShop
 {
@@ -28,9 +30,23 @@ namespace MechanicShop
 
             ShopDB = new MechanicShopSQLite();
 
-            
-            
+            //FOR TESTING
+            void PrintToTxt(string s)
+            {
+                using (StreamWriter sw = new StreamWriter(Constant.TestPath))
+                {
+                    sw.Write(s);
+                }
+            }
+            //Generate Invoice
+            List<RepairOrder> appointments = ShopDB.GetRepairOrdersThatAreNOTActive();
+            Vehicle testVehicle = ShopDB.GetVehicleByVIN(appointments[0].VIN);
+            RepairOrder tempRO = appointments[0];
+            GenerateInvoice.SaveInvoiceDelRO(tempRO);
+            //RemoveCustomerChecker
 
+            PrintToTxt($"RemoveCustomerChecker: {Customer.RemoveCustomerChecker("124-555-8888")}");
+            PrintToTxt($"RemoveVehicleChecker: {Vehicle.RemoveVehicleChecker(testVehicle)}");
 
 #if DEBUG
             builder.Logging.AddDebug();

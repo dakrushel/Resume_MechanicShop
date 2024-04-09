@@ -38,6 +38,8 @@ namespace MechanicShop.Services
         //}
 
         //Close and save method. Must output RepairOrder to a txt file and remove it from the database
+        
+        //TESTED
         public static void SaveInvoiceDelRO(RepairOrder rO)
         {
             //Write RO to txt
@@ -52,12 +54,12 @@ namespace MechanicShop.Services
                 $"    Created:\t     Appointment:\t   Closed:\n" +
                 $"    {rO.DateCreated}         {rO.AppointmentDate}\t   {rO.DateClose}\n\n" +
                 $"    ----------------------------------------------------------\n" +
-                $"     Technician: {rO.RepairJobTechnician}\n" +
                 $"    Employee ID: {rO.EmployeeId}\n" +
-                $"         Job ID: {rO.ServiceJobId}\n" +
                 $"          Hours: {rO.RepairOrderHours}\n" +
-                $"        Vehicle: {rO.Vehicle}\r\n" +
                 $"            VIN: {rO.VIN}\n\n";
+
+            //Generate NEW txt file for each Invoice (based on Customer Name and RO ID)
+            //Constant.repairOrderFilename = 
 
             using (StreamWriter sw = new StreamWriter(Constant.RepairOrderPath))
             {
@@ -65,12 +67,11 @@ namespace MechanicShop.Services
             }
 
             //Delete RO from database RepairOrder, Customer, Vehicle, ServiceJob, Technician
-            MauiProgram.ShopDB.RemoveRepairOrder(rO.RepairOrderId.ToString());
+            //MauiProgram.ShopDB.RemoveRepairOrder(rO.RepairOrderId);
 
-            //List<RepairOrder> tempOrders = MauiProgram.ShopDB.GetRepairOrderByVIN("123T");
-            //RepairOrder tempRO = tempOrders[0];
-            //MauiProgram.ShopDB.AddRepairOrder(tempRO);
-            //GenerateInvoice.SaveInvoiceDelRO(tempRO);
+
         }
+
+
     }
 }
