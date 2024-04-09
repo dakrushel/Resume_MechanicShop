@@ -42,24 +42,30 @@ namespace MechanicShop.Services
         //TESTED
         public static void SaveInvoiceDelRO(RepairOrder rO)
         {
+            Vehicle tempVehicle = MauiProgram.ShopDB.GetVehicleByVIN(rO.VIN);
+            //Technician tempTech = MauiProgram.ShopDB.GetTechnician(rO.EmployeeId);
             //Write RO to txt
             RepairOrderOutput =
                 $"==================================================================\n" +
-                $"               REPAIR ORDER {rO.RepairOrderId}\n" +
+                $"    REPAIR ORDER: {rO.RepairOrderId}\n" +
                 $"    ----------------------------------------------------------\n" +
+                $"    CUSTOMER\n\n" +
+                $"    Name: {rO.CustomerName}\t\t Phone: {rO.CustomerPhoneNumber}\n\n" +
                 $"    Description:\n" +
-                $"    {rO.RepairOrderDescription}\n" +
+                $"    {rO.RepairOrderDescription}\n\n" +
+                $"    Vehicle: {tempVehicle}\n" +
+                $"    VIN: {rO.VIN}\n\n" +
                 $"    ----------------------------------------------------------\n" +
-                $"    \t\t\tDate\n\n" +
+                $"    DATE\n\n" +
                 $"    Created:\t     Appointment:\t   Closed:\n" +
                 $"    {rO.DateCreated}         {rO.AppointmentDate}\t   {rO.DateClose}\n\n" +
                 $"    ----------------------------------------------------------\n" +
                 $"    Employee ID: {rO.EmployeeId}\n" +
-                $"          Hours: {rO.RepairOrderHours}\n" +
-                $"            VIN: {rO.VIN}\n\n";
+                //$"     Technician: {tempTech.Name}" +
+                $"          Hours: {rO.RepairOrderHours}\n";
 
             //Generate NEW txt file for each Invoice (based on Customer Name and RO ID)
-            //Constant.repairOrderFilename = 
+            Constant.repairOrderFilename += $"{rO.RepairOrderId}_{rO.CustomerName}";
 
             using (StreamWriter sw = new StreamWriter(Constant.RepairOrderPath))
             {
