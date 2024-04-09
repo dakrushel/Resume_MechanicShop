@@ -192,7 +192,38 @@ public partial class OrderView : ContentPage
     //========================================================================================================
     private void addThisJob_Clicked(object sender, EventArgs e)
     {
+        ServiceJob? sj = thisJob.BindingContext as ServiceJob;
+        if (sj != null)
+        {
+            if (thisJobs.Contains(sj))
+            {
+                return;
+            }
+            thisJobs.Add(sj);
+            addThisJob.IsEnabled = false;
+            RefreshROJobs();
 
+            if (repairOrder != null)
+            {
+                //TODO
+                RepairOrderServiceJobBridge rsjb = new RepairOrderServiceJobBridge(repairOrder.RepairOrderId, sj.ServiceJobId);
+                MauiProgram.ShopDB.AddRepairOrderServiceJobBridge(rsjb);
+            }
+        }
+    }
+    private void serviceJobs_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        ServiceJob? sj = e.SelectedItem as ServiceJob;
+        if (sj != null)
+        {
+            thisJob.BindingContext = sj;
+            if (thisJobs.Contains(sj))
+            {
+                addThisJob.IsEnabled = false;
+                return;
+            }
+            addThisJob.IsEnabled = true;
+        }
     }
 
     //========================================================================================================
@@ -216,4 +247,6 @@ public partial class OrderView : ContentPage
         }
         updateRO.IsEnabled = true;
     }
+
+    
 }

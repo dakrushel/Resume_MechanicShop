@@ -248,7 +248,7 @@
                     <VerticalStackLayout Spacing="10">
                         <Label Text="Service Jobs:" FontSize="25" TextDecorations="Underline"/>
                         <!--service jobs list (all service jobs)-->
-                        <ListView x:Name="serviceJobs" 
+                        <ListView x:Name="serviceJobs" ItemSelected="serviceJobs_ItemSelected"
                                     HeightRequest="200" WidthRequest="460" Background="AliceBlue">
                             <!--All jobs that have been added to this repair order go here-->
                             <ListView.ItemTemplate>

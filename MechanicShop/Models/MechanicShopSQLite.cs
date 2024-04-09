@@ -232,7 +232,7 @@ namespace MechanicShop.Models
             return this.database.Table<Technician>().ToList();
         }
 
-        public Technician GetTechnician(string employeeId) //Denver
+        public Technician GetTechnician(int employeeId) //Denver
         {
             return this.database.Table<Technician>().First(x => x.EmployeeId == employeeId);
         }
