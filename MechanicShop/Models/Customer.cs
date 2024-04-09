@@ -6,7 +6,8 @@ using System.Runtime.CompilerServices;
 
 namespace MechanicShop.Models
 {
-    public class Customer
+    [Table("Customer")]
+    public class Customer 
     {
         [Required]
         [PrimaryKey]
@@ -77,7 +78,7 @@ namespace MechanicShop.Models
                 List<RepairOrder> tempRO = new List<RepairOrder>();
                 foreach (Vehicle v in custVehicles)
                 {
-                    tempRO.AddRange(MauiProgram.ShopDB.GetRepairOrdersByVIN(v.VIN));
+                    tempRO.Add(MauiProgram.ShopDB.GetRepairOrderByVIN(v.VIN));
                 }
                 //Check to see if any of those ROs are active or not closed and add them to customerROs
                 foreach (RepairOrder ro in tempRO)

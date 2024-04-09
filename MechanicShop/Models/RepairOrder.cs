@@ -41,6 +41,8 @@ namespace MechanicShop.Models
 
         public string CustomerName {  get; set; }
 
+        public string CustomerPhoneNumber { get; set; }
+
         //Property to act as foreign key
         [ForeignKey(typeof(Vehicle))]
         public string VIN {  get; set; }
@@ -75,7 +77,12 @@ namespace MechanicShop.Models
             this.VIN = VIN;
             this.EmployeeId = employeeId;
 
-            this.CustomerName = MauiProgram.ShopDB.GetCustomerNameViaVIN(VIN);
+
+            Customer customerAttached = MauiProgram.ShopDB.GetCustomerViaVIN(VIN);
+
+            this.CustomerName = customerAttached.Name;
+
+            this.CustomerPhoneNumber = customerAttached.CustomerPhone;
 
             //Automatically sets is Active to False signifying this is NOT an active appointment
             this.IsActive = false;
@@ -101,8 +108,11 @@ namespace MechanicShop.Models
             this.DateCreated = dateCreated;
             this.AppointmentDate = appointmentDate;
             this.VIN = VIN;
+            Customer customerAttached = MauiProgram.ShopDB.GetCustomerViaVIN(VIN);
 
-            this.CustomerName = MauiProgram.ShopDB.GetCustomerNameViaVIN(VIN);
+            this.CustomerName = customerAttached.Name;
+
+            this.CustomerPhoneNumber = customerAttached.CustomerPhone;
 
 
             this.ListOfServiceJobs = new List<ServiceJob>();
@@ -144,6 +154,7 @@ namespace MechanicShop.Models
             //serviceJobId and returns it, it is then added to the list for Repair Orders
             ServiceJob? newlyAddedServiceJob = MauiProgram.ShopDB.GetAllServiceJobs().
                 Find(x => x.ServiceJobId == serviceJobId);
+
             if (newlyAddedServiceJob != null)
             {
                 ListOfServiceJobs?.Add(newlyAddedServiceJob);

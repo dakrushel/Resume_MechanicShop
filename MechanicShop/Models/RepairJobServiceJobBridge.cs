@@ -10,7 +10,7 @@ namespace MechanicShop.Models
 {
     public class RepairOrderServiceJobBridge
     {
-        [PrimaryKey]
+        [PrimaryKey, AutoIncrement]
         public int RepairOrderServiceJobBridgeId { get; set; }
 
         public int RepairOrderId { get; set; }
@@ -23,15 +23,7 @@ namespace MechanicShop.Models
 
         public RepairOrderServiceJobBridge(int repairOrderId, int serviceJobId)
         {
-            Random random = new Random();
 
-            int repairOrderServiceJobId = random.Next(1000);
-            while (MauiProgram.ShopDB.GetAllRepairOrders().FirstOrDefault(x => x.RepairOrderId == repairOrderId) != default)
-            {
-                repairOrderServiceJobId = random.Next(1000);
-            }
-
-            this.RepairOrderServiceJobBridgeId = repairOrderServiceJobId;
             this.RepairOrderId = repairOrderId;
             this.ServiceJobId = serviceJobId;
         }
