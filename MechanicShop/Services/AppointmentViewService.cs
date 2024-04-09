@@ -79,7 +79,7 @@ namespace MechanicShop.Services
             }
         }
 
-        public static Technician GetTechByID (int id)
+        public static Technician? GetTechByID (int? id)
         {
             foreach (var tech in MauiProgram.ShopDB.GetAllTechnicians())
             {
