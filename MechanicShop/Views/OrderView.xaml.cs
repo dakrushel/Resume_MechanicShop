@@ -80,7 +80,7 @@ public partial class OrderView : ContentPage
     {
         AppointmentViewService.RefreshOpenTechnicians();
         techList.ItemsSource = AppointmentViewService.openTechnicians;
-        assignTechPicker.ItemsSource = AppointmentViewService.openTechnicians;
+        
     }
     private void RefreshServiceJobs()
     {
@@ -117,6 +117,42 @@ public partial class OrderView : ContentPage
     private void updateRO_Clicked(object sender, EventArgs e)
     {
         updateRO.IsEnabled = false;
+        if (repairOrder != null)
+        {
+            //update problem description
+            repairOrder.RepairOrderDescription = problemDescriptionEntry.Text;
+
+            MauiProgram.ShopDB.RemoveRepairOrderServiceJobBridgeAttachedToRepairOrder(repairOrder.RepairOrderId);
+            foreach (ServiceJob job in thisJobs)
+            {
+                repairOrder.AssignServiceJob(job.ServiceJobId);
+            }
+
+            MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
+            
+        }
+
+    }
+    private void repairOrderJobs_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        ServiceJob? sj = e.SelectedItem as ServiceJob;
+        if (sj != null)
+        {
+            removeJobBtn.IsEnabled = true;
+            removeJobBtn.Text = $"Remove {sj.ServiceJobDescription}";
+        }
+    }
+    private void removeJobBtn_Clicked(object sender, EventArgs e)
+    {
+        removeJobBtn.Text = "Remove Job";
+        updateRO.IsEnabled = true;
+        ServiceJob? toRemove = repairOrderJobs.SelectedItem as ServiceJob;
+        if (toRemove != null)
+        {
+            thisJobs.Remove(toRemove);
+            RefreshROJobs();
+        }
+        removeJobBtn.IsEnabled = false;
     }
 
     private void closeRO_Clicked(object sender, EventArgs e)
@@ -126,6 +162,8 @@ public partial class OrderView : ContentPage
 
     private void Clear_Clicked(object sender, EventArgs e)
     {
+
+        //TODO do you want to save changes??? (ifchanged)
         OnAppearing();
     }
     private void RefreshROJobs()
@@ -206,13 +244,6 @@ public partial class OrderView : ContentPage
             thisJobs.Add(sj);
             addThisJob.IsEnabled = false;
             RefreshROJobs();
-
-            if (repairOrder != null)
-            {
-                //TODO
-                RepairOrderServiceJobBridge rsjb = new RepairOrderServiceJobBridge(repairOrder.RepairOrderId, sj.ServiceJobId);
-                MauiProgram.ShopDB.AddRepairOrderServiceJobBridge(rsjb);
-            }
         }
     }
     private void serviceJobs_ItemSelected(object sender, SelectedItemChangedEventArgs e)

@@ -59,24 +59,34 @@ namespace MechanicShop.Services
         }
 
         // Get a list of technicians that are not currently assigned to any repair orders.
-        public static ObservableCollection<Technician> openTechnicians = new ObservableCollection<Technician>();
+        public static ObservableCollection<Technician>? openTechnicians = new ObservableCollection<Technician>();
         public static void RefreshOpenTechnicians()
         {
             openTechnicians.Clear();
-            List<Technician> techList = MauiProgram.ShopDB.GetAllTechnicians();
-
-            foreach (var tech in techList)
+            List<Technician>? techList = MauiProgram.ShopDB.GetAllTechnicians();
+            List<RepairOrder>? roList = MauiProgram.ShopDB.GetAllRepairOrders();
+            List<int?>? assignedIDs = new List<int?>();
+            if (roList != null)
             {
-                foreach (var ro in MauiProgram.ShopDB.GetAllRepairOrders())
+                foreach (RepairOrder ro in roList)
                 {
-                    if (ro.EmployeeId == tech.EmployeeId) 
+                    if (ro.EmployeeId != null) 
                     {
-                        continue;
+                        assignedIDs.Add(ro.EmployeeId);
                     }
-                    
                 }
-                openTechnicians.Add(tech);
             }
+            if (assignedIDs != null && techList != null)
+            {
+                foreach(Technician t in techList)
+                {
+                    if (assignedIDs.Contains(t.EmployeeId))
+                    {
+                        techList.Remove(t);
+                    }
+                }
+            }
+            openTechnicians = new ObservableCollection<Technician>(techList);
         }
 
         public static Technician? GetTechByID (int? id)

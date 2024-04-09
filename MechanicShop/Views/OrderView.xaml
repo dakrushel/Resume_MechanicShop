@@ -81,7 +81,7 @@
                             TextChanged="problemDescriptionEntry_TextChanged"/>
                     <!--REPAIR ORDER JOBS (For currently displayed repair order)-->
                     <Label Text="Jobs:" Margin="0,5,0,0"/>
-                    <ListView x:Name="repairOrderJobs" 
+                    <ListView x:Name="repairOrderJobs" ItemSelected="repairOrderJobs_ItemSelected"
                                 HeightRequest="100" WidthRequest="450" Background="AliceBlue">
                         <!--All jobs that have been added to this repair order go here-->
                         <ListView.ItemTemplate>
@@ -106,7 +106,8 @@
                         </ListView.ItemTemplate>
                     </ListView>
                     <Button x:Name="removeJobBtn" Text="Remove Job" BackgroundColor="maroon"
-                            TextColor="White" WidthRequest="250" IsEnabled="False"/>
+                            TextColor="White" WidthRequest="250" IsEnabled="False"
+                            Clicked="removeJobBtn_Clicked"/>
                     <!--Price Quote information-->
                     <HorizontalStackLayout Margin="0,10,0,0">
                         <Label Text="Price Estimate (before fees):" VerticalOptions="Center"/>
