@@ -11,6 +11,8 @@ namespace MechanicShop.Services
 {
     public static class AppointmentViewService
     {
+
+        //FOR APPOINTMENTS PAGE
         public static ObservableCollection<RepairOrder> upcomingAppointments = new ObservableCollection<RepairOrder>();
         public static ObservableCollection<RepairOrder> expiredAppointments = new ObservableCollection<RepairOrder>();
         public static void refreshAppointments()
@@ -29,6 +31,29 @@ namespace MechanicShop.Services
                 else
                 {
                     upcomingAppointments.Add(appointment);
+                }
+            }
+        }
+
+
+        //FOR REPAIR ORDERS PAGE
+        public static ObservableCollection<RepairOrder> unassigned = new ObservableCollection<RepairOrder>();
+        public static ObservableCollection<RepairOrder> inProgress = new ObservableCollection<RepairOrder>();
+        public static void refreshROs()
+        {
+            unassigned.Clear();
+            inProgress.Clear();
+            List<RepairOrder> roList = MauiProgram.ShopDB.GetRepairOrdersThatAreActive();
+
+            foreach (var ro in roList)
+            {
+                if (ro.EmployeeId == null)
+                {
+                    unassigned.Add(ro);
+                }
+                else
+                {
+                    inProgress.Add(ro);
                 }
             }
         }

@@ -9,8 +9,11 @@ namespace MechanicShop.Services
 {
     public static class Pass
     {
+
+        // FOR PASSING OBJECTS BETWEEN PAGES
         public static Customer? CustomerPass {  get; set; }
         public static Vehicle? VehiclePass { get; set; }
+        public static RepairOrder? ROPass { get; set; }
 
         public static void PassCustomer (Customer c)
         {
@@ -38,5 +41,20 @@ namespace MechanicShop.Services
             VehiclePass = null;
             return vehicle;
         }
+        public static void PassRO(RepairOrder r)
+        {
+            if (r != null)
+            {
+                ROPass = r;
+            }
+        }
+        public static RepairOrder RetrieveRO()
+        {
+            RepairOrder? ro = ROPass;
+            ROPass = null;
+            return ro;
+        }
+
+
     }
 }
