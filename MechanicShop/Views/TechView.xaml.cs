@@ -112,6 +112,7 @@ public partial class TechView : ContentPage
             string date = AppointmentView.TodayDate;
 
             //TODO make technician (need ID)
+
         }
     }
     private void FormChanged()

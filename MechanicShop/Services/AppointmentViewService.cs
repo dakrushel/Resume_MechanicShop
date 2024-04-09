@@ -58,6 +58,28 @@ namespace MechanicShop.Services
             }
         }
 
+        // Get a list of technicians that are not currently assigned to any repair orders.
+        public static ObservableCollection<Technician> openTechnicians = new ObservableCollection<Technician>();
+        public static void RefreshOpenTechnicians()
+        {
+            openTechnicians.Clear();
+            List<Technician> techList = MauiProgram.ShopDB.GetAllTechnicians();
+
+            foreach (var tech in techList)
+            {
+                foreach (var ro in MauiProgram.ShopDB.GetAllRepairOrders())
+                {
+                    if (ro.EmployeeId == tech.EmployeeId) 
+                    {
+                        continue;
+                    }
+                    
+                }
+                openTechnicians.Add(tech);
+            }
+        }
+        
+
         
     }
 }

@@ -5,15 +5,19 @@
              Title="Repair Orders">
 
     <ScrollView>
-        <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" >
+        <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="100">
             <!--============================================================================================-->
-            <!--APPOINTMENT SLIP WIDGET=====================================================================-->
+            <!--ORDER SLIP WIDGET=====================================================================-->
             <!--============================================================================================-->
             <Border x:Name="orderSlip" HorizontalOptions="Center" Padding="20"
-                    HeightRequest="700" WidthRequest="500" IsEnabled="true">
+                     WidthRequest="500" IsEnabled="true" IsVisible="false">
                 <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
-
-                    <Label Text="Repair Order" FontSize="20" TextDecorations="Underline"/>
+                    <HorizontalStackLayout VerticalOptions="Center" Spacing="160" Padding="1">
+                        <Label Text="Repair Order" FontSize="25" TextDecorations="Underline" VerticalOptions="Center"/>
+                        <Button x:Name="Clear" Text="Back to All RO's"
+                                Clicked="Clear_Clicked"/>
+                    </HorizontalStackLayout>
+                    
 
                     <HorizontalStackLayout  x:Name="cInformation" Padding="5" Spacing="5"
                                             BindingContext="Customer">
@@ -73,7 +77,8 @@
                     <Label Text="Problem Description:"/>
                     <Editor WidthRequest="450" HeightRequest="100" Background="{StaticResource White}" 
                             x:Name="problemDescriptionEntry" 
-                            Placeholder="Enter problem description here"/>
+                            Placeholder="Enter problem description here"
+                            TextChanged="problemDescriptionEntry_TextChanged"/>
                     <!--REPAIR ORDER JOBS (For currently displayed repair order)-->
                     <Label Text="Jobs:" Margin="0,5,0,0"/>
                     <ListView x:Name="repairOrderJobs" 
@@ -110,26 +115,22 @@
                     <!--TECHNICIAN-->
                     <HorizontalStackLayout WidthRequest="450" Spacing="10">
                         <Label Text="Technician:" VerticalOptions="Center" FontSize="16"/>
-                        <Picker x:Name="assignTechPicker" WidthRequest="300"
+                        <Picker x:Name="assignTechPicker" WidthRequest="300" ItemDisplayBinding="{Binding Name}"
                                 SelectedIndexChanged="assignTechPicker_SelectedIndexChanged"/>
                     </HorizontalStackLayout>
-                    <!--SHEDULE APPOINTMENT BUTTON-->
-                    <Button Text="Close Repair Order and Generate Invoice" IsEnabled="true" TextColor="black"
-                    x:Name="scheduleAppointment" Background="{StaticResource Tertiary}"/>
-
-
-                    <!--CONVERT TO RO BUTTON-->
-                    <HorizontalStackLayout x:Name="apptOptions" IsVisible="false" 
-                               Spacing="10" HorizontalOptions="Center">
-                        <Button x:Name="deleteAppt" Text="Delete" BackgroundColor="maroon"
-                    TextColor="white" WidthRequest="100"
-                    Clicked="deleteAppt_Clicked"/>
-                        <Button x:Name="updateAppt" Text="Update Details" WidthRequest="130"
-                    Clicked="updateAppt_Clicked" IsEnabled="False"/>
-                        <Button Text="Convert to Repair Order" TextColor="black"
-                    Background="{StaticResource Tertiary}" x:Name="makeRO"
-                    Clicked="makeRO_Clicked" HorizontalOptions="FillAndExpand"/>
+                    <!--OPTION BUTTONS-->
+                    <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" Margin="0,20,0,0">
+                        <Button x:Name="DeleteRO" Text="Delete RO" BackgroundColor="maroon" TextColor="white"
+                                Clicked="DeleteRO_Clicked"/>
+                        <Button x:Name="updateRO" Text="Save Changes" IsEnabled="False"
+                                Clicked="updateRO_Clicked"/>
+                        <Button x:Name="closeRO" Text="Close and Invoice" WidthRequest="210" TextColor="Black"
+                                BackgroundColor="{StaticResource Tertiary}" IsEnabled="False"
+                                Clicked="closeRO_Clicked"/>
                     </HorizontalStackLayout>
+
+
+
 
 
 
@@ -146,7 +147,7 @@
                     <Label Text="Not Assigned:"/>
                     <ListView x:Name="unasignedROs"
                                 HeightRequest="200" WidthRequest="400" Background="AliceBlue"
-                                ItemSelected="unasignedROs_ItemSelected">
+                                ItemSelected="ROs_ItemSelected">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
@@ -172,7 +173,7 @@
                     <Label Text="In Progress:" Margin="0,20,0,0"/>
                     <ListView x:Name="inProgressROs"
                                 HeightRequest="100" WidthRequest="400" Background="AliceBlue"
-                                ItemSelected="inProgressROs_ItemSelected">
+                                ItemSelected="ROs_ItemSelected">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
@@ -278,12 +279,8 @@
                             <Entry Text="{Binding ServiceJobHours}"
                                     WidthRequest="50"/>
                         </HorizontalStackLayout>
-                        <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
-                            <Button Text="Close" WidthRequest="150" Background="maroon" TextColor="white"
-                                    x:Name="closeServiceJobMenu" />
-                            <Button Text="Add This Job" WidthRequest="280"
-                                    x:Name="addThisJob" />
-                        </HorizontalStackLayout>
+                        <Button Text="Add This Job" WidthRequest="400"
+                                x:Name="addThisJob" Clicked="addThisJob_Clicked"/>
                     </VerticalStackLayout>
                 </Border>
 

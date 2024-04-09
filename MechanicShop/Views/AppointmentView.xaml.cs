@@ -97,8 +97,7 @@ public partial class AppointmentView : ContentPage
     {
         appointmentSlip.IsEnabled = true;
         repairOrder = e.SelectedItem as RepairOrder;
-        //activeAppointments.SelectedItem = null;
-        //expiredAppointments.SelectedItem = null;
+        
         if (repairOrder != null)
         {
             // set local variables

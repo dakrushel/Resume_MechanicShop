@@ -21,9 +21,9 @@ namespace MechanicShop.Models
 
         public double HourlyRate { get; set; }
 
-        public Technician(string employeeId, string name, string employeePhone, string hireDate, string specialization, double hourlyRate)
+        public Technician(string name, string employeePhone, string hireDate, string specialization, double hourlyRate)
         {
-            this.EmployeeId = employeeId;
+            //this.EmployeeId = employeeId;
             this.Name = name;
             this.EmployeePhone = employeePhone;
             this.HireDate = hireDate;
