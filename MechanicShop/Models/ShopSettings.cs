@@ -10,6 +10,7 @@ namespace MechanicShop.Models
     public class ShopSettings
     {
         [PrimaryKey]
+        public int ShopSettingsId { get; set ; }
         public double ShopHourlyRate {  get; set; }
 
         public double ShopSupplyCost {  get; set; }   

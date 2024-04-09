@@ -192,7 +192,7 @@ public partial class AppointmentView : ContentPage
             foreach (ServiceJob job in thisJobs)
             {
                 //TODO
-                //newAppointment.AssignServiceJob(job.ServiceJobId);
+                newAppointment.AssignServiceJob(job.ServiceJobId);
             }
             repairOrder = newAppointment;
            
@@ -312,8 +312,8 @@ public partial class AppointmentView : ContentPage
             if (repairOrder != null)
             {
                 //TODO
-                //RepairOrderServiceJobBridge rsjb = new RepairOrderServiceJobBridge(repairOrder.RepairOrderId, sj.ServiceJobId);
-                //MauiProgram.ShopDB.AddRepairOrderServiceJobBridge(rsjb);
+                RepairOrderServiceJobBridge rsjb = new RepairOrderServiceJobBridge(repairOrder.RepairOrderId, sj.ServiceJobId);
+                MauiProgram.ShopDB.AddRepairOrderServiceJobBridge(rsjb);
             }
         }
         

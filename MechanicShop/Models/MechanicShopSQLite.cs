@@ -1,6 +1,9 @@
 ﻿
 using MechanicShop.Resources;
 using SQLite;
+using SQLiteNetExtensions.Extensions;
+using System.Linq.Expressions;
+using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 
 namespace MechanicShop.Models
@@ -18,7 +21,7 @@ namespace MechanicShop.Models
             this.database.Execute("PRAGMA foreign_keys = ON;");
 
             //For dropping tables, uncomment the next line and insert your table name in the <>
-            //this.database.DropTable<RepairOrder>();
+
 
             //Try creating this table
             try
@@ -237,20 +240,22 @@ namespace MechanicShop.Models
             this.database.Insert(repairOrder);
         }
 
-
         public void RemoveRepairOrder(int repairOrderId)
         {
-            List<RepairOrderServiceJobBridge> listToCheck = this.database.Table<RepairOrderServiceJobBridge>().ToList();
+            RepairOrder repairOrder = this.database.Get<RepairOrder>(repairOrderId);
             //For loop to delete each RepairOrderServiceJob attached to the repair order
-            foreach (RepairOrderServiceJobBridge objectToCheck in listToCheck)
+            foreach (RepairOrderServiceJobBridge bridge in this.GetAllRepairOrderServiceJobBridge())
             {
-                if (objectToCheck.RepairOrderId == repairOrderId)
+
+                if (bridge.RepairOrderId == repairOrder.RepairOrderId)
                 {
-                    this.database.Delete<RepairOrderServiceJobBridge>(objectToCheck.RepairOrderServiceJobBridgeId); 
+                    this.database.Delete<RepairOrderServiceJobBridge>(bridge.BridgeIdForROandSJ);
                 }
             }
             this.database.Delete<RepairOrder>(repairOrderId);
         }
+
+
 
         //Removes all RepairOrderServiceJobBridge rows associated with the repair order without deleting the repair order
         public void RemoveRepairOrderServiceJobBridgeAttachedToRepairOrder(int repairOrderId)
@@ -259,7 +264,7 @@ namespace MechanicShop.Models
             {
                 if (var.RepairOrderId == repairOrderId)
                 {
-                    this.database.Delete<RepairOrderServiceJobBridge>(var.RepairOrderServiceJobBridgeId);
+                    this.database.Delete<RepairOrderServiceJobBridge>(var.BridgeIdForROandSJ);
                 }
             }
         }
@@ -292,6 +297,11 @@ namespace MechanicShop.Models
         public RepairOrder GetRepairOrderByVIN(string VIN)
         {
             return this.database.Table<RepairOrder>().First(x => x.VIN == VIN);
+        }
+
+        public RepairOrder GetRepairOrderByPK(int PK)
+        {
+            return this.database.Table<RepairOrder>().First(x => x.RepairOrderId == PK);
         }
 
 
