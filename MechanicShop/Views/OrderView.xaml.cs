@@ -29,6 +29,8 @@ public partial class OrderView : ContentPage
         RefreshServiceJobs();
         RefreshROs();
         updateRO.IsEnabled = false;
+        selectedTech.Text = null;
+        assignTechPicker.IsVisible = true;
         // If receiving a customer from PASS
         if (Pass.CustomerPass != null && Pass.VehiclePass != null)
         {
@@ -45,6 +47,10 @@ public partial class OrderView : ContentPage
             //Binding Contexts
             cInformation.BindingContext = c;
             vInformation.BindingContext = v;
+            thisJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.
+                GetServiceJobListByRepairOrderId(repairOrder.RepairOrderId));
+            repairOrderJobs.ItemsSource = thisJobs;
+            problemDescriptionEntry.Text = repairOrder.RepairOrderDescription;
 
             //Widget Visibility
             orderSlip.IsVisible = true;
@@ -149,6 +155,15 @@ public partial class OrderView : ContentPage
             thisJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.
                 GetServiceJobListByRepairOrderId(repairOrder.RepairOrderId));
             repairOrderJobs.ItemsSource = thisJobs;
+
+            if (repairOrder.EmployeeId != null)
+            {
+                Technician? tech = AppointmentViewService.GetTechByID(repairOrder.EmployeeId);
+                if (tech != null)
+                {
+                    selectedTech.Text = tech.Name;
+                }
+            }
         }
     }
 
@@ -158,7 +173,18 @@ public partial class OrderView : ContentPage
 
     private void assignTechPicker_SelectedIndexChanged(object sender, EventArgs e)
     {
+        Technician? selectedT = assignTechPicker.SelectedItem as Technician;
+        if (selectedT != null)
+        {
+            //get rid of picker
+            assignTechPicker.IsVisible = false;
+            // put in technician label
+            selectedTech.Text = selectedT.Name;
+            //refresh open techs list
+            RefreshTechList();
+            // add a remove tech button??? TODO
 
+        }
     }
 
     //========================================================================================================

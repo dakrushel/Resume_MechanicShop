@@ -271,7 +271,18 @@ public partial class AppointmentView : ContentPage
         updateAppt.IsEnabled = true;
         
     }
-
+    private async void makeRO_Clicked(object sender, EventArgs e)
+    {
+        if (repairOrder != null && c != null && v != null)
+        {
+            repairOrder.IsActive = true;
+            MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
+            Pass.PassCustomer(c);
+            Pass.PassVehicle(v);
+            Pass.PassRO(repairOrder);
+            await Shell.Current.GoToAsync("//OrderView");
+        }
+    }
 
     //======================================================================================
     //+++Service Job Menu+++
@@ -385,18 +396,7 @@ public partial class AppointmentView : ContentPage
     
 
 
-    private async void makeRO_Clicked(object sender, EventArgs e)
-    {
-        if (repairOrder != null && c != null && v != null)
-        {
-            repairOrder.IsActive = true;
-            MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
-            //Pass.PassCustomer(c);
-            //Pass.PassVehicle(v);
-            //Pass.PassRO(repairOrder);
-            await Shell.Current.GoToAsync("//OrderView");
-        }
-    }
+    
 
     
 }

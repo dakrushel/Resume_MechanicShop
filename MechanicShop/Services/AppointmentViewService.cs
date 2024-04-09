@@ -78,6 +78,18 @@ namespace MechanicShop.Services
                 openTechnicians.Add(tech);
             }
         }
+
+        public static Technician GetTechByID (int id)
+        {
+            foreach (var tech in MauiProgram.ShopDB.GetAllTechnicians())
+            {
+                if (tech.EmployeeId == id)
+                {
+                    return tech;
+                }
+            }
+            return null;
+        }
         
 
         

@@ -117,6 +117,7 @@
                         <Label Text="Technician:" VerticalOptions="Center" FontSize="16"/>
                         <Picker x:Name="assignTechPicker" WidthRequest="300" ItemDisplayBinding="{Binding Name}"
                                 SelectedIndexChanged="assignTechPicker_SelectedIndexChanged"/>
+                        <Label x:Name="selectedTech"/>
                     </HorizontalStackLayout>
                     <!--OPTION BUTTONS-->
                     <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" Margin="0,20,0,0">
