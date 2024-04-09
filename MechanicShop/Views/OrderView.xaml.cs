@@ -10,8 +10,10 @@ public partial class OrderView : ContentPage
     // Page temp variables (for currently displayed repair order)
     public static Customer? c = null;
     public static Vehicle? v = null;
+    public static Technician? t = null;
     public static RepairOrder? repairOrder = null;
     public static ObservableCollection<ServiceJob> thisJobs = new ObservableCollection<ServiceJob>();
+
     public OrderView()
 	{
 		InitializeComponent();
@@ -29,8 +31,7 @@ public partial class OrderView : ContentPage
         RefreshServiceJobs();
         RefreshROs();
         updateRO.IsEnabled = false;
-        selectedTech.Text = null;
-        assignTechPicker.IsVisible = true;
+        selectedTech.Text = ":::Not Assigned:::";
         // If receiving a customer from PASS
         if (Pass.CustomerPass != null && Pass.VehiclePass != null)
         {
@@ -62,6 +63,7 @@ public partial class OrderView : ContentPage
             // Clear all page variables
             c = null;
             v = null;
+            t = null;
             repairOrder = null;
             thisJobs.Clear();
 
@@ -206,6 +208,12 @@ public partial class OrderView : ContentPage
                     selectedTech.Text = tech.Name;
                 }
             }
+
+            //TODO get tech name in selectedTech
+            if (repairOrder.EmployeeId != null)
+            {
+                t = MauiProgram.ShopDB.GetTechnician(repairOrder.EmployeeId);
+            }
         }
     }
 
@@ -213,21 +221,7 @@ public partial class OrderView : ContentPage
     //-----TECHNICIAN LIST
     //========================================================================================================
 
-    private void assignTechPicker_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        Technician? selectedT = assignTechPicker.SelectedItem as Technician;
-        if (selectedT != null)
-        {
-            //get rid of picker
-            assignTechPicker.IsVisible = false;
-            // put in technician label
-            selectedTech.Text = selectedT.Name;
-            //refresh open techs list
-            RefreshTechList();
-            // add a remove tech button??? TODO
-
-        }
-    }
+    
 
     //========================================================================================================
     //-----SERVICE JOBS MENU
@@ -283,5 +277,25 @@ public partial class OrderView : ContentPage
         updateRO.IsEnabled = true;
     }
 
-    
+    private void techList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        Technician? techToAssign = e.SelectedItem as Technician;
+        if (techToAssign != null && repairOrder != null)
+        {
+            assignTech.IsEnabled = true;
+            assignTech.Text = $"Assign {techToAssign.Name} to This RO?";
+            t = techToAssign;
+        }
+    }
+
+    private void assignTech_Clicked(object sender, EventArgs e)
+    {
+        assignTech.IsEnabled = false;
+        if (t != null && repairOrder != null)
+        {
+            repairOrder.EmployeeId = t.EmployeeId;
+            selectedTech.Text = t.Name;
+            MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
+        }
+    }
 }

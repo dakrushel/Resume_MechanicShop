@@ -49,7 +49,7 @@ namespace MechanicShop.Models
 
         [ForeignKey(typeof(Technician))]
         //Property to act as foreign key 
-        public int? EmployeeId { get; set; }
+        public int EmployeeId { get; set; }
 
         [ForeignKey(typeof(RepairOrderServiceJobBridge))]
         public int RepairOrderServiceJobBridgeId { get; set; }
@@ -124,7 +124,7 @@ namespace MechanicShop.Models
         }
 
         //Assign technician 
-        public void AssignTechnician(string employeeId)
+        public void AssignTechnician(int employeeId)
         {
             this.EmployeeId = EmployeeId;
 
