@@ -22,14 +22,19 @@ namespace MechanicShop.Models
         [PrimaryKey, NotNull]
         public string VIN { get; set; }
 
+        [NotNull]
         public string Make { get; set; }
 
+        [NotNull]
         public string Model { get; set; }
 
+        [NotNull]
         public string Colour { get; set; }
 
+        [NotNull]
         public int Year { get; set; }
 
+        [NotNull]
         [ForeignKey(typeof(Customer))]
         public string CustomerPhone { get; set; }
 

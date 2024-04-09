@@ -11,19 +11,15 @@ namespace MechanicShop.Models
     public class RepairOrderServiceJobBridge
     {
         [PrimaryKey, AutoIncrement]
-        public int RepairOrderServiceJobBridgeId { get; set; }
-
+        public int BridgeIdForROandSJ { get; set; }
+        [NotNull]
         public int RepairOrderId { get; set; }
 
-
+        [NotNull]
         public int ServiceJobId { get; set; }
-
-        //Opens connection to Database
-        MechanicShopSQLite ShopDB = new MechanicShopSQLite();   
 
         public RepairOrderServiceJobBridge(int repairOrderId, int serviceJobId)
         {
-
             this.RepairOrderId = repairOrderId;
             this.ServiceJobId = serviceJobId;
         }
