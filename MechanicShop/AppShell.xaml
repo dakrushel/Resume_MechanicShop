@@ -67,7 +67,7 @@ Shell.BackgroundColor="#814827"-->
         Title="Repair Orders"
         Icon="repairorder.png"  
         ContentTemplate="{DataTemplate local:OrderView}"
-        Route="OrderPage" />
+        Route="OrderView" />
 
         <ShellContent
         Title="Technicians"

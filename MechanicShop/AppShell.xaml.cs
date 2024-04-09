@@ -7,7 +7,7 @@ namespace MechanicShop
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(AppointmentView), typeof(AppointmentView));
-
+            Routing.RegisterRoute(nameof(OrderView), typeof(OrderView));
 
 
         }

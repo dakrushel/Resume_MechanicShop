@@ -48,6 +48,7 @@ namespace MechanicShop
             PrintToTxt($"RemoveCustomerChecker: {Customer.RemoveCustomerChecker("555-555-5555")}");
             PrintToTxt($"RemoveVehicleChecker: {Vehicle.RemoveVehicleChecker(testVehicle)}");
 
+
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
