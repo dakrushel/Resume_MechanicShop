@@ -9,7 +9,7 @@ namespace MechanicShop.Models
     public class Technician 
     {
         [PrimaryKey, NotNull, AutoIncrement]
-        public string EmployeeId { get; set; }
+        public int EmployeeId { get; set; }
 
         public string Specialization { get; set; }
 
@@ -23,7 +23,7 @@ namespace MechanicShop.Models
 
         public Technician(string name, string employeePhone, string hireDate, string specialization, double hourlyRate)
         {
-            //this.EmployeeId = employeeId;
+
             this.Name = name;
             this.EmployeePhone = employeePhone;
             this.HireDate = hireDate;
