@@ -97,5 +97,13 @@ namespace MechanicShop.Models
             }
             else { return true; }
         }
+
+        public override string ToString()
+        {
+            return
+                $"\nName: {this.Name}\n" +
+                $"Phone: {this.CustomerPhone}\n" +
+                $"Address: {this.Address}";
+        }
     }
 }

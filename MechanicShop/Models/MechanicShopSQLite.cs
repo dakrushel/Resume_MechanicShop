@@ -155,15 +155,23 @@ namespace MechanicShop.Models
                 .Where(x => x.CustomerPhone == CustomerPhone).ToList();
         }
 
+        //TESTED
         public List<Customer> GetCustomerByName(string customerName)
         {
             return this.database.Table<Customer>()
-                .Where(x => x.Name.IndexOf(customerName, StringComparison.OrdinalIgnoreCase) >= 0)
+                .Where(x => x.Name.ToLower().Contains(customerName.ToLower()))
+                .ToList();
+        }
+
+        public List<Customer> GetCustomerByPhone(string customerPhone)
+        {
+            return this.database.Table<Customer>()
+                .Where(x => x.CustomerPhone.ToLower().Contains(customerPhone.ToLower()))
                 .ToList();
         }
         public Customer GetACustomerByName(string customerName)
         {
-            return this.database.Table<Customer>().First(x => x.Name == customerName);
+            return this.database.Table<Customer>().FirstOrDefault(x => x.Name == customerName);
         }
 
 
@@ -234,7 +242,7 @@ namespace MechanicShop.Models
 
         public Technician GetTechnician(int employeeId) //Denver
         {
-            return this.database.Table<Technician>().First(x => x.EmployeeId == employeeId);
+            return this.database.Table<Technician>().FirstOrDefault(x => x.EmployeeId == employeeId);
         }
         /*---------------------------- REPAIR ORDER ------------------------------------*/
 
