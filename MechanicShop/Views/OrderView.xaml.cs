@@ -253,6 +253,7 @@ public partial class OrderView : ContentPage
             thisJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.
                 GetServiceJobListByRepairOrderId(repairOrder.RepairOrderId));
             RefreshROJobs();
+            updateRO.IsEnabled = false;
             if (repairOrder.EmployeeId != null)
             {
                 Technician? tech = AppointmentViewService.GetTechByID(repairOrder.EmployeeId);
