@@ -18,12 +18,8 @@ namespace MechanicShop.Services
             ShopSettings shopSettings = MauiProgram.ShopDB.GetShopSettings();
             Vehicle tempVehicle = MauiProgram.ShopDB.GetVehicleByVIN(rO.VIN);
             List<ServiceJob> tempJobs = rO.ListOfServiceJobs;
-            Technician tempTech = new Technician();
-            if (rO.EmployeeId != null)
-            {
-                string id = rO.EmployeeId.ToString();
-                tempTech = MauiProgram.ShopDB.GetTechnician(Int32.Parse(id));
-            }
+            Technician tech = MauiProgram.ShopDB.GetTechnician(rO.EmployeeId);
+            string? techName = tech.Name;
             string workDone = null;
             double totalHours = 0;
             if (tempJobs != null)
@@ -50,7 +46,7 @@ namespace MechanicShop.Services
                 $"    ----------------------------------------------------------\n" +
                 $"    DESCRIPTION\n\n" +
                 $"    {rO.RepairOrderDescription}\n\n" +
-                $"    Employee ID: {rO.EmployeeId}\t\t\tTechnician: {tempTech.Name}\n\n" +
+                $"    Employee ID: {rO.EmployeeId}\t\t\tTechnician: {techName}\n\n" +
                 $"    Work done:\n" +
                 $"    {workDone}\n\n\n" +
                 $"    Total Hours............................................ {totalHours}\n\n" +

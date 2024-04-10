@@ -240,7 +240,7 @@ namespace MechanicShop.Models
             return this.database.Table<Technician>().ToList();
         }
 
-        public Technician GetTechnician(int employeeId) //Denver
+        public Technician GetTechnician(int? employeeId) //Denver
         {
             return this.database.Table<Technician>().FirstOrDefault(x => x.EmployeeId == employeeId);
         }
