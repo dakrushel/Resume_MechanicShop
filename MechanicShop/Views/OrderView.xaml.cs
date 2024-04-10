@@ -10,8 +10,10 @@ public partial class OrderView : ContentPage
     // Page temp variables (for currently displayed repair order)
     public static Customer? c = null;
     public static Vehicle? v = null;
+    public static Technician? t = null;
     public static RepairOrder? repairOrder = null;
     public static ObservableCollection<ServiceJob> thisJobs = new ObservableCollection<ServiceJob>();
+
     public OrderView()
 	{
 		InitializeComponent();
@@ -29,6 +31,7 @@ public partial class OrderView : ContentPage
         RefreshServiceJobs();
         RefreshROs();
         updateRO.IsEnabled = false;
+        selectedTech.Text = ":::Not Assigned:::";
         // If receiving a customer from PASS
         if (Pass.CustomerPass != null && Pass.VehiclePass != null)
         {
@@ -45,6 +48,10 @@ public partial class OrderView : ContentPage
             //Binding Contexts
             cInformation.BindingContext = c;
             vInformation.BindingContext = v;
+            thisJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.
+                GetServiceJobListByRepairOrderId(repairOrder.RepairOrderId));
+            repairOrderJobs.ItemsSource = thisJobs;
+            problemDescriptionEntry.Text = repairOrder.RepairOrderDescription;
 
             //Widget Visibility
             orderSlip.IsVisible = true;
@@ -56,6 +63,7 @@ public partial class OrderView : ContentPage
             // Clear all page variables
             c = null;
             v = null;
+            t = null;
             repairOrder = null;
             thisJobs.Clear();
 
@@ -74,7 +82,7 @@ public partial class OrderView : ContentPage
     {
         AppointmentViewService.RefreshOpenTechnicians();
         techList.ItemsSource = AppointmentViewService.openTechnicians;
-        assignTechPicker.ItemsSource = AppointmentViewService.openTechnicians;
+        
     }
     private void RefreshServiceJobs()
     {
@@ -111,6 +119,42 @@ public partial class OrderView : ContentPage
     private void updateRO_Clicked(object sender, EventArgs e)
     {
         updateRO.IsEnabled = false;
+        if (repairOrder != null)
+        {
+            //update problem description
+            repairOrder.RepairOrderDescription = problemDescriptionEntry.Text;
+
+            MauiProgram.ShopDB.RemoveRepairOrderServiceJobBridgeAttachedToRepairOrder(repairOrder.RepairOrderId);
+            foreach (ServiceJob job in thisJobs)
+            {
+                repairOrder.AssignServiceJob(job.ServiceJobId);
+            }
+
+            MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
+            
+        }
+
+    }
+    private void repairOrderJobs_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        ServiceJob? sj = e.SelectedItem as ServiceJob;
+        if (sj != null)
+        {
+            removeJobBtn.IsEnabled = true;
+            removeJobBtn.Text = $"Remove {sj.ServiceJobDescription}";
+        }
+    }
+    private void removeJobBtn_Clicked(object sender, EventArgs e)
+    {
+        removeJobBtn.Text = "Remove Job";
+        updateRO.IsEnabled = true;
+        ServiceJob? toRemove = repairOrderJobs.SelectedItem as ServiceJob;
+        if (toRemove != null)
+        {
+            thisJobs.Remove(toRemove);
+            RefreshROJobs();
+        }
+        removeJobBtn.IsEnabled = false;
     }
 
     private void closeRO_Clicked(object sender, EventArgs e)
@@ -120,7 +164,13 @@ public partial class OrderView : ContentPage
 
     private void Clear_Clicked(object sender, EventArgs e)
     {
+
+        //TODO do you want to save changes??? (ifchanged)
         OnAppearing();
+    }
+    private void RefreshROJobs()
+    {
+        //TODO
     }
 
 
@@ -149,6 +199,21 @@ public partial class OrderView : ContentPage
             thisJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.
                 GetServiceJobListByRepairOrderId(repairOrder.RepairOrderId));
             repairOrderJobs.ItemsSource = thisJobs;
+
+            if (repairOrder.EmployeeId != null)
+            {
+                Technician? tech = AppointmentViewService.GetTechByID(repairOrder.EmployeeId);
+                if (tech != null)
+                {
+                    selectedTech.Text = tech.Name;
+                }
+            }
+
+            //TODO get tech name in selectedTech
+            if (repairOrder.EmployeeId != null)
+            {
+                t = MauiProgram.ShopDB.GetTechnician(repairOrder.EmployeeId);
+            }
         }
     }
 
@@ -156,17 +221,38 @@ public partial class OrderView : ContentPage
     //-----TECHNICIAN LIST
     //========================================================================================================
 
-    private void assignTechPicker_SelectedIndexChanged(object sender, EventArgs e)
-    {
-
-    }
+    
 
     //========================================================================================================
     //-----SERVICE JOBS MENU
     //========================================================================================================
     private void addThisJob_Clicked(object sender, EventArgs e)
     {
-
+        ServiceJob? sj = thisJob.BindingContext as ServiceJob;
+        if (sj != null)
+        {
+            if (thisJobs.Contains(sj))
+            {
+                return;
+            }
+            thisJobs.Add(sj);
+            addThisJob.IsEnabled = false;
+            RefreshROJobs();
+        }
+    }
+    private void serviceJobs_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        ServiceJob? sj = e.SelectedItem as ServiceJob;
+        if (sj != null)
+        {
+            thisJob.BindingContext = sj;
+            if (thisJobs.Contains(sj))
+            {
+                addThisJob.IsEnabled = false;
+                return;
+            }
+            addThisJob.IsEnabled = true;
+        }
     }
 
     //========================================================================================================
@@ -189,5 +275,27 @@ public partial class OrderView : ContentPage
             editor.Text = newText;
         }
         updateRO.IsEnabled = true;
+    }
+
+    private void techList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        Technician? techToAssign = e.SelectedItem as Technician;
+        if (techToAssign != null && repairOrder != null)
+        {
+            assignTech.IsEnabled = true;
+            assignTech.Text = $"Assign {techToAssign.Name} to This RO?";
+            t = techToAssign;
+        }
+    }
+
+    private void assignTech_Clicked(object sender, EventArgs e)
+    {
+        assignTech.IsEnabled = false;
+        if (t != null && repairOrder != null)
+        {
+            repairOrder.EmployeeId = t.EmployeeId;
+            selectedTech.Text = t.Name;
+            MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
+        }
     }
 }

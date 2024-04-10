@@ -1,14 +1,12 @@
 ==================================================================
+
     REPAIR ORDER: 79
     ----------------------------------------------------------
     CUSTOMER
 
     Name: Bobbert		 Phone: 123-456-7890
 
-    Description:
-    Omg GODZILLA. Truck partially eaten.
-
-    Vehicle: MechanicShop.Models.Vehicle
+    Vehicle: 2020 Toyota Tacoma
     VIN: 1A2C
 
     ----------------------------------------------------------
@@ -18,5 +16,20 @@
     2024-04-08         2024-04-25	   
 
     ----------------------------------------------------------
-    Employee ID: 
-     Technician:           Hours: 0
+    DESCRIPTION
+
+    Omg GODZILLA. Truck partially eaten.
+
+    Employee ID: 4			Technician: 
+
+    Work done:
+    
+
+
+    Total Hours............................................ 0
+
+    Shop Supplies........................................ 100
+
+    Amount Owing......................................... 0
+
+==================================================================
