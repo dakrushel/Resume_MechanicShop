@@ -1,6 +1,8 @@
 ﻿using MechanicShop.Models;
 using MechanicShop.Resources;
+using MechanicShop.Services;
 using Microsoft.Extensions.Logging;
+using System.Security.Cryptography.X509Certificates;
 
 namespace MechanicShop
 {
@@ -9,6 +11,7 @@ namespace MechanicShop
         public static MechanicShopSQLite ShopDB;
         public static DateTime currentDate = DateTime.Now;
         public static string dateString = currentDate.ToString("yyyy-MM-dd");
+
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
@@ -27,9 +30,23 @@ namespace MechanicShop
 
             ShopDB = new MechanicShopSQLite();
 
-            
-
-
+            ////FOR TESTING
+            void PrintToTxt(string s)
+            {
+                using (StreamWriter sw = new StreamWriter(Constant.TestPath))
+                {
+                    sw.Write(s);
+                }
+            }
+            //Generate Invoice
+            //Customer testCustomer = ShopDB.GetCustomerByPhone("123-456-7890")[0];
+            //List<RepairOrder> appointments = ShopDB.GetRepairOrdersByVIN(testCustomer.CustomerVehicles[1].VIN);
+            //Vehicle testVehicle = ShopDB.GetVehicleByVIN(appointments[0].VIN);
+            //RepairOrder tempRO = ShopDB.GetRepairOrderByVIN("1A2C");
+            //GenerateInvoice.SaveInvoiceDelRO(tempRO);
+            //RemoveCustomerChecker
+            //PrintToTxt($"RemoveCustomerChecker: {Customer.RemoveCustomerChecker("555-555-5555")}");
+            //PrintToTxt($"RemoveVehicleChecker: {Vehicle.RemoveVehicleChecker(testVehicle)}");
 
 
 #if DEBUG
