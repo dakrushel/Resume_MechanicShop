@@ -177,19 +177,14 @@ public partial class OrderView : ContentPage
                 return;
             }
             repairOrder.RepairOrderHours = AppointmentViewService.GetHours(thisJobs.ToList());
-            //Employee??
-            if (repairOrder.EmployeeId !> 0)
-            {
-                await DisplayAlert("Assign Technician", "You must assign a technician to close this Repair Order", "Ok");
-                return;
-            }
+            
             repairOrder.DateClose = AppointmentView.TodayDate;
     
             // update the RO object
             MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
 
             //invoice the RO
-
+            GenerateInvoice.SaveInvoiceDelRO(repairOrder);
             //TODO: Delete the RO
             
         }

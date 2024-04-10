@@ -17,7 +17,7 @@ namespace MechanicShop.Services
         {
             ShopSettings shopSettings = MauiProgram.ShopDB.GetShopSettings();
             Vehicle tempVehicle = MauiProgram.ShopDB.GetVehicleByVIN(rO.VIN);
-            List<ServiceJob> tempJobs = rO.ListOfServiceJobs;
+            List<ServiceJob> tempJobs = MauiProgram.ShopDB.GetServiceJobListByRepairOrderId(rO.RepairOrderId);
             Technician tech = MauiProgram.ShopDB.GetTechnician(rO.EmployeeId);
             string? techName = tech.Name;
             string workDone = null;
@@ -50,8 +50,8 @@ namespace MechanicShop.Services
                 $"    Work done:\n" +
                 $"    {workDone}\n\n\n" +
                 $"    Total Hours............................................ {totalHours}\n\n" +
-                $"    Shop Supplies........................................ {shopSettings.ShopSupplyCost}\n\n" +
-                $"    Amount Owing......................................... {totalHours * shopSettings.ShopHourlyRate}" +
+                $"    Shop Supplies........................................ {shopSettings.ShopSupplyCost.ToString("C")}\n\n" +
+                $"    Amount Owing......................................... {(totalHours * shopSettings.ShopHourlyRate).ToString("C")}" +
                 $"\n\n==================================================================";
                                                     
             //Generate NEW txt file for each Invoice (based on Customer Name, RO ID, and Date Created)
