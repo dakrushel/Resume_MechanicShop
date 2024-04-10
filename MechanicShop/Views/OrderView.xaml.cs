@@ -82,12 +82,16 @@ public partial class OrderView : ContentPage
     {
         AppointmentViewService.RefreshOpenTechnicians();
         techList.ItemsSource = AppointmentViewService.openTechnicians;
-        
+        techList.SelectedItem = null;
+        assignTech.IsEnabled = false;
+        assignTech.Text = "Assign Technician";
     }
     private void RefreshServiceJobs()
     {
         var allJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.GetAllServiceJobs());
         serviceJobs.ItemsSource = allJobs;
+        addThisJob.IsEnabled = false;
+        thisJob.BindingContext = null;
     }
     private void RefreshROs()
     {
@@ -234,7 +238,7 @@ public partial class OrderView : ContentPage
         orderSlip.IsVisible = true;
         roLogs.IsVisible = false;
         repairOrder = e.SelectedItem as RepairOrder;
-
+        RefreshTechList();
         if (repairOrder != null)
         {
             // set local variables
