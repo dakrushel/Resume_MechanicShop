@@ -173,6 +173,10 @@ namespace MechanicShop.Models
         {
             return this.database.Table<Customer>().FirstOrDefault(x => x.Name == customerName);
         }
+        public Customer GetACustomerByPhone(string customerPhone)
+        {
+            return this.database.Table<Customer>().FirstOrDefault(x => x.CustomerPhone == customerPhone);
+        }
 
 
         /*---------------------------- VEHICLE ------------------------------------*/

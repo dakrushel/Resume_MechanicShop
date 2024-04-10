@@ -126,26 +126,24 @@
 
                         <!--SEARCH APPOINTMENTS-->
                         <Label Text="Find Appointment:" Margin="0,20,0,0"/>
-                        <HorizontalStackLayout Spacing="10">
-                            <Label Text="Customer Name:"
+                        <HorizontalStackLayout Spacing="10" WidthRequest="400">
+                            <Label Text="Name:" WidthRequest="50"
                                     VerticalOptions="Center" HorizontalOptions="End"/>
-                            <Entry x:Name="apptName" WidthRequest="300" Background="White"
-                                   TextChanged="apptName_TextChanged"/>
+                            <Entry x:Name="apptName" WidthRequest="200" Background="White"
+                                   TextChanged="apptName_TextChanged" Placeholder="Customer Name"/>
+                            <Button x:Name="searchName" Text="Search Name" WidthRequest="125"
+                                    Clicked="searchName_Clicked" IsEnabled="False"/>
                         </HorizontalStackLayout>
-                        <HorizontalStackLayout Spacing="10">
-                            <Label Text="Customer Phone:"
+                        <HorizontalStackLayout Spacing="10" WidthRequest="400">
+                            <Label Text="Phone:" WidthRequest="50"
                                     VerticalOptions="Center" HorizontalOptions="End"/>
-                            <Entry x:Name="apptPhone" WidthRequest="300" Background="White"
-                                   TextChanged="apptPhone_TextChanged"/>
+                            <Entry x:Name="apptPhone" WidthRequest="200" Background="White"
+                                   TextChanged="apptPhone_TextChanged" Placeholder="000-000-0000"/>
+                            <Button x:Name="SearchPhone" Text="Search Phone" WidthRequest="125"
+                                    Clicked="SearchPhone_Clicked" IsEnabled="False"/>
                         </HorizontalStackLayout>
-                        
-                        <HorizontalStackLayout Spacing="10">
-                            <Button x:Name="clearSearchForm" Text="Clear Search"
-                                    Clicked="clearSearchForm_Clicked"/>
-                            <Button x:Name="findAppointment" Text="Find Appointment"
-                                    Clicked="findAppointment_Clicked"/>
-                            
-                        </HorizontalStackLayout>
+                        <Button x:Name="clearSearchForm" Text="Clear Search" IsEnabled="False"
+                                Clicked="clearSearchForm_Clicked" WidthRequest="200"/>
                     </VerticalStackLayout>
                 </Border>
 

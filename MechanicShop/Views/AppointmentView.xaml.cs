@@ -39,27 +39,19 @@ public partial class AppointmentView : ContentPage
             appointmentSlip.IsEnabled = true;
             appointmentLogs.IsEnabled = false;
             apptOptions.IsVisible = false;
-            scheduleAppointment.IsVisible = true;
-            
-
+            scheduleAppointment.IsVisible = true;            
             // page temp objects
             c = Pass.RetreiveCustomer();         
             v = Pass.RetrieveVehicle();
-            
-
             //Binding Contexts
             cInformation.BindingContext = c;
-            vInformation.BindingContext = v; 
-            
-
+            vInformation.BindingContext = v;            
         }
         else 
         { 
             // page temp objects
             cInformation.BindingContext = null;
             vInformation.BindingContext = null;
-            
-
             // Widgets
             appointmentSlip.IsEnabled = false;
             appointmentLogs.IsVisible = true;
@@ -71,11 +63,17 @@ public partial class AppointmentView : ContentPage
         problemDescriptionEntry.Text = null;
         priceEstimate.Text = null;
         datePicker.Date = currentDate.AddDays(7);
-       
-
         RefreshAppointments();
+        RefreshSearch();
 
-
+    }
+    private void RefreshSearch()
+    {
+        apptPhone.Text = null;
+        apptName.Text = null;
+        searchName.IsEnabled = false;
+        SearchPhone.IsEnabled = false;
+        clearSearchForm.IsEnabled = false;
     }
     private void RefreshAppointments()
     {
@@ -92,8 +90,7 @@ public partial class AppointmentView : ContentPage
         if (thisJobs != null)
         {
             priceEstimate.Text = AppointmentViewService.CalculateEstimate(thisJobs.ToList()).ToString("C");
-        }
-        
+        }      
     }
     //======================================================================================
     //+++APPOINTMENT LISTS+++
@@ -106,7 +103,7 @@ public partial class AppointmentView : ContentPage
         if (repairOrder != null)
         {
             // set local variables
-            c = MauiProgram.ShopDB.GetACustomerByName(repairOrder.CustomerName);
+            c = MauiProgram.ShopDB.GetACustomerByPhone(repairOrder.CustomerPhoneNumber);
             v = MauiProgram.ShopDB.GetVehicleByVIN(repairOrder.VIN);
             // bind info to appointmenmt slip
             cInformation.BindingContext = c;
@@ -126,20 +123,49 @@ public partial class AppointmentView : ContentPage
             updateAppt.IsEnabled = false;
         }
     }
+
+    //======================================================================================
+    //+++SEARCH+++
+    //======================================================================================
+    private void apptName_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        clearSearchForm.IsEnabled = true;
+        apptName.Text = Validate.Name(e.NewTextValue);
+        searchName.IsEnabled = true;
+    }
+    private void apptPhone_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        clearSearchForm.IsEnabled = true;
+        apptPhone.Text = Validate.Phone(e.NewTextValue);
+        if (apptPhone.Text != null)
+        {
+            if (apptPhone.Text.Length == 12)
+            {
+                SearchPhone.IsEnabled = true;
+                return;
+            }
+        }
+        SearchPhone.IsEnabled = false;
+
+    }
     private void clearSearchForm_Clicked(object sender, EventArgs e)
     {
         apptName.Text = null;
         apptPhone.Text = null;
+        clearSearchForm.IsEnabled = false;
+        RefreshAppointments();
     }
-
-    private void findAppointment_Clicked(object sender, EventArgs e)
+    private void SearchPhone_Clicked(object sender, EventArgs e)
     {
-        //TODO
+        //TODO once method exists
+    }
+    private void searchName_Clicked(object sender, EventArgs e)
+    {
+        //TODO once method exists
     }
     //======================================================================================
     //+++APPOINTMENT SLIP+++
-    //======================================================================================
-    
+    //======================================================================================  
     private void removeJobBtn_Clicked(object sender, EventArgs e)
     {
         updateAppt.IsEnabled = true;
@@ -152,7 +178,6 @@ public partial class AppointmentView : ContentPage
         removeJobBtn.IsEnabled = false;
         
     }
-
     private void addJobBtn_Clicked(object sender, EventArgs e)
     {
         appointmentLogs.IsVisible = false;
@@ -169,8 +194,7 @@ public partial class AppointmentView : ContentPage
             removeJobBtn.IsEnabled = true;
             removeJobBtn.Text = $"Remove {sj.ServiceJobDescription}";
         }      
-    }
-    
+    }   
     private void scheduleAppointment_Clicked(object sender, EventArgs e)
     {
         appointmentLogs.IsVisible = true;
@@ -181,7 +205,6 @@ public partial class AppointmentView : ContentPage
         string? createDate = TodayDate;
         string? appointmentDate = datePicker.Date.ToString("yyyy-MM-dd");
         string? VIN = v?.VIN;
-
         if (datePicker.Date < currentDate.AddDays(-1))
         {
             NotifyDateError();
@@ -195,20 +218,14 @@ public partial class AppointmentView : ContentPage
                 //TODO
                 newAppointment.AssignServiceJob(job.ServiceJobId);
             }
-            repairOrder = newAppointment;
-           
+            repairOrder = newAppointment;           
             appointmentLogs.IsEnabled = true;
-            RefreshAppointments();
-            
-            
+            RefreshAppointments();           
             // swap out button set
             scheduleAppointment.IsVisible = false;
             apptOptions.IsVisible = true;
         }
-    }
-
-
-    
+    }  
     private async void deleteAppt_Clicked(object sender, EventArgs e)
     {
         if (repairOrder != null)
@@ -229,7 +246,6 @@ public partial class AppointmentView : ContentPage
         {
             //update problem description
             repairOrder.RepairOrderDescription = problemDescriptionEntry.Text;
-
             // update appointment date
             if (datePicker.Date < currentDate.AddDays(-1))
             {
@@ -241,14 +257,12 @@ public partial class AppointmentView : ContentPage
             {
                 repairOrder.AppointmentDate = appointmentDate;           
             }
-
             //update list of jobs for this RO
             MauiProgram.ShopDB.RemoveRepairOrderServiceJobBridgeAttachedToRepairOrder(repairOrder.RepairOrderId);
             foreach (ServiceJob job in thisJobs)
             {
                 repairOrder.AssignServiceJob(job.ServiceJobId);
             }
-
             MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
             RefreshAppointments();
         }
@@ -260,8 +274,7 @@ public partial class AppointmentView : ContentPage
     private void datePicker_DateSelected(object sender, DateChangedEventArgs e)
     {
         if (repairOrder != null)
-        {
-            
+        {          
             DateTime roDate = DateTime.Parse(repairOrder.AppointmentDate);
             if (roDate != datePicker.Date && datePicker.Date >= currentDate.AddDays(-1))
             {
@@ -272,8 +285,8 @@ public partial class AppointmentView : ContentPage
     }
     private void AppointmentDetailsChanged()
     {
-        updateAppt.IsEnabled = true;
-        
+        //TODO?? only 1 reference? why?
+        updateAppt.IsEnabled = true;      
     }
     private async void makeRO_Clicked(object sender, EventArgs e)
     {
@@ -286,6 +299,11 @@ public partial class AppointmentView : ContentPage
             Pass.PassRO(repairOrder);
             await Shell.Current.GoToAsync("//OrderView");
         }
+    }
+    private void Editor_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        problemDescriptionEntry.Text = Validate.Description(e.NewTextValue);
+        updateAppt.IsEnabled = true;
     }
 
     //======================================================================================
@@ -324,76 +342,8 @@ public partial class AppointmentView : ContentPage
             thisJobs.Add(sj);
             addThisJob.IsEnabled = false;
             RefreshROJobs();
-        }
-        
+        }      
     }
-
-    
-    //====================================================================================================
-    // INPUT VALIDATORS
-    //====================================================================================================
-    private void apptName_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        var entry = (Entry)sender;
-        if (e.NewTextValue == null || e.NewTextValue == "") { return; }
-        // Regular expression pattern to allow only alphabetic characters, space, hyphen, apostrophe, and period
-        string pattern = @"^[a-zA-ZÀ-ÿ\s'\-\.\,]+$";
-
-        // Check if the entered text matches the pattern
-        if (!Regex.IsMatch(e.NewTextValue, pattern))
-        {
-            // If the entered text contains disallowed characters, remove them
-            var newText = Regex.Replace(e.NewTextValue, @"[^a-zA-ZÀ-ÿ\s'\-\.\,]", "");
-
-            // Update the entry's text with the sanitized text
-            entry.Text = newText;
-        }
-    }
-    private void apptPhone_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        var entry = (Entry)sender;
-        if (e.NewTextValue == null) { return; }
-        // Remove non-digit characters
-        var newText = new string(e.NewTextValue.Where(char.IsDigit).ToArray());
-        // Limit maximum length to 10 digits
-        if (newText.Length > 10)
-        {
-            newText = newText.Substring(0, 10);
-        }
-        // Automatically insert dashes
-        if (newText.Length > 3)
-        {
-            newText = newText.Insert(3, "-");
-            if (newText.Length > 7)
-            {
-                newText = newText.Insert(7, "-");
-            }
-        }
-        entry.Text = newText;
-    }
-    private void Editor_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        var editor = (Editor)sender;
-        if (string.IsNullOrEmpty(e.NewTextValue)) { return; }
-        // Regular expression pattern to match disallowed characters
-        string pattern = @"[^a-zA-ZÀ-ÿ\s'\-.,\d]";
-
-        // Check if the entered text contains disallowed characters
-        if (Regex.IsMatch(e.NewTextValue, pattern))
-        {
-            // If disallowed characters are found, remove them
-            var newText = Regex.Replace(e.NewTextValue, pattern, "");
-
-            // Update the entry's text with the sanitized text
-            editor.Text = newText;
-        }
-        updateAppt.IsEnabled = true;
-    }
-
-    
-
-
-    
 
     
 }
