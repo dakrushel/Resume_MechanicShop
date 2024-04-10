@@ -39,12 +39,12 @@ namespace MechanicShop
                 }
             }
             //Generate Invoice
-            //List<RepairOrder> appointments = ShopDB.GetRepairOrdersThatAreNOTActive();
-            //Vehicle testVehicle = ShopDB.GetVehicleByVIN(appointments[1].VIN);
-            //RepairOrder tempRO = appointments[0];
-            //GenerateInvoice.SaveInvoiceDelRO(tempRO);
+            //Customer testCustomer = ShopDB.GetCustomerByPhone("123-456-7890")[0];
+            //List<RepairOrder> appointments = ShopDB.GetRepairOrdersByVIN(testCustomer.CustomerVehicles[1].VIN);
+            //Vehicle testVehicle = ShopDB.GetVehicleByVIN(appointments[0].VIN);
+            RepairOrder tempRO = ShopDB.GetRepairOrderByVIN("1A2C");
+            GenerateInvoice.SaveInvoiceDelRO(tempRO);
             //RemoveCustomerChecker
-
             //PrintToTxt($"RemoveCustomerChecker: {Customer.RemoveCustomerChecker("555-555-5555")}");
             //PrintToTxt($"RemoveVehicleChecker: {Vehicle.RemoveVehicleChecker(testVehicle)}");
 

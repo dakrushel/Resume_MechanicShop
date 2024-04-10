@@ -11,66 +11,51 @@ namespace MechanicShop.Services
     {
         //Getters and setters
         public static string RepairOrderOutput { get; set; }
-
-        //Ctors
-        //public GenerateInvoice() { }
-        //public GenerateInvoice(RepairOrder rO)
-        //{
-        //    //Retrieve RepairOrder (create temp RO?)
-        //    RepairOrder temp = rO;
-        //    this.RepairOrderOutput = 
-        //        $"==================================================================\n" +
-        //        $"               REPAIR ORDER {rO.RepairOrderId}\n" +
-        //        $"    ----------------------------------------------------------\n" +
-        //        $"    Description:\n" +
-        //        $"    {rO.RepairOrderDescription}\n" +
-        //        $"    ----------------------------------------------------------\n" +
-        //        $"    \t\t\tDate\n\n" +
-        //        $"    Created:\t     Appointment:\t   Closed:\n" +
-        //        $"    {rO.DateCreated}         {rO.AppointmentDate}\t   {rO.DateClose}\n\n" +
-        //        $"    ----------------------------------------------------------\n" +
-        //        $"     Technician: {rO.RepairJobTechnician}\n" +
-        //        $"    Employee ID: {rO.EmployeeId}\n" +
-        //        $"         Job ID: {rO.ServiceJobId}\n" +
-        //        $"          Hours: {rO.RepairOrderHours}\n" +
-        //        $"        Vehicle: {rO.Vehicle}\r\n" +
-        //        $"            VIN: {rO.VIN}\n\n";
-        //}
-
-        //Close and save method. Must output RepairOrder to a txt file and remove it from the database
         
         //TESTED
         public static void SaveInvoiceDelRO(RepairOrder rO)
         {
+            ShopSettings shopSettings = MauiProgram.ShopDB.GetShopSettings();
             Vehicle tempVehicle = MauiProgram.ShopDB.GetVehicleByVIN(rO.VIN);
-            Technician tempTech = new Technician();
-            if (rO.EmployeeId != null)
+            List<ServiceJob> tempJobs = rO.ListOfServiceJobs;
+            Technician tech = MauiProgram.ShopDB.GetTechnician(rO.EmployeeId);
+            string? techName = tech.Name;
+            string workDone = null;
+            double totalHours = 0;
+            if (tempJobs != null)
             {
-                string id = rO.EmployeeId.ToString();
-                tempTech = MauiProgram.ShopDB.GetTechnician(Int32.Parse(id));
+                foreach (ServiceJob sj in tempJobs)
+                {
+                    workDone += $"{sj.ServiceJobDescription}\n    Hours.................................................. {sj.ServiceJobHours}\n\n";
+                    totalHours += sj.ServiceJobHours;
+                }
             }
             //Write RO to txt
             RepairOrderOutput =
-                $"==================================================================\n" +
+                $"==================================================================\n\n" +
                 $"    REPAIR ORDER: {rO.RepairOrderId}\n" +
                 $"    ----------------------------------------------------------\n" +
                 $"    CUSTOMER\n\n" +
                 $"    Name: {rO.CustomerName}\t\t Phone: {rO.CustomerPhoneNumber}\n\n" +
-                $"    Description:\n" +
-                $"    {rO.RepairOrderDescription}\n\n" +
-                $"    Vehicle: {tempVehicle}\n" +
+                $"    Vehicle: {tempVehicle.Year} {tempVehicle.Make} {tempVehicle.Model}\n" +
                 $"    VIN: {rO.VIN}\n\n" +
                 $"    ----------------------------------------------------------\n" +
                 $"    DATE\n\n" +
                 $"    Created:\t     Appointment:\t   Closed:\n" +
                 $"    {rO.DateCreated}         {rO.AppointmentDate}\t   {rO.DateClose}\n\n" +
                 $"    ----------------------------------------------------------\n" +
-                $"    Employee ID: {rO.EmployeeId}\n" +
-                $"     Technician: {tempTech.Name}\n" +
-                $"          Hours: {rO.RepairOrderHours}\n";
-
-            //Generate NEW txt file for each Invoice (based on Customer Name and RO ID)
-            Constant.repairOrderFilename += $"{rO.RepairOrderId}_{rO.CustomerName}";
+                $"    DESCRIPTION\n\n" +
+                $"    {rO.RepairOrderDescription}\n\n" +
+                $"    Employee ID: {rO.EmployeeId}\t\t\tTechnician: {techName}\n\n" +
+                $"    Work done:\n" +
+                $"    {workDone}\n\n\n" +
+                $"    Total Hours............................................ {totalHours}\n\n" +
+                $"    Shop Supplies........................................ {shopSettings.ShopSupplyCost}\n\n" +
+                $"    Amount Owing......................................... {totalHours * shopSettings.ShopHourlyRate}" +
+                $"\n\n==================================================================";
+                                                    
+            //Generate NEW txt file for each Invoice (based on Customer Name, RO ID, and Date Created)
+            Constant.repairOrderFilename += $"{rO.RepairOrderId}_{rO.CustomerName}_{rO.DateCreated}";
 
             using (StreamWriter sw = new StreamWriter(Constant.RepairOrderPath))
             {
