@@ -137,18 +137,12 @@ public partial class AppointmentView : ContentPage
     
     private void removeJobBtn_Clicked(object sender, EventArgs e)
     {
-        AppointmentDetailsChanged();
+        updateAppt.IsEnabled = true;
         ServiceJob? toRemove = repairOrderJobs.SelectedItem as ServiceJob;
         if (toRemove != null)
         {
             thisJobs.Remove(toRemove);
             RefreshROJobs();
-        }
-        if (repairOrder != null && toRemove != null)
-        {
-            //TODO
-            //RepairOrderServiceJobBridge rsjb = new RepairOrderServiceJobBridge(repairOrder.RepairOrderId, toRemove.ServiceJobId);
-            //MauiProgram.ShopDB.DeleteRepairOrderServiceJobBridge(rsjb);
         }
         removeJobBtn.IsEnabled = false;
     }
@@ -168,8 +162,7 @@ public partial class AppointmentView : ContentPage
         {
             removeJobBtn.IsEnabled = true;
             removeJobBtn.Text = $"Remove {sj.ServiceJobDescription}";
-        }
-        
+        }      
     }
     
     private void scheduleAppointment_Clicked(object sender, EventArgs e)
@@ -243,7 +236,12 @@ public partial class AppointmentView : ContentPage
                 repairOrder.AppointmentDate = appointmentDate;           
             }
 
-            // TODO Clear job list and rebuild based on current thisJobs
+            //update list of jobs for this RO
+            MauiProgram.ShopDB.RemoveRepairOrderServiceJobBridgeAttachedToRepairOrder(repairOrder.RepairOrderId);
+            foreach (ServiceJob job in thisJobs)
+            {
+                repairOrder.AssignServiceJob(job.ServiceJobId);
+            }
 
             MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
             RefreshAppointments();
@@ -271,7 +269,18 @@ public partial class AppointmentView : ContentPage
         updateAppt.IsEnabled = true;
         
     }
-
+    private async void makeRO_Clicked(object sender, EventArgs e)
+    {
+        if (repairOrder != null && c != null && v != null)
+        {
+            repairOrder.IsActive = true;
+            MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
+            Pass.PassCustomer(c);
+            Pass.PassVehicle(v);
+            Pass.PassRO(repairOrder);
+            await Shell.Current.GoToAsync("//OrderView");
+        }
+    }
 
     //======================================================================================
     //+++Service Job Menu+++
@@ -298,7 +307,7 @@ public partial class AppointmentView : ContentPage
     }
     private void addThisJob_Clicked(object sender, EventArgs e)
     {
-        AppointmentDetailsChanged();
+        updateAppt.IsEnabled = true;
         ServiceJob? sj = thisJob.BindingContext as ServiceJob;
         if (sj != null)
         {
@@ -309,13 +318,6 @@ public partial class AppointmentView : ContentPage
             thisJobs.Add(sj);
             addThisJob.IsEnabled = false;
             RefreshROJobs();
-
-            if (repairOrder != null)
-            {
-                //TODO
-                RepairOrderServiceJobBridge rsjb = new RepairOrderServiceJobBridge(repairOrder.RepairOrderId, sj.ServiceJobId);
-                MauiProgram.ShopDB.AddRepairOrderServiceJobBridge(rsjb);
-            }
         }
         
     }
@@ -385,18 +387,7 @@ public partial class AppointmentView : ContentPage
     
 
 
-    private async void makeRO_Clicked(object sender, EventArgs e)
-    {
-        if (repairOrder != null && c != null && v != null)
-        {
-            repairOrder.IsActive = true;
-            MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
-            //Pass.PassCustomer(c);
-            //Pass.PassVehicle(v);
-            //Pass.PassRO(repairOrder);
-            await Shell.Current.GoToAsync("//OrderView");
-        }
-    }
+    
 
     
 }

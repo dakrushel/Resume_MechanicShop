@@ -45,18 +45,8 @@ namespace MechanicShop
             GenerateInvoice.SaveInvoiceDelRO(tempRO);
             //RemoveCustomerChecker
 
-            PrintToTxt($"RemoveCustomerChecker: {Customer.RemoveCustomerChecker("555-555-5555")}");
-            PrintToTxt($"RemoveVehicleChecker: {Vehicle.RemoveVehicleChecker(testVehicle)}");
-
-            string testphone = "555";
-            List<Customer> filteredCustomers = ShopDB.GetCustomerByPhone(testphone);
-            if (filteredCustomers.Count > 0)
-            {
-                foreach (Customer c in filteredCustomers)
-                {
-                    PrintToTxt(c.ToString());
-                }
-            }
+            //PrintToTxt($"RemoveCustomerChecker: {Customer.RemoveCustomerChecker("555-555-5555")}");
+            //PrintToTxt($"RemoveVehicleChecker: {Vehicle.RemoveVehicleChecker(testVehicle)}");
 
 
 #if DEBUG

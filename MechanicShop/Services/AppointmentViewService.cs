@@ -47,36 +47,62 @@ namespace MechanicShop.Services
 
             foreach (var ro in roList)
             {
-                if (ro.EmployeeId == null)
+                if (ro.EmployeeId > 0)
                 {
-                    unassigned.Add(ro);
+                    inProgress.Add(ro);
                 }
                 else
                 {
-                    inProgress.Add(ro);
+                    unassigned.Add(ro);
                 }
             }
         }
 
         // Get a list of technicians that are not currently assigned to any repair orders.
-        public static ObservableCollection<Technician> openTechnicians = new ObservableCollection<Technician>();
+        public static ObservableCollection<Technician>? openTechnicians = new ObservableCollection<Technician>();
+
         public static void RefreshOpenTechnicians()
         {
             openTechnicians.Clear();
-            List<Technician> techList = MauiProgram.ShopDB.GetAllTechnicians();
+            List<Technician>? techList = MauiProgram.ShopDB.GetAllTechnicians();
+            List<RepairOrder>? roList = MauiProgram.ShopDB.GetAllRepairOrders();
+            List<int?>? assignedIDs = new List<int?>();
 
-            foreach (var tech in techList)
+            if (roList != null)
             {
-                foreach (var ro in MauiProgram.ShopDB.GetAllRepairOrders())
+                foreach (RepairOrder ro in roList)
                 {
-                    if (ro.EmployeeId == tech.EmployeeId) 
+                    if (ro.EmployeeId != null)
                     {
-                        continue;
+                        assignedIDs.Add(ro.EmployeeId);
                     }
-                    
                 }
-                openTechnicians.Add(tech);
             }
+
+            if (assignedIDs != null && techList != null)
+            {
+                for (int i = techList.Count - 1; i >= 0; i--)
+                {
+                    if (assignedIDs.Contains(techList[i].EmployeeId))
+                    {
+                        techList.RemoveAt(i);
+                    }
+                }
+            }
+
+            openTechnicians = new ObservableCollection<Technician>(techList);
+        }
+
+        public static Technician? GetTechByID (int? id)
+        {
+            foreach (var tech in MauiProgram.ShopDB.GetAllTechnicians())
+            {
+                if (tech.EmployeeId == id)
+                {
+                    return tech;
+                }
+            }
+            return null;
         }
         
 
