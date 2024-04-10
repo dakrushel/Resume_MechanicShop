@@ -35,10 +35,6 @@ public partial class OrderView : ContentPage
         // If receiving a customer from PASS
         if (Pass.CustomerPass != null && Pass.VehiclePass != null)
         {
-            //widgets
-            
-
-
             // page temp objects
             c = Pass.RetreiveCustomer();
             v = Pass.RetrieveVehicle();
@@ -310,7 +306,6 @@ public partial class OrderView : ContentPage
             }
             thisJobs.Add(sj);
             addThisJob.IsEnabled = false;
-            RefreshROJobs();
         }
     }
     private void serviceJobs_ItemSelected(object sender, SelectedItemChangedEventArgs e)

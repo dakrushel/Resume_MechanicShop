@@ -14,13 +14,13 @@ namespace MechanicShop.Services
     {
 
         //FOR APPOINTMENTS PAGE
-        public static ObservableCollection<RepairOrder> upcomingAppointments = new ObservableCollection<RepairOrder>();
-        public static ObservableCollection<RepairOrder> expiredAppointments = new ObservableCollection<RepairOrder>();
+        public static ObservableCollection<RepairOrder>? upcomingAppointments;
+        public static ObservableCollection<RepairOrder>? expiredAppointments;
         public static void refreshAppointments() // Chloe
         {
             // Sorts appointments into upcoming and expired for seperate listviews in APPOINTMENTS page
-            upcomingAppointments.Clear();
-            expiredAppointments.Clear();
+            upcomingAppointments = new ObservableCollection<RepairOrder>();
+            expiredAppointments = new ObservableCollection<RepairOrder>();
             List<RepairOrder> appointments = MauiProgram.ShopDB.GetRepairOrdersThatAreNOTActive();
 
             foreach (var appointment in appointments)

@@ -17,7 +17,7 @@ public partial class AppointmentView : ContentPage
 	public static Customer? c = null;
 	public static Vehicle? v = null;
     public static RepairOrder? repairOrder = null;   
-    public  static ObservableCollection<ServiceJob> thisJobs = new ObservableCollection<ServiceJob>();
+    public static ObservableCollection<ServiceJob> thisJobs = new ObservableCollection<ServiceJob>();
 
 	public AppointmentView()
 	{
@@ -60,6 +60,7 @@ public partial class AppointmentView : ContentPage
             
         }
         thisJobs.Clear();
+        addJobBtn.IsEnabled = true;
         problemDescriptionEntry.Text = null;
         priceEstimate.Text = null;
         datePicker.Date = currentDate.AddDays(7);
@@ -80,7 +81,7 @@ public partial class AppointmentView : ContentPage
         AppointmentViewService.refreshAppointments();
         activeAppointments.ItemsSource = AppointmentViewService.upcomingAppointments;
         expiredAppointments.ItemsSource = AppointmentViewService.expiredAppointments;
-        updateAppt.IsEnabled = false;
+        updateAppt.IsEnabled = false;       
     }
     private void RefreshROJobs()
     {
@@ -116,6 +117,7 @@ public partial class AppointmentView : ContentPage
             thisJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.
                 GetServiceJobListByRepairOrderId(repairOrder.RepairOrderId));
             RefreshROJobs();
+            testjobs.ItemsSource = thisJobs;
 
             // swap buttons
             scheduleAppointment.IsVisible = false;
@@ -165,7 +167,11 @@ public partial class AppointmentView : ContentPage
     }
     //======================================================================================
     //+++APPOINTMENT SLIP+++
-    //======================================================================================  
+    //======================================================================================
+    private void clearSlip_Clicked(object sender, EventArgs e)
+    {
+        OnAppearing();
+    }
     private void removeJobBtn_Clicked(object sender, EventArgs e)
     {
         updateAppt.IsEnabled = true;
@@ -315,11 +321,6 @@ public partial class AppointmentView : ContentPage
         if (sj != null)
         {
             thisJob.BindingContext = sj;
-            if (thisJobs.Contains(sj))
-            {
-                addThisJob.IsEnabled = false;
-                return;
-            }
             addThisJob.IsEnabled = true;
         }
     }
@@ -335,10 +336,6 @@ public partial class AppointmentView : ContentPage
         ServiceJob? sj = thisJob.BindingContext as ServiceJob;
         if (sj != null)
         {
-            if (thisJobs.Contains(sj))
-            {
-                return;
-            }
             thisJobs.Add(sj);
             addThisJob.IsEnabled = false;
             RefreshROJobs();
