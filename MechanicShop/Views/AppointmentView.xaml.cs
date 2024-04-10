@@ -69,7 +69,7 @@ public partial class AppointmentView : ContentPage
         }
         thisJobs.Clear();
         problemDescriptionEntry.Text = null;
-        
+        priceEstimate.Text = null;
         datePicker.Date = currentDate.AddDays(7);
        
 
@@ -89,6 +89,11 @@ public partial class AppointmentView : ContentPage
         repairOrderJobs.ItemsSource = thisJobs;
         removeJobBtn.Text = "Remove Job";
         removeJobBtn.IsEnabled = false;
+        if (thisJobs != null)
+        {
+            priceEstimate.Text = AppointmentViewService.CalculateEstimate(thisJobs.ToList()).ToString("C");
+        }
+        
     }
     //======================================================================================
     //+++APPOINTMENT LISTS+++
@@ -113,7 +118,7 @@ public partial class AppointmentView : ContentPage
             //populate list of jobs assigned to this appointment
             thisJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.
                 GetServiceJobListByRepairOrderId(repairOrder.RepairOrderId));
-            repairOrderJobs.ItemsSource = thisJobs;
+            RefreshROJobs();
 
             // swap buttons
             scheduleAppointment.IsVisible = false;
@@ -145,6 +150,7 @@ public partial class AppointmentView : ContentPage
             RefreshROJobs();
         }
         removeJobBtn.IsEnabled = false;
+        
     }
 
     private void addJobBtn_Clicked(object sender, EventArgs e)
