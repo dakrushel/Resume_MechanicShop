@@ -5,6 +5,7 @@ using MechanicShop.Models;
 using MechanicShop.Resources;
 using Microsoft.Maui.Controls;
 using MechanicShop.Services;
+using static Microsoft.Maui.ApplicationModel.Permissions;
 
 
 
@@ -58,8 +59,8 @@ public partial class CustomerView : ContentPage
         nameEntry.Text = null;
         phoneEntry.Text = null;
         clearCustomerSearch.IsEnabled = false;
-        searchCustomersBtn.IsEnabled = false;
-
+        searchPhoneBtn.IsEnabled = false;
+        searchNameBtn.IsEnabled = false;
         var customers = new ObservableCollection<Customer>(MauiProgram.ShopDB.GetAllCustomers());
         customersCollectionView.ItemsSource = customers;
     }
@@ -94,17 +95,31 @@ public partial class CustomerView : ContentPage
     //====================================================================================================
     // Customer Search Box---------------------------------------------------------------------
     //====================================================================================================
+    private async void searchPhoneBtn_Clicked(object sender, EventArgs e)
+    {
+        // Search customer by phone number
+        // only accept whole phone number BC the dashes will be in the right place
+        string phone = phoneEntry.Text;
+        if (phone.Length == 12)
+        {
+            var customers = new ObservableCollection<Customer>(MauiProgram.ShopDB.GetCustomerByPhone(phone));
+            customersCollectionView.ItemsSource = customers;
+        }
+    }
+    private void searchNameBtn_Clicked(object sender, EventArgs e)
+    {
+        string name = nameEntry.Text;
+        if (name != null)
+        {
+            var customers = new ObservableCollection<Customer>(MauiProgram.ShopDB.GetCustomerByName(name));
+            customersCollectionView.ItemsSource = customers;
+        }
+    }
     private void clearCustomerSearch_Clicked(object sender, EventArgs e)
     {
         // inactive unless search fields filled in
         ResetSearchWidget();
         
-    }
-    private void searchCustoemrsBtn_Clicked(object sender, EventArgs e)
-    {
-        // TODO: this method!
-        // inactive unless search fields are filled in
-        // Pairs down collectionview to only items matching search terms
     }
     private void addCustomer_Clicked(object sender, EventArgs e)
     {
@@ -114,7 +129,6 @@ public partial class CustomerView : ContentPage
         newNameBox.Text = nameEntry.Text;
         newPhoneBox.Text = phoneEntry.Text;
         searchCustomers.IsEnabled = false;
-
     }
     private void customers_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
@@ -245,7 +259,6 @@ public partial class CustomerView : ContentPage
         AddVehicleForm.IsVisible = true;
         searchCustomers.IsEnabled = false;
         customerDisplay.IsEnabled = false;
-
     }
     private void cancelAddVehicle_Clicked(object sender, EventArgs e)
     {
@@ -381,16 +394,22 @@ public partial class CustomerView : ContentPage
     
     private void SearchTextChanged(object sender, TextChangedEventArgs e)
     {
-        if(nameEntry.Text == null && phoneEntry.Text == null)
+        //(This is for the name search box)
+        searchNameBtn.IsEnabled = true;
+        var entry = (Entry)sender;
+        if (e.NewTextValue == null || e.NewTextValue == "") { return; }
+        // Regular expression pattern to allow only alphabetic characters, space, hyphen, apostrophe, and period
+        string pattern = @"^[a-zA-ZÀ-ÿ\s'\-\.\,]+$";
+        // Check if the entered text matches the pattern
+        if (!Regex.IsMatch(e.NewTextValue, pattern))
         {
-            clearCustomerSearch.IsEnabled = false;
-            searchCustomersBtn.IsEnabled= false;
-            return;
+            // If the entered text contains disallowed characters, remove them
+            var newText = Regex.Replace(e.NewTextValue, @"[^a-zA-ZÀ-ÿ\s'\-\.\,]", "");
+
+            // Update the entry's text with the sanitized text
+            entry.Text = newText;
         }
-        
-        
         clearCustomerSearch.IsEnabled = true;
-        searchCustomersBtn.IsEnabled = true;
     }
 
 
@@ -449,6 +468,7 @@ public partial class CustomerView : ContentPage
     }
     private void phoneEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
+        clearCustomerSearch.IsEnabled = true;
         var entry = (Entry)sender;
         if (e.NewTextValue == null) { return; }
         // Remove non-digit characters
@@ -468,6 +488,12 @@ public partial class CustomerView : ContentPage
             }
         }
         entry.Text = newText;
+        if (entry.Text.Length == 12)
+        {
+            searchPhoneBtn.IsEnabled = true;
+            return;
+        }
+        searchPhoneBtn.IsEnabled = false;
     }
     // New customer phone number entry
     private void newPhoneBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -563,5 +589,9 @@ public partial class CustomerView : ContentPage
             AddCustomerForm_Updated();
         }
     }
+
+    
+
+    
 }
 
