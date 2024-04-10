@@ -40,7 +40,7 @@ namespace MechanicShop
             }
             //Generate Invoice
             List<RepairOrder> appointments = ShopDB.GetRepairOrdersThatAreNOTActive();
-            Vehicle testVehicle = ShopDB.GetVehicleByVIN(appointments[1].VIN);
+            Vehicle testVehicle = ShopDB.GetVehicleByVIN(appointments[0].VIN);
             RepairOrder tempRO = appointments[0];
             GenerateInvoice.SaveInvoiceDelRO(tempRO);
             //RemoveCustomerChecker
