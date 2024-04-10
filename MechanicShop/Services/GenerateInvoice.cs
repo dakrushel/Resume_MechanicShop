@@ -11,37 +11,11 @@ namespace MechanicShop.Services
     {
         //Getters and setters
         public static string RepairOrderOutput { get; set; }
-
-        //Ctors
-        //public GenerateInvoice() { }
-        //public GenerateInvoice(RepairOrder rO)
-        //{
-        //    //Retrieve RepairOrder (create temp RO?)
-        //    RepairOrder temp = rO;
-        //    this.RepairOrderOutput = 
-        //        $"==================================================================\n" +
-        //        $"               REPAIR ORDER {rO.RepairOrderId}\n" +
-        //        $"    ----------------------------------------------------------\n" +
-        //        $"    Description:\n" +
-        //        $"    {rO.RepairOrderDescription}\n" +
-        //        $"    ----------------------------------------------------------\n" +
-        //        $"    \t\t\tDate\n\n" +
-        //        $"    Created:\t     Appointment:\t   Closed:\n" +
-        //        $"    {rO.DateCreated}         {rO.AppointmentDate}\t   {rO.DateClose}\n\n" +
-        //        $"    ----------------------------------------------------------\n" +
-        //        $"     Technician: {rO.RepairJobTechnician}\n" +
-        //        $"    Employee ID: {rO.EmployeeId}\n" +
-        //        $"         Job ID: {rO.ServiceJobId}\n" +
-        //        $"          Hours: {rO.RepairOrderHours}\n" +
-        //        $"        Vehicle: {rO.Vehicle}\r\n" +
-        //        $"            VIN: {rO.VIN}\n\n";
-        //}
-
-        //Close and save method. Must output RepairOrder to a txt file and remove it from the database
         
         //TESTED
         public static void SaveInvoiceDelRO(RepairOrder rO)
         {
+            ShopSettings shopSettings = MauiProgram.ShopDB.GetShopSettings();
             Vehicle tempVehicle = MauiProgram.ShopDB.GetVehicleByVIN(rO.VIN);
             List<ServiceJob> tempJobs = rO.ListOfServiceJobs;
             Technician tempTech = new Technician();
@@ -79,8 +53,9 @@ namespace MechanicShop.Services
                 $"    Employee ID: {rO.EmployeeId}\t\t\tTechnician: {tempTech.Name}\n\n" +
                 $"    Work done:\n" +
                 $"    {workDone}\n\n\n" +
-                $"    Total Hours............................................ {totalHours}\n" +
-                //$"    Amount Owing.........................................{totalHours * ShopSettings.ShopHourlyRate}" +
+                $"    Total Hours............................................ {totalHours}\n\n" +
+                $"    Shop Supplies........................................ {shopSettings.ShopSupplyCost}\n\n" +
+                $"    Amount Owing......................................... {totalHours * shopSettings.ShopHourlyRate}" +
                 $"\n\n==================================================================";
                                                     
             //Generate NEW txt file for each Invoice (based on Customer Name, RO ID, and Date Created)
