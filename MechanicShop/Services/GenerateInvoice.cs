@@ -26,7 +26,7 @@ namespace MechanicShop.Services
             {
                 foreach (ServiceJob sj in tempJobs)
                 {
-                    workDone += $"{sj.ServiceJobDescription}\n    Hours.................................................. {sj.ServiceJobHours}\n\n";
+                    workDone += $"    {sj.ServiceJobDescription}\n    Hours.................................................. {sj.ServiceJobHours}\n\n";
                     totalHours += sj.ServiceJobHours;
                 }
             }
@@ -48,18 +48,20 @@ namespace MechanicShop.Services
                 $"    {rO.RepairOrderDescription}\n\n" +
                 $"    Employee ID: {rO.EmployeeId}\t\t\tTechnician: {techName}\n\n" +
                 $"    Work done:\n" +
-                $"    {workDone}\n\n\n" +
+                $"{workDone}\n" +
                 $"    Total Hours............................................ {totalHours}\n\n" +
+                $"    Shop Rate............................................ {shopSettings.ShopHourlyRate.ToString("C")}\n\n" +
                 $"    Shop Supplies........................................ {shopSettings.ShopSupplyCost.ToString("C")}\n\n" +
                 $"    Amount Owing......................................... {(totalHours * shopSettings.ShopHourlyRate).ToString("C")}" +
                 $"\n\n==================================================================";
                                                     
             //Generate NEW txt file for each Invoice (based on Customer Name, RO ID, and Date Created)
-            Constant.repairOrderFilename += $"{rO.RepairOrderId}_{rO.CustomerName}_{rO.DateCreated}";
+            Constant.repairOrderFilename += $"{rO.RepairOrderId}_{rO.CustomerName}_{rO.DateCreated}.txt";
 
             using (StreamWriter sw = new StreamWriter(Constant.RepairOrderPath))
             {
                 sw.Write(RepairOrderOutput);
+                Constant.repairOrderFilename = @"..\..\..\..\..\Resources\Raw\Invoices\";
             }
 
             //Delete RO from database RepairOrder, Customer, Vehicle, ServiceJob, Technician

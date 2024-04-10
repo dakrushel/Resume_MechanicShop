@@ -285,8 +285,6 @@ namespace MechanicShop.Models
             }
         }
 
-
-
         //TESTED
         public void UpdateRepairOrder(RepairOrder repairOrder)
         {
@@ -320,14 +318,25 @@ namespace MechanicShop.Models
             return this.database.Table<RepairOrder>().First(x => x.RepairOrderId == PK);
         }
 
-
-
         public List<RepairOrder> GetRepairOrdersByVIN(string vin) //Denver
         {
             return this.database.Table<RepairOrder>().ToList()
                 .Where(x => x.VIN == vin).ToList();
         }
 
+        public List<RepairOrder> GetRepairOrdersByCustPhone(string customerPhone)
+        {
+            return this.database.Table<RepairOrder>()
+                .Where(x => x.CustomerPhoneNumber.ToLower().Contains(customerPhone.ToLower()))
+                .ToList();
+        }
+
+        public List<RepairOrder> GetRepairOrdersByCustName(string customerName)
+        {
+            return this.database.Table<RepairOrder>()
+                .Where(x => x.CustomerName.ToLower().Contains(customerName.ToLower()))
+                .ToList();
+        }
 
         /*----------------------------SERVICE JOB ------------------------------------*/
 
