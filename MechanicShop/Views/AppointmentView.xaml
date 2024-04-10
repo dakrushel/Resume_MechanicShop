@@ -232,6 +232,7 @@
                         <Label Text="Jobs:" Margin="0,5,0,0"/>
                         <ListView x:Name="repairOrderJobs" ItemSelected="repairOrderJobs_ItemSelected"
                                 HeightRequest="100" WidthRequest="450" Background="AliceBlue" VerticalScrollBarVisibility="Always"
+                                  
                                   >
                             <!--All jobs that have been added to this repair order go here-->
                             <ListView.ItemTemplate>

@@ -95,7 +95,7 @@ public partial class CustomerView : ContentPage
     //====================================================================================================
     // Customer Search Box---------------------------------------------------------------------
     //====================================================================================================
-    private async void searchPhoneBtn_Clicked(object sender, EventArgs e)
+    private void searchPhoneBtn_Clicked(object sender, EventArgs e)
     {
         // Search customer by phone number
         // only accept whole phone number BC the dashes will be in the right place

@@ -2,6 +2,7 @@ using MechanicShop.Services;
 using MechanicShop.Models;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
+using Microsoft.Maui.Animations;
 
 namespace MechanicShop.Views;
 
@@ -153,9 +154,25 @@ public partial class AppointmentView : ContentPage
         clearSearchForm.IsEnabled = false;
         RefreshAppointments();
     }
-    private void SearchPhone_Clicked(object sender, EventArgs e)
+    private async void SearchPhone_Clicked(object sender, EventArgs e)
     {
-        //TODO once method exists
+        // Search customer by phone number
+        // only accept whole phone number BC the dashes will be in the right place
+        string phone = apptPhone.Text; // get ssearch value
+        if(phone.Length == 12)
+        {
+            // Call filter method to sort new lists based on phone
+            AppointmentViewService.RefreshByPhone(phone);
+            activeAppointments.ItemsSource = AppointmentViewService.upcomingAppointments;
+            expiredAppointments.ItemsSource = AppointmentViewService.expiredAppointments;
+            int? upcomingCount = AppointmentViewService.upcomingAppointments?.Count;
+            int? expCount = AppointmentViewService.expiredAppointments?.Count;
+            if(upcomingCount == 0 && expCount == 0)
+            {
+                await DisplayAlert("No Results","No appointments match this phone number","Ok");
+                RefreshAppointments();
+            }
+        }
     }
     private void searchName_Clicked(object sender, EventArgs e)
     {

@@ -22,7 +22,7 @@ namespace MechanicShop.Services
                 CustomerPass = c;
             }          
         }
-        public static Customer RetreiveCustomer()
+        public static Customer? RetreiveCustomer()
         {
             Customer? customer = CustomerPass;
             CustomerPass = null;
@@ -35,7 +35,7 @@ namespace MechanicShop.Services
                 VehiclePass = v;
             }
         }
-        public static Vehicle RetrieveVehicle()
+        public static Vehicle? RetrieveVehicle()
         {
             Vehicle? vehicle = VehiclePass;
             VehiclePass = null;
@@ -48,7 +48,7 @@ namespace MechanicShop.Services
                 ROPass = r;
             }
         }
-        public static RepairOrder RetrieveRO()
+        public static RepairOrder? RetrieveRO()
         {
             RepairOrder? ro = ROPass;
             ROPass = null;
