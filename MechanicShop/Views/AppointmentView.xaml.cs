@@ -111,14 +111,10 @@ public partial class AppointmentView : ContentPage
             vInformation.BindingContext = v;
             problemDescriptionEntry.Text = repairOrder.RepairOrderDescription;
             datePicker.Date = DateTime.Parse(repairOrder.AppointmentDate);
-            //initialize reschedule button
-            
             //populate list of jobs assigned to this appointment
             thisJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.
                 GetServiceJobListByRepairOrderId(repairOrder.RepairOrderId));
             RefreshROJobs();
-            testjobs.ItemsSource = thisJobs;
-
             // swap buttons
             scheduleAppointment.IsVisible = false;
             apptOptions.IsVisible = true;
@@ -168,13 +164,20 @@ public partial class AppointmentView : ContentPage
     //======================================================================================
     //+++APPOINTMENT SLIP+++
     //======================================================================================
-    private void clearSlip_Clicked(object sender, EventArgs e)
+    private async void clearSlip_Clicked(object sender, EventArgs e)
     {
+        if (updateAppt.IsEnabled == true)
+        {
+            bool savechanges = await DisplayAlert("Save Changes?", "This RO has been altered, do you want to save changes before closing?", "Save Changes", "Discard Changes");
+            if (savechanges)
+            {
+                UpdateAppointment();
+            }
+        }
         OnAppearing();
     }
     private void removeJobBtn_Clicked(object sender, EventArgs e)
     {
-        updateAppt.IsEnabled = true;
         ServiceJob? toRemove = repairOrderJobs.SelectedItem as ServiceJob;
         if (toRemove != null)
         {
@@ -182,6 +185,7 @@ public partial class AppointmentView : ContentPage
             RefreshROJobs();
         }
         removeJobBtn.IsEnabled = false;
+        AppointmentDetailsChanged();
         
     }
     private void addJobBtn_Clicked(object sender, EventArgs e)
@@ -221,7 +225,6 @@ public partial class AppointmentView : ContentPage
             RepairOrder newAppointment = new RepairOrder(description, createDate, appointmentDate, VIN);
             foreach (ServiceJob job in thisJobs)
             {
-                //TODO
                 newAppointment.AssignServiceJob(job.ServiceJobId);
             }
             repairOrder = newAppointment;           
@@ -247,6 +250,10 @@ public partial class AppointmentView : ContentPage
     }
     private void updateAppt_Clicked(object sender, EventArgs e)
     {
+        UpdateAppointment();
+    }
+    private void UpdateAppointment()
+    {
         updateAppt.IsEnabled = false;
         if (repairOrder != null)
         {
@@ -261,7 +268,7 @@ public partial class AppointmentView : ContentPage
             string? appointmentDate = datePicker.Date.ToString("yyyy-MM-dd");
             if (appointmentDate != null)
             {
-                repairOrder.AppointmentDate = appointmentDate;           
+                repairOrder.AppointmentDate = appointmentDate;
             }
             //update list of jobs for this RO
             MauiProgram.ShopDB.RemoveRepairOrderServiceJobBridgeAttachedToRepairOrder(repairOrder.RepairOrderId);
@@ -291,25 +298,29 @@ public partial class AppointmentView : ContentPage
     }
     private void AppointmentDetailsChanged()
     {
-        //TODO?? only 1 reference? why?
+        // Called when description, jobs, or date are changed,
+        // Activates update button
         updateAppt.IsEnabled = true;      
     }
     private async void makeRO_Clicked(object sender, EventArgs e)
     {
         if (repairOrder != null && c != null && v != null)
         {
+            // Set the RO ti active (classifying it as Repair Order rather and Appointment)
             repairOrder.IsActive = true;
+            // Update OBJ in DB
             MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
             Pass.PassCustomer(c);
             Pass.PassVehicle(v);
             Pass.PassRO(repairOrder);
+            // Go to REPAIR ORDER VIEW page
             await Shell.Current.GoToAsync("//OrderView");
         }
     }
     private void Editor_TextChanged(object sender, TextChangedEventArgs e)
     {
         problemDescriptionEntry.Text = Validate.Description(e.NewTextValue);
-        updateAppt.IsEnabled = true;
+        AppointmentDetailsChanged();
     }
 
     //======================================================================================
@@ -332,14 +343,14 @@ public partial class AppointmentView : ContentPage
     }
     private void addThisJob_Clicked(object sender, EventArgs e)
     {
-        updateAppt.IsEnabled = true;
         ServiceJob? sj = thisJob.BindingContext as ServiceJob;
         if (sj != null)
         {
             thisJobs.Add(sj);
             addThisJob.IsEnabled = false;
             RefreshROJobs();
-        }      
+        }
+        AppointmentDetailsChanged();
     }
 
     

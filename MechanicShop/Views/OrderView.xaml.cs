@@ -118,6 +118,10 @@ public partial class OrderView : ContentPage
 
     private void updateRO_Clicked(object sender, EventArgs e)
     {
+        UpdateRo();
+    }
+    private void UpdateRo()
+    {
         updateRO.IsEnabled = false;
         if (repairOrder != null)
         {
@@ -131,9 +135,8 @@ public partial class OrderView : ContentPage
             }
 
             MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
-            
-        }
 
+        }
     }
     private void repairOrderJobs_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
@@ -159,7 +162,7 @@ public partial class OrderView : ContentPage
 
     private async void closeRO_Clicked(object sender, EventArgs e)
     {
-        // TODO this will delete the OBj and generate invoice. Need to make sure all info there (tech, jobs, etc)
+        //this will delete the OBj and generate invoice. Need to make sure all info there (tech, jobs, etc)
         if (repairOrder != null)
         {
             //update problem description
@@ -176,30 +179,33 @@ public partial class OrderView : ContentPage
                 await DisplayAlert("Add Job", "You must add a job to close this Repair Order", "Ok");
                 return;
             }
+            // set finalized hours
             repairOrder.RepairOrderHours = AppointmentViewService.GetHours(thisJobs.ToList());
-            
+            // set finalized close date
             repairOrder.DateClose = AppointmentView.TodayDate;
-    
-            // update the RO object
+            // update the RO object in DB
             MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
-
             //invoice the RO
             GenerateInvoice.SaveInvoiceDelRO(repairOrder);
-            //TODO: Delete the RO
-            
+            //Delete the RO (This happens in invoice method)          
         }
     }
 
-    private void Clear_Clicked(object sender, EventArgs e)
+    private async void Clear_Clicked(object sender, EventArgs e)
     {
-
-        //TODO do you want to save changes??? (ifchanged)
+        if (updateRO.IsEnabled == true)
+        {
+            bool savechanges = await DisplayAlert("Save Changes?","This RO has been altered, do you want to save changes before closing?","Save Changes","Discard Changes");
+            if (savechanges)
+            {
+                UpdateRo();
+            }
+        }      
         OnAppearing();
     }
     private void RefreshROJobs()
     {
         repairOrderJobs.ItemsSource = thisJobs;
-        //TODO
         if (thisJobs != null)
         {
             priceEstimate.Text = AppointmentViewService.CalculateEstimate(thisJobs.ToList()).ToString("C");
@@ -210,8 +216,7 @@ public partial class OrderView : ContentPage
     {
         // enable the "Save CHanges" button
         updateRO.IsEnabled = true;
-
-        // Enable checkout button is all info is present
+        // Enable checkout button if all info is present
         if (repairOrder != null)
         {
             if (repairOrder.EmployeeId > 0 && thisJobs != null)
@@ -243,13 +248,11 @@ public partial class OrderView : ContentPage
             // bind info to appointmenmt slip
             cInformation.BindingContext = c;
             vInformation.BindingContext = v;
-            problemDescriptionEntry.Text = repairOrder.RepairOrderDescription;
-            
+            problemDescriptionEntry.Text = repairOrder.RepairOrderDescription;            
             //populate list of jobs assigned to this appointment
             thisJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.
                 GetServiceJobListByRepairOrderId(repairOrder.RepairOrderId));
             RefreshROJobs();
-
             if (repairOrder.EmployeeId != null)
             {
                 Technician? tech = AppointmentViewService.GetTechByID(repairOrder.EmployeeId);
@@ -258,8 +261,6 @@ public partial class OrderView : ContentPage
                     selectedTech.Text = tech.Name;
                 }
             }
-
-            //TODO get tech name in selectedTech
             if (repairOrder.EmployeeId != null)
             {
                 t = MauiProgram.ShopDB.GetTechnician(repairOrder.EmployeeId);

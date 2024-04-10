@@ -143,15 +143,15 @@ public partial class CustomerView : ContentPage
     }
     private void customers_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
-        //TODO: hightlight???
         Customer? selectedCustomer = e.SelectedItem as Customer;
         customerDisplay.IsEnabled = true;
         if (selectedCustomer != null)
         {
+            // Send customer info to display form
             cNameBox.Text = selectedCustomer.Name;
             cPhoneBox.Text = selectedCustomer.CustomerPhone;
             cEmailBox.Text = selectedCustomer.Address;
-            // TODO get cars
+            // Get customer vehicle list
             var vehicles = new ObservableCollection<Vehicle>(MauiProgram.ShopDB.GetCustomerVehicles(selectedCustomer.CustomerPhone));
             cVehicleList.ItemsSource = vehicles;
             vehicleInformation.BindingContext = null;
@@ -299,6 +299,7 @@ public partial class CustomerView : ContentPage
     }
     public void ResetAddVehicleForm()
     {
+        // reset all inputs
         AddVehicleForm.IsVisible = false;
         searchCustomers.IsEnabled = true;
         customerDisplay.IsEnabled = true;
@@ -307,7 +308,6 @@ public partial class CustomerView : ContentPage
         colourPicker.SelectedItem = null;
         makePicker.SelectedItem = null;
         modelPicker.SelectedItem = null;
-        //TODO: Reset picker selections
     }
     private async void AddThisVehicleBtn_Clicked(object sender, EventArgs e)
     {

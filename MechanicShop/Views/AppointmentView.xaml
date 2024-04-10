@@ -303,33 +303,7 @@
 
             </HorizontalStackLayout>
 
-            <ListView x:Name="testjobs" 
-HeightRequest="200" WidthRequest="460" Background="AliceBlue">
-                <!--All jobs that have been added to this repair order go here-->
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto"></RowDefinition>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50"></ColumnDefinition>
-                                    <ColumnDefinition Width="340"></ColumnDefinition>
-                                    <ColumnDefinition Width="50"></ColumnDefinition>
-
-                                </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Text="{Binding ServiceJobId}" HorizontalOptions="Center"/>
-                                <Label Grid.Column="1" Text="{Binding ServiceJobDescription}"/>
-                                <Label Grid.Column="2" Text="{Binding ServiceJobHours}" HorizontalOptions="Start"/>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-
-
-
+          
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
