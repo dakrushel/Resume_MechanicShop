@@ -3,52 +3,378 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MechanicShop.Views.CustomerView"
              Title="Customers">
-    
-    
-    
-    
-    <VerticalStackLayout>
 
-        
-        <Grid HorizontalOptions="Center" ColumnSpacing="10" RowSpacing="10" Margin="0,20,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Label Text="Search Customers" FontSize="30"/>
+
+
+    <ScrollView>
+        <VerticalStackLayout>
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="40">
+                <!--CUSTOMER SEARCH FORM / LIST VIEW.................................................-->
+                <Border  x:Name="searchCustomers" WidthRequest="650" Margin="0,20,10,20" Padding="0,0,0,10">
+                    <Grid HorizontalOptions="Center" ColumnSpacing="10" RowSpacing="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="150"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Search Customers" Grid.ColumnSpan="3" FontSize="30"/>
+
+                        <!--Search Box Entries and Labels-->
+                        <Label Grid.Row="1" Text="Phone Number:" HorizontalTextAlignment="End"
+                               VerticalOptions="Center" FontSize="16" FontAttributes="Bold"/>
+                        <Entry x:Name="phoneEntry" Placeholder="000-000-0000" Grid.Row="1" Grid.Column="1" 
+                                MaxLength="12"
+                               TextChanged="phoneEntry_TextChanged"/>
+                        <Button Grid.Row="1" Grid.Column="2" Text="Search Phone" IsEnabled="False"
+                                x:Name="searchPhoneBtn" Clicked="searchPhoneBtn_Clicked"/>
+
+                        <Label Grid.Row="2" Text="Customer Name:" HorizontalTextAlignment="End"
+                               VerticalOptions="Center" FontSize="16" FontAttributes="Bold"/>
+                        <Entry x:Name="nameEntry" Placeholder="Customer Name" Grid.Row="2" Grid.Column="1" 
+                                MaxLength="30"
+                               TextChanged="SearchTextChanged"/>
+                        <Button Grid.Row="2" Grid.Column="2" Text="Search Name" IsEnabled="False"
+                                x:Name="searchNameBtn" Clicked="searchNameBtn_Clicked"/>
+                        <!--Search and clear buttons-->
+                        <Button x:Name="clearCustomerSearch" Grid.Row="3"  Grid.Column="2" Text="Clear Search"
+                                Clicked="clearCustomerSearch_Clicked" IsEnabled="False"/>
+                        <!--Customer List View-->
+                        <Label Grid.Row="3" Grid.ColumnSpan="2" Text="Customer List" VerticalOptions="End" FontAttributes="Bold"
+                               FontSize="20"/>
+                        <ListView Grid.ColumnSpan="3" Grid.Row="4" 
+                                        x:Name="customersCollectionView" WidthRequest="600"
+                                        HeightRequest="200" Background="AliceBlue"
+                                        ItemSelected="customers_ItemSelected">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+
+                                    <ViewCell>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="120"></ColumnDefinition>
+                                                <ColumnDefinition Width="150"></ColumnDefinition>
+                                                <ColumnDefinition Width="200"></ColumnDefinition>
+                                                
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="1" Text="{Binding Name}"></Label>
+                                            <Label Grid.Column="0" Text="{Binding CustomerPhone}"></Label>
+                                            <Label Grid.Column="2" Text="{Binding Address}"></Label>
+                                        </Grid>
+                                        
+                                    </ViewCell>
+                                    
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+
+                        <Button x:Name="addCustomer" Grid.Row="5" Grid.ColumnSpan="3" Text="Add New Customer"
+                                Clicked="addCustomer_Clicked"/>
+                    </Grid>
+                </Border>
+                <!--END CUSTOMER SEARCH FORM / LIST VIEW........................................................-->
+                
+                
+                <!--CONDITIONALLY VISIBLE NEW CUSTOMER INFORMATION FORM.........................................-->
+                <Border x:Name="addCustomerForm" IsVisible="false" WidthRequest="400" HeightRequest="400">
+                    <Grid HorizontalOptions="Center" ColumnSpacing="10" RowSpacing="0" Padding="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="70"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label x:Name="addFormTitle" Text="Enter new Customer Information:" Grid.ColumnSpan="2"
+                               FontAttributes="Bold"/>
+                        <Label Grid.Row="1"
+                            Text="Name:" VerticalOptions="Center" HorizontalOptions="End"/>
+                        <Entry x:Name="newNameBox" Grid.Row="1" Grid.Column="1"
+                            WidthRequest="300" MaxLength="30" Placeholder="Customer Name"
+                               TextChanged="newNameBox_TextChanged"/>
+
+                        <Label Grid.Row="2"
+                            Text="Phone:" VerticalOptions="Center" HorizontalOptions="End"/>
+                        <Entry x:Name="newPhoneBox" Grid.Row="2" Grid.Column="1"
+                            WidthRequest="300" MaxLength="12" Placeholder="000-000-0000"
+                               TextChanged="newPhoneBox_TextChanged" Keyboard="Numeric"/>
+
+                        <Label Grid.Row="3"
+                            Text="Email:" VerticalOptions="Center" HorizontalOptions="End"/>
+                        <Entry x:Name="newEmailBox" Grid.Row="3" Grid.Column="1"
+                            WidthRequest="300" MaxLength="30" Placeholder="customer@email.com"
+                               TextChanged="newEmailBox_TextChanged"/>
+
+                        <HorizontalStackLayout Grid.Row="4" Grid.ColumnSpan="2" Spacing="10" Margin="20,15"
+                                               HorizontalOptions="Center">
+                            <Button WidthRequest="100" BackgroundColor="maroon" TextColor="white"
+                                x:Name="cancelAddCustomer" Text="Cancel" Clicked="cancelAddCustomer_Clicked"/>
+                            <Button WidthRequest="200"
+                                x:Name="AddThisCustomerBtn" Text="Add Customer" Clicked="AddThisCustomerBtn_Clicked"
+                                    IsEnabled="False"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </Border>
+                <!--Same form but for EDIT CUSTOMER.................................................................-->
+                <Border x:Name="EditCustomerForm" IsVisible="false" WidthRequest="400" HeightRequest="400">
+                    <Grid HorizontalOptions="Center" ColumnSpacing="10" RowSpacing="0" Padding="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="70"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Edit Customer Information:" Grid.ColumnSpan="2"
+                            FontAttributes="Bold"/>
+                        <Label Grid.Row="2"
+                            Text="Name:" VerticalOptions="Center" HorizontalOptions="End"/>
+                        <Entry x:Name="editNameBox" Grid.Row="2" Grid.Column="1"
+                            WidthRequest="300" MaxLength="30" Placeholder="Customer Name"
+                               TextChanged="editNameBox_TextChanged"/>
+
+                        <Label Grid.Row="1"
+                            Text="Phone:" VerticalOptions="Center" HorizontalOptions="End"/>
+                        <Entry x:Name="editPhoneBox" Grid.Row="1" Grid.Column="1"
+                            WidthRequest="300" MaxLength="12" Placeholder="000-000-0000"
+                            IsReadOnly="True" IsEnabled="False"/>
+
+                        <Label Grid.Row="3"
+                            Text="Email:" VerticalOptions="Center" HorizontalOptions="End"/>
+                        <Entry x:Name="editEmailBox" Grid.Row="3" Grid.Column="1"
+                            WidthRequest="300" MaxLength="30" Placeholder="customer@email.com"/>
+
+                        <HorizontalStackLayout Grid.Row="4" Grid.ColumnSpan="2" Spacing="10" Margin="20,15"
+                               HorizontalOptions="Center">
+                            <Button WidthRequest="100" BackgroundColor="maroon" TextColor="white"
+                                x:Name="cancelEditCustomer" Text="Cancel" Clicked="cancelEditCustomer_Clicked"/>
+                            <Button WidthRequest="200"
+                                x:Name="EditThisCustomerBtn" Text="Update Information" Clicked="EditThisCustomerBtn_Clicked"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                    
+                </Border>
+                <!-- ADD VEHICLE FORM..........................................................................-->
+                <Border x:Name="AddVehicleForm" IsVisible="false" WidthRequest="400" HeightRequest="400">
+                    <Grid HorizontalOptions="Center" ColumnSpacing="10" RowSpacing="10" Padding="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="40"></RowDefinition>
+                            <RowDefinition Height="40"></RowDefinition>
+                            <RowDefinition Height="40"></RowDefinition>
+                            <RowDefinition Height="40"></RowDefinition>
+                            <RowDefinition Height="40"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Label Text="Add New Customer Vehicle" Grid.ColumnSpan="2" FontAttributes="Bold"/>
+
+                        <Label Grid.Row="1" Text="VIN:" HorizontalOptions="End" VerticalOptions="Center"/>
+                        <Entry x:Name="vinEntry" Grid.Row="1" Grid.Column="1" WidthRequest="300"
+                                Placeholder="Enter VIN" MaxLength="17" TextChanged="vinEntry_TextChanged"/>
+
+                        <Label Grid.Row="2" Text="Year:" HorizontalOptions="End" VerticalOptions="Center"/>
+                        <Picker x:Name="yearPicker" Grid.Row="2" Grid.Column="1"
+                                WidthRequest="300" SelectedIndexChanged="yearPicker_SelectedIndexChanged"/>
+
+                        <Label Grid.Row="3" Text="Make:" HorizontalOptions="End" VerticalOptions="Center"/>
+                        <Picker x:Name="makePicker" Grid.Row="3" Grid.Column="1"
+                            WidthRequest="300" SelectedIndexChanged="makePicker_SelectedIndexChanged"/>
+
+                        <Label Grid.Row="4" Text="Model:" HorizontalOptions="End" VerticalOptions="Center"/>
+                        <Picker x:Name="modelPicker" Grid.Row="4" Grid.Column="1"
+                            WidthRequest="300" IsEnabled="false" SelectedIndexChanged="modelPicker_SelectedIndexChanged"/>
+
+                        <Label Grid.Row="5" Text="Colour:" HorizontalOptions="End" VerticalOptions="Center"/>
+                        <Picker x:Name="colourPicker" Grid.Row="5" Grid.Column="1"
+                                WidthRequest="300" SelectedIndexChanged="colourPicker_SelectedIndexChanged"/>
+
+                        
+
+                        <HorizontalStackLayout Grid.Row="6" Grid.ColumnSpan="2" Spacing="10" Margin="20,5"
+                                    HorizontalOptions="Center">
+                            <Button WidthRequest="100" BackgroundColor="maroon" TextColor="white"
+                                    x:Name="cancelAddVehicle" Text="Cancel"
+                                    Clicked="cancelAddVehicle_Clicked"/>
+                            <Button WidthRequest="200" IsEnabled="false"
+                                    x:Name="AddThisVehicleBtn" Text="Add Vehicle"
+                                    Clicked="AddThisVehicleBtn_Clicked"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                </Border>
+            </HorizontalStackLayout>
+            <!--CUSTOMER INFORMATION DISPLAY FORM..............................................................-->
+            <Border x:Name="customerDisplay" Margin="100,10" Padding="10" IsEnabled="false" MaximumWidthRequest="1400" >
+                
+                <Grid HorizontalOptions="Center" ColumnSpacing="10" RowSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70"></ColumnDefinition>
+                        <ColumnDefinition Width="350"></ColumnDefinition>
+                        <ColumnDefinition Width="200"></ColumnDefinition>
+                        <ColumnDefinition Width="200"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <!--CUSTOMER INFORMATION DISPLAY BOXES (READ ONLY)-->
+                    <HorizontalStackLayout Grid.ColumnSpan="2" Spacing="40" Padding="5">
+                        <Label  Text="Customer Information:" FontSize="20" FontAttributes="Bold"
+                                VerticalOptions="Center"/>
+                        <Button x:Name="ClearCustomerDisplay" Text="Clear" WidthRequest="100"
+                                Clicked="ClearCustomerDisplay_Clicked" />
+                    </HorizontalStackLayout>
+                    
+                    
+                    <Label Grid.Row="1"
+                        Text="Name:" VerticalOptions="Center" HorizontalOptions="End"/>
+                    <Entry x:Name="cNameBox" Grid.Row="1" Grid.Column="1"
+                        IsReadOnly="True" WidthRequest="300" />
+                    
+                    <Label Grid.Row="2"
+                        Text="Phone:" VerticalOptions="Center" HorizontalOptions="End"/>
+                    <Entry x:Name="cPhoneBox" Grid.Row="2" Grid.Column="1"
+                        IsReadOnly="True" WidthRequest="300" />
+
+                    <Label Grid.Row="3"
+                        Text="Email:" VerticalOptions="Center" HorizontalOptions="End"/>
+                    <Entry x:Name="cEmailBox" Grid.Row="3" Grid.Column="1"
+                        IsReadOnly="True" WidthRequest="300" />
+
+                    <HorizontalStackLayout Grid.Row="4" Grid.ColumnSpan="2" Spacing="10" HorizontalOptions="Center">
+                        <Button x:Name="deleteCustomer" Text="Delete Customer" WidthRequest="150"
+                                Clicked="deleteCustomer_Clicked" BackgroundColor="maroon" TextColor="white"/>
+                        <Button x:Name="updateCustomerInfo" Text="Update Customer Information"
+                                WidthRequest="250" Clicked="updateCustomerInfo_Clicked"/>
+                    </HorizontalStackLayout>
+                    
+                    <!--CUSTOMER CARS DISPLAY...........................................................................-->
+                    <VerticalStackLayout Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="4"
+                                         HorizontalOptions="End" Spacing="10" Padding="10">
+                        <HorizontalStackLayout HorizontalOptions="End" Spacing="40">
+                            <Label Text="Customer Vehicles" HorizontalOptions="Center" VerticalOptions="Center"
+                                   FontAttributes="Bold" FontSize="18"/>
+                            <Button x:Name="addVehicle" Text="Add Vehicle"
+                                    Clicked="addVehicle_Clicked" HorizontalOptions="End"/>
+                        </HorizontalStackLayout>
+                        
+                        <ListView x:Name="cVehicleList" WidthRequest="400"
+                                HeightRequest="70" Background="AliceBlue" 
+                                  ItemSelected="cVehicleList_ItemSelected">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                                <ColumnDefinition Width="80"></ColumnDefinition>
+                                                <ColumnDefinition Width="100"></ColumnDefinition>
+                                                <ColumnDefinition Width="80"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Text="{Binding Year}"></Label>
+                                            <Label Grid.Column="1" Text="{Binding Make}"></Label>
+                                            <Label Grid.Column="2" Text="{Binding Model}"></Label>
+                                            <Label Grid.Column="3" Text="{Binding Colour}"></Label>
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        
+                        <!--Selected vehicle information display-->
+                        
+                        <Grid x:Name="vehicleInformation" HorizontalOptions="Center" ColumnSpacing="10"
+                              VerticalOptions="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                <ColumnDefinition Width="200"></ColumnDefinition>
+                                
+                            </Grid.ColumnDefinitions>
+                            <Label Text="Selected Vehicle" FontAttributes="Bold"
+                                   Grid.ColumnSpan="2"
+                                   HorizontalOptions="Start"/>
+
+                            <Label Grid.Column="0" Grid.Row="1" FontAttributes="Bold"
+                                Text="Year:" HorizontalOptions="End"/>
+                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding Year}"></Label>
+
+                            <Label Grid.Column="0" Grid.Row="2" FontAttributes="Bold"
+                                Text="Make:" HorizontalOptions="End"/>
+                            <Label Grid.Row="2" Grid.Column="1" Text="{Binding Make}"></Label>
+
+                            <Label Grid.Column="0" Grid.Row="3" FontAttributes="Bold"
+                                Text="Model:" HorizontalOptions="End"/>
+                            <Label Grid.Row="3" Grid.Column="1" Text="{Binding Model}"></Label>
+
+                            <Label Grid.Column="0" Grid.Row="4" FontAttributes="Bold"
+                                Text="Colour:" HorizontalOptions="End"/>
+                            <Label Grid.Row="4" Grid.Column="1" Text="{Binding Colour}"></Label>
+                                
+                            <Label Grid.Row="5" Grid.Column="0" Text="VIN:" FontAttributes="Bold"
+                                   HorizontalOptions="End"/>
+                            <Label Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding VIN}"/>
+                                                       
+                        </Grid>
+
+                        <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
+                            <Button x:Name="deleteVehicle" Text="Delete Vehicle" BackgroundColor="maroon"
+                                    Clicked="deleteVehicle_Clicked" TextColor="white" IsEnabled="False"/>
+                        </HorizontalStackLayout>
+                        
+                    </VerticalStackLayout>
+                    <Button x:Name="newAppointmentBtn" Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2"
+                            
+                            Text="Create New Appontment" BackgroundColor="{StaticResource Tertiary}"
+                            TextColor="{StaticResource Black}" IsEnabled="False"
+                            Clicked="newAppointmentBtn_Clicked"/>
+
+                    
+
+                </Grid>
+                
+            </Border>
             
-        <!--Search Box Entries and Labels-->
-            <Label Grid.Row="1" Text="Phone Number:" HorizontalTextAlignment="End"
-                   VerticalOptions="Center"/>
-            <Entry x:Name="phoneEntry" Placeholder="000-000-0000" Grid.Row="1" Grid.Column="1" 
-                    WidthRequest="300" MaxLength="12"/>
-
-            <Label Grid.Row="2" Text="Customer Name:" HorizontalTextAlignment="End"
-                   VerticalOptions="Center"/>
-            <Entry x:Name="nameEntry" Placeholder="Customer Name" Grid.Row="2" Grid.Column="1" 
-                   WidthRequest="300" MaxLength="20"/>
-
-        <!--Search and clear buttons-->
-            <Button x:Name="clearCustomerSearch" Grid.Row="3" Text="Clear Form"
-                    Clicked="clearCustomerSearch_Clicked"/>
-            <Button x:Name="searchCustoemrsBtn" Grid.Row="3" Grid.Column="1" Text="Search"
-                    Clicked="searchCustoemrsBtn_Clicked"/>
-    
-        <!--Customer List View-->
-            <CollectionView Grid.ColumnSpan="2" Grid.Row="4" WidthRequest="600"
-                            HeightRequest="200" Background="AliceBlue">
-                <!--Customer list view binding goes here-->
-            </CollectionView>
-        </Grid>
-        
-        
-        
-    </VerticalStackLayout>
+            
+            
+            
+            
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

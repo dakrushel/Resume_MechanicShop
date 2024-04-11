@@ -14,9 +14,25 @@
     </Style>
 
     <Style TargetType="Border">
-        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" />
-        <Setter Property="StrokeShape" Value="Rectangle"/>
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Gray500}}" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 10"/>
+        <Setter Property="Background" Value="{StaticResource Primary}"/>
         <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="Shadow">
+            <Shadow Brush="{StaticResource Tertiary}" Offset="8,10" Radius="6" Opacity=".3"/>
+        </Setter>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value=".7"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
     </Style>
 
     <Style TargetType="BoxView">
@@ -47,8 +63,11 @@
                     <VisualState x:Name="Normal" />
                     <VisualState x:Name="Disabled">
                         <VisualState.Setters>
-                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
-                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}" />
+                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray200}}" />
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray600}}" />
+                            <Setter Property="Shadow">
+                                <Shadow Brush="{StaticResource Primary}" Offset="4,4" Radius="2" Opacity=".3"/>
+                            </Setter>
                         </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="Pressed">
@@ -139,6 +158,7 @@
                     <VisualState x:Name="Disabled">
                         <VisualState.Setters>
                             <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}" />
+                            
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
@@ -219,7 +239,7 @@
     <Style TargetType="Picker">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}" />
         <Setter Property="TitleColor" Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Gray200}" />
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="MinimumHeightRequest" Value="44"/>
@@ -230,8 +250,14 @@
                     <VisualState x:Name="Normal" />
                     <VisualState x:Name="Disabled">
                         <VisualState.Setters>
-                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}" />
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray600}}" />
                             <Setter Property="TitleColor" Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Selected">
+                        <VisualState.Setters>
+                            <!-- Set the background color for selected item -->
+                            <Setter Property="BackgroundColor" Value="Green" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
@@ -426,7 +452,9 @@
     </Style>-->
     <Style TargetType="Page" ApplyToDerivedTypes="True">
         <Setter Property="Padding" Value="0"/>
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource OffBlack}}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource OffBlack}}" />
+        <Setter Property="BackgroundImageSource" Value="shop.jpg"/>
+
     </Style>
 
     <Style TargetType="Shell" ApplyToDerivedTypes="True">

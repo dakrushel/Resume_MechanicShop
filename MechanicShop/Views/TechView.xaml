@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MechanicShop.Views.TechView"
+             Title="Technicians">
+    <ScrollView>
+        <HorizontalStackLayout HorizontalOptions="Center" Spacing="100">
+            <VerticalStackLayout VerticalOptions="Center" Spacing="50">
+                <Border x:Name="techList" HeightRequest="355" WidthRequest="500"
+                        Padding="20">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Technicians" FontSize="30"/>
+                        <!--Technician List View-->
+                        <ListView Grid.ColumnSpan="2" Grid.Row="4" 
+                                    x:Name="techListView" WidthRequest="450"
+                                    HeightRequest="200" Background="AliceBlue"
+                                  ItemSelected="techListView_ItemSelected">     
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+
+                                    <ViewCell>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                                <ColumnDefinition Width="200"></ColumnDefinition>
+                                                <ColumnDefinition Width="200"></ColumnDefinition>
+
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Text="{Binding EmployeeId}"></Label>
+                                            <Label Grid.Column="1" Text="{Binding Name}"></Label>
+                                            <Label Grid.Column="2" Text="{Binding Specialization}"></Label>
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Button x:Name="newTech" Text="Add New Hire" Margin="2"
+                                Clicked="newTech_Clicked"/>
+                    </VerticalStackLayout>
+                </Border>
+                
+                <!--SHOP SETTINGS-->
+                <Border WidthRequest="350" HeightRequest="280">
+                    <VerticalStackLayout Spacing="10" Padding="20">
+                        <Label Text="Shop Settings" FontSize="30"/>
+                        <Grid x:Name="settingsMenu" 
+                            HorizontalOptions="Center"  RowSpacing="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="190"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="Labour Rate: $" HorizontalOptions="End"
+                                   VerticalOptions="Center"/>
+                            <Entry x:Name="shopRate" Grid.Column="1"
+                                   Text="{Binding ShopHourlyRate}"
+                                   TextChanged="shopRate_TextChanged"/>
+
+                            <Label Text="Shop Supplies: $" HorizontalOptions="End"
+                                   VerticalOptions="Center" Grid.Row="1"/>
+                            <Entry x:Name="shopSupplies" Grid.Column="1" Grid.Row="1"
+                                   Text="{Binding ShopSupplyCost}"
+                                   TextChanged="shopSupplies_TextChanged"/>
+
+                            <Button Grid.Row="2" Grid.ColumnSpan="2" Margin="0,30,0,0"
+                                    x:Name="updateShopSettings" Text="Update Shop Settings"
+                                    IsEnabled="False" Clicked="updateShopSettings_Clicked"/>
+                            
+
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+            
+            <!--TECHNICIAN FORM-->
+            <Border x:Name="techForm" HeightRequest="530" WidthRequest="500" Padding="20">
+                <VerticalStackLayout Spacing="10">
+                    <HorizontalStackLayout Spacing="130">
+                        <Label x:Name="techFormTitle" Text="Technician Info:" FontSize="30"/>
+                        <Button x:Name="clearTechForm" HorizontalOptions="End"
+                                Text="Clear" WidthRequest="100" Clicked="clearTechForm_Clicked"/>
+                    </HorizontalStackLayout>
+                    
+                    <Grid RowSpacing="10" HorizontalOptions="Center"
+                          x:Name="techInfo">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        
+
+                        <Label Text="Technician Name:" VerticalOptions="Center" HorizontalOptions="End"
+                               Grid.Row="0" Margin="0,0,10,0"/>
+                        <Entry Grid.Column="1" Grid.Row="0" VerticalOptions="Center"
+                               Placeholder="Employee Name" WidthRequest="220"
+                               x:Name="techName" Text="{Binding Name}"
+                               TextChanged="techName_TextChanged"/>
+
+                        <Label Text="Phone Number:" VerticalOptions="Center" HorizontalOptions="End"
+                                Grid.Row="1" Margin="0,0,10,0"/>
+                        <Entry Grid.Column="1" Grid.Row="1" VerticalOptions="Center"
+                                Placeholder="Employee Phone" WidthRequest="220"
+                               x:Name="techPhone" Text="{Binding EmployeePhone}"
+                               TextChanged="techPhone_TextChanged"/>
+
+                        <Label Text="Specialization:" VerticalOptions="Center" HorizontalOptions="End"
+                                Grid.Row="2" Margin="0,0,10,0"/>
+                        <Entry Grid.Column="1" Grid.Row="2" VerticalOptions="Center"
+                                Placeholder="Specialization" WidthRequest="220"
+                               x:Name="techSpecial" Text="{Binding Specialization}"
+                               TextChanged="techSpecial_TextChanged"/>
+
+                        <Label Text="Hourly Rate: $" VerticalOptions="Center" HorizontalOptions="End"
+                                    Grid.Row="3"/>
+                        <Entry Grid.Column="1" Grid.Row="3" VerticalOptions="Center"
+                                Placeholder="Pay Rate" WidthRequest="220"
+                                x:Name="techRate" Text="{Binding HourlyRate}"
+                                TextChanged="techRate_TextChanged"/>
+
+                        <Label Text="==========================================="
+                               Grid.Row="4" Grid.ColumnSpan="2" HorizontalOptions="Center"/>
+
+                        <Label Text="Employee Id:" VerticalOptions="Center" HorizontalOptions="End"
+                               Grid.Row="5" Margin="0,0,10,0"/>
+                        <Entry Grid.Column="1" Grid.Row="5" IsReadOnly="True" Placeholder="Auto Generated"
+                                x:Name="techID" WidthRequest="220" Text="{Binding EmployeeId}"/>
+
+                        <Label Text="Hire Date:" VerticalOptions="Center" HorizontalOptions="End"
+                                Grid.Row="6" Margin="0,0,10,0"/>
+                        <Entry Grid.Column="1" Grid.Row="6" VerticalOptions="Center"
+                                Placeholder="Auto Generated" WidthRequest="220" IsReadOnly="True"
+                                x:Name="techHireDate" Text="{Binding HireDate}"/> 
+                    </Grid>
+                    <HorizontalStackLayout Spacing="10" HorizontalOptions="Center"
+                                           Margin="0,30,0,0" x:Name="techOptions">
+                        <Button x:Name="deleteTech" Text="Delete Technician" BackgroundColor="maroon"
+                                TextColor="white" Clicked="deleteTech_Clicked"/>
+                        <Button x:Name="updateTech" Text="Update Details"
+                                Clicked="updateTech_Clicked" WidthRequest="280"
+                                IsEnabled="False"/>
+                    </HorizontalStackLayout>
+                    <Button Text="Add New Technician" x:Name="addTech" BackgroundColor="{StaticResource Tertiary}"
+                            TextColor="black" Margin="0,30,0,0" IsVisible="false"
+                            IsEnabled="False"
+                            Clicked="addTech_Clicked"/>
+                </VerticalStackLayout>
+            </Border>
+        </HorizontalStackLayout>
+    </ScrollView>
+</ContentPage>
