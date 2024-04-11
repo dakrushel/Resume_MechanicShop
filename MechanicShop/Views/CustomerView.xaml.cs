@@ -140,6 +140,7 @@ public partial class CustomerView : ContentPage
         newNameBox.Text = nameEntry.Text;
         newPhoneBox.Text = phoneEntry.Text;
         searchCustomers.IsEnabled = false;
+        ResetCustomerDisplay();
     }
     private void customers_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {

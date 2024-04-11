@@ -54,9 +54,10 @@ namespace MechanicShop.Services
                 $"    Shop Supplies........................................ {shopSettings.ShopSupplyCost.ToString("C")}\n\n" +
                 $"    Amount Owing......................................... {(totalHours * shopSettings.ShopHourlyRate).ToString("C")}" +
                 $"\n\n==================================================================";
-                                                    
-            //Generate NEW txt file for each Invoice (based on Customer Name, RO ID, and Date Created)
-            Constant.repairOrderFilename += $"{rO.RepairOrderId}_{rO.CustomerName}_{rO.DateCreated}.txt";
+            
+            
+            //Generate NEW txt file for each Invoice (based on Customer Name, RO ID, and Date Closed)
+            Constant.repairOrderFilename += $"{rO.DateClose}_{rO.CustomerName}_{rO.RepairOrderId}.txt";
 
             using (StreamWriter sw = new StreamWriter(Constant.RepairOrderPath))
             {
