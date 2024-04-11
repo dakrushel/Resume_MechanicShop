@@ -325,9 +325,10 @@ public partial class OrderView : ContentPage
         }
     }
 
-    //========================================================================================================
-    //-----INPUT VALIDATION
-    //========================================================================================================
+    //==================================================================================
+    // INPUT VALIDATION
+    //==================================================================================
+    // For more info on how these work, see the Validation class in 'Services' folder
     private void problemDescriptionEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
         var editor = (Editor)sender;

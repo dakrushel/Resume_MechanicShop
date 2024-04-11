@@ -12,53 +12,71 @@ namespace MechanicShop.Services
 {
     public static class AppointmentViewService
     {
-
-        //FOR APPOINTMENTS PAGE
+        //====================================================================================================
+        //               FOR APPOINTMENTS PAGE
+        //====================================================================================================
         public static ObservableCollection<RepairOrder>? upcomingAppointments;
         public static ObservableCollection<RepairOrder>? expiredAppointments;
         public static void refreshAppointments() // Chloe
         {
-            // Sorts appointments into upcoming and expired for seperate listviews in APPOINTMENTS page
+            // Establish new collections
             upcomingAppointments = new ObservableCollection<RepairOrder>();
             expiredAppointments = new ObservableCollection<RepairOrder>();
+            // Get a list of all INACTIVE orders (aka appointments) from the DB
             List<RepairOrder> appointments = MauiProgram.ShopDB.GetRepairOrdersThatAreNOTActive();
-
+            // Send to sort method to populate the colelctions
             foreach (var appointment in appointments)
             {
-                DateTime appointmentDate = DateTime.Parse(appointment.AppointmentDate);
-                if (appointmentDate < AppointmentView.currentDate.AddDays(-1))
-                {
-                    expiredAppointments.Add(appointment);
-                }
-                else
-                {
-                    upcomingAppointments.Add(appointment);
-                }
+                SortByDate(appointment);
             }
         }
         public static void RefreshByPhone(string phone) //Chloe
         {
             upcomingAppointments = new ObservableCollection<RepairOrder>();
             expiredAppointments = new ObservableCollection<RepairOrder>();
+            // Get a list of all repair orders matching the input phone number
             List<RepairOrder> appointments = MauiProgram.ShopDB.GetRepairOrdersByCustPhone(phone);
-
+            // Sent to sorter to build collections
             foreach (var appointment in appointments)
             {
-                DateTime appointmentDate = DateTime.Parse(appointment.AppointmentDate);
-                if (appointmentDate < AppointmentView.currentDate.AddDays(-1))
+                if (appointment.IsActive == false) // filter out active (aka Repaior Orders)
                 {
-                    expiredAppointments.Add(appointment);
-                }
-                else
+                    SortByDate(appointment);
+                }         
+            }
+        }
+        public static void RefreshByName(string name) //Chloe
+        {
+            upcomingAppointments = new ObservableCollection<RepairOrder>();
+            expiredAppointments = new ObservableCollection<RepairOrder>();
+            // Get a list of all repair orders matching (or containing) the input name
+            List<RepairOrder> appointments = MauiProgram.ShopDB.GetRepairOrdersByCustName(name);
+            foreach (var appointment in appointments)
+            {
+                if (appointment.IsActive == false) // filter out active (aka Repaior Orders)
                 {
-                    upcomingAppointments.Add(appointment);
+                    SortByDate(appointment);
                 }
             }
         }
-       
+        public static void SortByDate(RepairOrder appointment)
+        {
+            // Sorts appointments into upcoming and expired for seperate listviews in APPOINTMENTS page
+            DateTime appointmentDate = DateTime.Parse(appointment.AppointmentDate);
+            if (appointmentDate < AppointmentView.currentDate.AddDays(-1))
+            {
+                expiredAppointments?.Add(appointment);
+            }
+            else
+            {
+                upcomingAppointments?.Add(appointment);
+            }
+        }
 
 
-        //FOR REPAIR ORDERS PAGE
+        //====================================================================================================
+        //               FOR REPAIR ORDERS PAGE
+        //====================================================================================================
         public static ObservableCollection<RepairOrder> unassigned = new ObservableCollection<RepairOrder>();
         public static ObservableCollection<RepairOrder> inProgress = new ObservableCollection<RepairOrder>();
         public static void refreshROs() // Chloe

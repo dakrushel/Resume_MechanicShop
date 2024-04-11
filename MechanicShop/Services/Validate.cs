@@ -23,6 +23,11 @@ namespace MechanicShop.Services
                 // If the entered text contains disallowed characters, remove them
                 var newText = Regex.Replace(input, @"[^a-zA-ZÀ-ÿ\s'\-\.\,]", "");
                 // Update the entry's text with the sanitized text
+                // Limit maximum length to 10 digits
+                if (newText.Length > 28)
+                {
+                    newText = newText.Substring(0, 28);
+                }
                 return newText;
             }
             return input;

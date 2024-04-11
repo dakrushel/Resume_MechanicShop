@@ -3,6 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MechanicShop.Views.AppointmentView"
              Title="Appointments">
+    
+    <!--Appointment View Page (Written by Chloe)
+    This page displays lists of upcoming and past date appointments, 
+    from here you can create and schedule new appointments, update jobs, dates, descriptions
+    on current appointments
+    You can even use this page to generate estimates as the estimated total is calculated when you add
+    jobs to an appointment.
+    
+    You can search existing appointments by customer name or phone number, and you can convert an appointment
+    to a repaio order, which will take you to the repair order page-->
+    
+    
     <ScrollView>
         <VerticalStackLayout>
             <HorizontalStackLayout Spacing="100" Margin="40"
@@ -10,8 +22,6 @@
                 <!--============================================================================================-->
                 <!--LEFT SIDE SCREEN=====================================================================-->
                 <!--============================================================================================-->
-
-
                 <!--============================================================================================-->
                 <!--Service Job Menu=====================================================================-->
                 <!--============================================================================================-->
@@ -35,7 +45,6 @@
                                                 <ColumnDefinition Width="50"></ColumnDefinition>
                                                 <ColumnDefinition Width="340"></ColumnDefinition>
                                                 <ColumnDefinition Width="50"></ColumnDefinition>
-
                                             </Grid.ColumnDefinitions>
                                             <Label Grid.Column="0" Text="{Binding ServiceJobId}" HorizontalOptions="Center"/>
                                             <Label Grid.Column="1" Text="{Binding ServiceJobDescription}"/>
@@ -71,7 +80,6 @@
                             <Label Text="Today's Date is:" FontSize="20"/>
                             <Label x:Name="DateDisplay" Text="" FontSize="20"/>
                         </HorizontalStackLayout>
-
                         <Label Text="Upcoming Appointments:"/>
                         <ListView x:Name="activeAppointments"
                             HeightRequest="200" WidthRequest="400" Background="AliceBlue"
@@ -87,7 +95,6 @@
                                                 <ColumnDefinition Width="50"></ColumnDefinition>
                                                 <ColumnDefinition Width="240"></ColumnDefinition>
                                                 <ColumnDefinition Width="100"></ColumnDefinition>
-
                                             </Grid.ColumnDefinitions>
                                             <Label Grid.Column="0" Text="{Binding RepairOrderId}" HorizontalOptions="Center"/>
                                             <Label Grid.Column="1" Text="{Binding CustomerName}"/>
@@ -97,7 +104,6 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-
                         <Label Text="Expired Appointments:" Margin="0,20,0,0"/>
                         <ListView x:Name="expiredAppointments"
                                 HeightRequest="100" WidthRequest="400" Background="AliceBlue"
@@ -123,7 +129,6 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-
                         <!--SEARCH APPOINTMENTS-->
                         <Label Text="Find Appointment:" Margin="0,20,0,0"/>
                         <HorizontalStackLayout Spacing="10" WidthRequest="400">
@@ -146,17 +151,9 @@
                                 Clicked="clearSearchForm_Clicked" WidthRequest="200"/>
                     </VerticalStackLayout>
                 </Border>
-
-
-
-
-
-
-
                 <!--============================================================================================-->
                 <!--RIGHT SIDE OF SCREEN=====================================================================-->
                 <!--============================================================================================-->
-
                 <!--============================================================================================-->
                 <!--APPOINTMENT SLIP WIDGET=====================================================================-->
                 <!--============================================================================================-->
@@ -194,27 +191,22 @@
                                 <ColumnDefinition Width="80"></ColumnDefinition>
                                 <ColumnDefinition Width="50"></ColumnDefinition>
                                 <ColumnDefinition Width="150"></ColumnDefinition>
-
                             </Grid.ColumnDefinitions>
                             <Label Text="Year:" 
                                     HorizontalOptions="End"/>
                             <Label Grid.Row="0" Grid.Column="1" Text="{Binding Year}"
                                    FontAttributes="Bold" HorizontalOptions="Start"/>
-
                             <Label Grid.Column="2" Grid.Row="0" Text="Make:" HorizontalOptions="End"/>
                             <Label Grid.Row="0" Grid.Column="3" HorizontalOptions="Start" 
                                    FontAttributes="Bold" Text="{Binding Make}"/>
-
                             <Label Grid.Column="4" Grid.Row="0" 
                                     Text="Model:" HorizontalOptions="End"/>
                             <Label Grid.Row="0" Grid.Column="5" HorizontalOptions="Start"
                                    FontAttributes="Bold" Text="{Binding Model}"/>
-
                             <Label Grid.Column="4" Grid.Row="1" 
                                     Text="Colour:" HorizontalOptions="End"/>
                             <Label Grid.Row="1" Grid.Column="5" HorizontalOptions="Start"
                                    FontAttributes="Bold" Text="{Binding Colour}"/>
-
                             <Label Grid.Row="1" Grid.Column="0" Text="VIN:" 
                                     HorizontalOptions="End"/>
                             <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" 
@@ -227,13 +219,11 @@
                         <Label Text="Problem Description:"/>
                         <Editor WidthRequest="450" HeightRequest="100" Background="{StaticResource White}" 
                                 x:Name="problemDescriptionEntry" TextChanged="Editor_TextChanged"
-                                Placeholder="Enter problem description here"/>
+                                Placeholder="Enter problem description here" MaxLength="500"/>
                         <!--REPAIR ORDER JOBS (For currently displayed repair order)-->
                         <Label Text="Jobs:" Margin="0,5,0,0"/>
                         <ListView x:Name="repairOrderJobs" ItemSelected="repairOrderJobs_ItemSelected"
-                                HeightRequest="100" WidthRequest="450" Background="AliceBlue" VerticalScrollBarVisibility="Always"
-                                  
-                                  >
+                                HeightRequest="100" WidthRequest="450" Background="AliceBlue">
                             <!--All jobs that have been added to this repair order go here-->
                             <ListView.ItemTemplate>
                                 <DataTemplate>
@@ -246,7 +236,6 @@
                                                 <ColumnDefinition Width="50"></ColumnDefinition>
                                                 <ColumnDefinition Width="340"></ColumnDefinition>
                                                 <ColumnDefinition Width="50"></ColumnDefinition>
-
                                             </Grid.ColumnDefinitions>
                                             <Label Grid.Column="0" Text="{Binding ServiceJobId}" HorizontalOptions="Center"/>
                                             <Label Grid.Column="1" Text="{Binding ServiceJobDescription}"/>
@@ -273,14 +262,11 @@
                             <Label Text="Appointment Date:" VerticalOptions="Center" FontSize="16"/>
                             <DatePicker x:Name="datePicker" FontAttributes="Bold" FontSize="18"
                                         DateSelected="datePicker_DateSelected"/>
-                            
                         </HorizontalStackLayout>
                         <!--SHEDULE APPOINTMENT BUTTON-->
                         <Button Text="Schedule Appointment" IsEnabled="true" TextColor="black"
                                 x:Name="scheduleAppointment" Background="{StaticResource Tertiary}"
                                 Clicked="scheduleAppointment_Clicked"/>
-
-
                         <!--CONVERT TO RO BUTTON-->
                         <HorizontalStackLayout x:Name="apptOptions" IsVisible="false" 
                                                Spacing="10" HorizontalOptions="Center">
@@ -293,18 +279,9 @@
                                     Background="{StaticResource Tertiary}" x:Name="makeRO"
                                     Clicked="makeRO_Clicked" HorizontalOptions="FillAndExpand"/>
                         </HorizontalStackLayout>
-                        
-
-
                     </VerticalStackLayout>
-
                 </Border>
-
-                
-
             </HorizontalStackLayout>
-
-          
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

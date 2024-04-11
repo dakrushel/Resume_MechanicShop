@@ -1,12 +1,16 @@
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Text.RegularExpressions;
 using MechanicShop.Models;
 using MechanicShop.Resources;
-using Microsoft.Maui.Controls;
 using MechanicShop.Services;
-using static Microsoft.Maui.ApplicationModel.Permissions;
 
+/* 
+ * Customer View page code behind (Written by Chloe) 
+    Here you can Create, read, edit, and delete customers AND vehicles.
+    This code handles input validation to creating and updating customers AND vehicles
+    You can search customers by name or phone
+    You can begin a new appointment creation from this page.
+ */
 
 
 namespace MechanicShop.Views;
@@ -16,29 +20,17 @@ public partial class CustomerView : ContentPage
     
     public CustomerView()
 	{
-		InitializeComponent();
-
-
-
-        var customers = new ObservableCollection<Customer>(MauiProgram.ShopDB.GetAllCustomers());
-        customersCollectionView.ItemsSource = customers;
-
-        //var makeList = new ObservableCollection<string>(MauiProgram.ShopDB.);
-        
+		InitializeComponent();           
         // Get years for the yearlist picker (in the add vehicle widget)
         for (int year = 1995; year <= 2025; year++)
         {
             yearPicker.Items.Add(year.ToString());
         }
         colourPicker.ItemsSource = MauiProgram.vehicleColors;
-
         // get makes for the make picker in the add vehicle widget
         List<string> makes = MauiProgram.ShopDB.GetListOfMakes();
-        makePicker.ItemsSource = makes;
-
-        
+        makePicker.ItemsSource = makes;       
     }
-
     //====================================================================================================
     // Page formatting upon refreshing page (or clearing a certain form)-------------------------------
     //====================================================================================================
@@ -51,8 +43,7 @@ public partial class CustomerView : ContentPage
         ResetAddVehicleForm();
         ResetEditCustomerForm();
         ResetCustomerDisplay();
-        ResetAddCustomerForm();
-        
+        ResetAddCustomerForm();      
     }
     private void ResetSearchWidget()
     {
@@ -115,7 +106,6 @@ public partial class CustomerView : ContentPage
         clearCustomerSearch.IsEnabled = true;
         // validate input
         nameEntry.Text = Validate.Name(e.NewTextValue);
-
     }
     private void searchNameBtn_Clicked(object sender, EventArgs e)
     {
@@ -158,23 +148,18 @@ public partial class CustomerView : ContentPage
             vehicleInformation.BindingContext = null;
             deleteVehicle.IsEnabled = false;
             newAppointmentBtn.IsEnabled = false;
-        }
-        
-
+        }       
     }
     //====================================================================================================
     // Add new customer form------------------------------------------------------------------
     //====================================================================================================
     private async void AddThisCustomerBtn_Clicked(object sender, EventArgs e)
-    {
+    { // validate form information and make new customer
         string newCustomerName = newNameBox.Text;
         string newPhoneNumber = newPhoneBox.Text;
         string newEmail = newEmailBox.Text;
-        
-
         // Regular expression pattern for validating email addresses
         string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-
         // Check if the entered text matches the pattern
         if (!Regex.IsMatch(newEmail, pattern))
         {
@@ -183,7 +168,6 @@ public partial class CustomerView : ContentPage
             await DisplayAlert("Invalid Email Address", "Please Enter a valid Email address", "Ok");
             return;
         }
-
         var customers = new ObservableCollection<Customer>(MauiProgram.ShopDB.GetAllCustomers());
         //customersCollectionView.ItemsSource = customers;
         foreach (Customer customer in customers)
@@ -195,7 +179,6 @@ public partial class CustomerView : ContentPage
                 return;
             }
         }
-
         if (newCustomerName != null && newPhoneNumber != null && newEmail != null)
         {
             Customer newCustomer = new Customer(newCustomerName, newEmail, newPhoneNumber);
@@ -204,7 +187,6 @@ public partial class CustomerView : ContentPage
             ResetSearchWidget();
         }     
     }
-
     private void cancelAddCustomer_Clicked(object sender, EventArgs e)
     {
         addCustomerForm.IsVisible = false;
@@ -226,7 +208,6 @@ public partial class CustomerView : ContentPage
     {
         ResetEditCustomerForm();
     }
-
     private async void EditThisCustomerBtn_Clicked(object sender, EventArgs e)
     {
         var customers = new ObservableCollection<Customer>(MauiProgram.ShopDB.GetAllCustomers());
@@ -262,7 +243,6 @@ public partial class CustomerView : ContentPage
         ResetEditCustomerForm();
         ResetSearchWidget();
     }
-
     //====================================================================================================
     // ADD CUSTOMER VEHICLE FORM---------------------------------------------------------------
     //====================================================================================================
@@ -281,7 +261,7 @@ public partial class CustomerView : ContentPage
         AddVehicleForm_Updated();
         var picker = (Picker)sender;
         if (picker.SelectedItem == null)
-        {
+        { // get correct list of models for this make
             modelPicker.ItemsSource = null;
             modelPicker.IsEnabled = false;
             return;
@@ -348,6 +328,7 @@ public partial class CustomerView : ContentPage
     //====================================================================================================
     private async void deleteCustomer_Clicked(object sender, EventArgs e)
     {
+        // confirm deletion, detele, reset views
         bool delete = await DisplayAlert("Confirm Deletion", "Are you sure you want to delete this customer?", "Delete", "Cancel");
         if (delete)
         {
@@ -360,8 +341,8 @@ public partial class CustomerView : ContentPage
     }
     private void ClearCustomerDisplay_Clicked(object sender, EventArgs e)
     {
-        ResetCustomerDisplay();
         customersCollectionView.SelectedItem = null;
+        ResetCustomerDisplay();   // reset view     
     }
     private void cVehicleList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
@@ -374,7 +355,7 @@ public partial class CustomerView : ContentPage
     {
         bool delete = await DisplayAlert("Confirm Deletion", "Are you sure you want to perminantly delete this vehicle?", "Delete", "Cancel");
         if (delete)
-        {
+        { // confirm deletion, detele, reset views
             Vehicle? toDelete = cVehicleList.SelectedItem as Vehicle;
             if (toDelete != null)
             {
@@ -384,13 +365,12 @@ public partial class CustomerView : ContentPage
                 vehicleInformation.BindingContext = null;
                 deleteVehicle.IsEnabled = false;
                 newAppointmentBtn.IsEnabled = false;
-            }
-            
+            }           
         }
-
     }
     private async void newAppointmentBtn_Clicked(object sender, EventArgs e)
     {
+        // collect and pass infor to appointment view page, navigate to appointment view
         Customer? c = customersCollectionView.SelectedItem as Customer;
         Vehicle? v = cVehicleList?.SelectedItem as Vehicle;
         if(v != null && c!= null) 
@@ -400,12 +380,10 @@ public partial class CustomerView : ContentPage
         }
         await Shell.Current.GoToAsync("//AppointmentView");
     }
-
-    
-
     //====================================================================================================
     // INPUT VALIDATIONS AND FORM BUTTON TRIGGERS
     //====================================================================================================
+    // For more info on how these work, see the Validation class in 'Services' folder
     private void AddCustomerForm_Updated()
     {
         if (newPhoneBox.Text == null)
@@ -471,30 +449,22 @@ public partial class CustomerView : ContentPage
     {
         AddVehicleForm_Updated();
     }
-
     private void vinEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
         vinEntry.Text = Validate.VIN(e.NewTextValue);
         AddVehicleForm_Updated();
     }
-
     private void modelPicker_SelectedIndexChanged(object sender, EventArgs e)
     {
         AddVehicleForm_Updated();
     }
-
     private void colourPicker_SelectedIndexChanged(object sender, EventArgs e)
     {
         AddVehicleForm_Updated();
     }
-
     private void editNameBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         editNameBox.Text = Validate.Name(e.NewTextValue);
-    }
-
-    
-
-    
+    }  
 }
 

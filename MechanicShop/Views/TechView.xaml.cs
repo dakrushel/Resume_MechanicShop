@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
 using MechanicShop.Models;
 using MechanicShop.Services;
@@ -39,20 +40,25 @@ public partial class TechView : ContentPage
         techOptions.IsVisible = true;
         addTech.IsVisible = false;
         updateShopSettings.IsEnabled = false;
-
-        shopSettings = MauiProgram.ShopDB.GetShopSettings();
-        settingsMenu.BindingContext = shopSettings;
+        RefreshShopSettings();
+       
 
     }
     private void RefreshTechList()
     {
-        var techList = new ObservableCollection<Technician>(MauiProgram.ShopDB.GetAllTechnicians());
-        techListView.ItemsSource = techList;
+        techList.IsEnabled = true;
+        var techs = new ObservableCollection<Technician>(MauiProgram.ShopDB.GetAllTechnicians());
+        techListView.ItemsSource = techs;
     }
-
-
+    private void RefreshShopSettings()
+    {
+        shopSettings = MauiProgram.ShopDB.GetShopSettings();
+        shopSupplies.Text = shopSettings.ShopSupplyCost.ToString("C");
+        shopRate.Text = shopSettings.ShopHourlyRate.ToString("C");
+        updateShopSettings.IsEnabled = false;
+    }
     //==================================================================================
-    // Technician info form
+    // Technician DISPLAY LIST
     //==================================================================================
     private void techListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
@@ -63,9 +69,26 @@ public partial class TechView : ContentPage
         if (t != null)
         {
             techInfo.BindingContext = t;
+            techRate.Text = t.HourlyRate.ToString("C");
         }
         updateTech.IsEnabled = false;
     }
+    private void newTech_Clicked(object sender, EventArgs e)
+    {
+        //setup new tech form
+        newTech.IsEnabled = false;
+        t = null;
+        formValid = false;
+        techInfo.BindingContext = null;
+        techForm.IsEnabled = true;
+        techOptions.IsVisible = false;
+        addTech.IsVisible = true;
+        techFormTitle.Text = "New Technician";
+        techList.IsEnabled = false;
+    }
+    //==================================================================================
+    // Technician info form
+    //==================================================================================
     private async void deleteTech_Clicked(object sender, EventArgs e)
     {
         if (t != null)
@@ -79,8 +102,11 @@ public partial class TechView : ContentPage
             OnAppearing();
         }
     }
-
     private void updateTech_Clicked(object sender, EventArgs e)
+    {
+        UpdateTech();
+    }
+    private void UpdateTech()
     {
         updateTech.IsEnabled = false;
         ValidateFormInfo();
@@ -94,13 +120,31 @@ public partial class TechView : ContentPage
             RefreshTechList();
         }
     }
-
-    private void clearTechForm_Clicked(object sender, EventArgs e)
+    private async void clearTechForm_Clicked(object sender, EventArgs e)
     {
+        if (techOptions.IsVisible == true && updateTech.IsEnabled == true)
+        {
+            bool saveChanges = await DisplayAlert("Update Technician?","Changes have been made to this technicians info. do you want to save changes?","Save Changes","Don't Save");
+            if (saveChanges)
+            {
+                UpdateTech();
+            }
+        }
+        if (addTech.IsVisible == true && addTech.IsEnabled == true)
+        {
+            bool saveNew = await DisplayAlert("Save New Tech?", "You've entered new technician information, do you want to add this Technician?", "Add New Technician", "Discard Information");
+            if (saveNew)
+            {
+                AddTech();
+            }
+        }
         OnAppearing();
     }
-
     private void addTech_Clicked(object sender, EventArgs e)
+    {
+        AddTech();
+    }
+    private void AddTech()
     {
         ValidateFormInfo();
         if (formValid)
@@ -118,23 +162,23 @@ public partial class TechView : ContentPage
                 MauiProgram.ShopDB.AddTechnician(newTech);
                 OnAppearing();
             }
-
         }
     }
     private void FormChanged()
     {
-        updateTech.IsEnabled = true;
-        AddTechEnable();
-    }
-    private void AddTechEnable()
-    {
         if (techName.Text != null && techPhone.Text != null && techSpecial.Text != null && techRate.Text != null)
         {
-            addTech.IsEnabled = true;
-            return;
+            if (techName.Text.Length >= 3 && techPhone.Text.Length == 12 && techSpecial.Text.Length >= 3 && techRate.Text.Length >= 2)
+            {
+                updateTech.IsEnabled = true;
+                addTech.IsEnabled = true;
+                return;
+            }
+
         }
+        updateTech.IsEnabled = false;
         addTech.IsEnabled = false;
-    }
+    } 
     private async void ValidateFormInfo()
     {
         if (techName.Text == null || techPhone.Text == null || techSpecial.Text == null || techRate.Text == null)
@@ -159,11 +203,35 @@ public partial class TechView : ContentPage
         }
         formValid = true;
     }
+    //==================================================================================
+    // SHOP SETTINGS MENU
+    //==================================================================================
+    private void updateShopSettings_Clicked(object sender, EventArgs e)
+    {
+        updateShopSettings.IsEnabled = false;
+        if (shopRate.Text != null && shopSupplies.Text != null && shopSettings != null)
+        {
+            shopSettings.ShopHourlyRate = double.Parse(shopRate.Text);
+            shopSettings.ShopSupplyCost = double.Parse(shopSupplies.Text);
+            MauiProgram.ShopDB.UpdateShopSettings(shopSettings);
+        }
+        RefreshShopSettings();
+    }
+    private void shopSettingsChanged()
+    {
+        if (shopRate.Text != null && shopSupplies.Text != null && shopSettings != null)
+        {
+            updateShopSettings.IsEnabled = true;
+            return;
+        }
+        updateShopSettings.IsEnabled = false;
 
+    }
 
     //==================================================================================
     // INPUT VALIDATION
     //==================================================================================
+    // For more info on how these work, see the Validation class in 'Services' folder
     private void techName_TextChanged(object sender, TextChangedEventArgs e)
     {
         FormChanged();
@@ -177,55 +245,18 @@ public partial class TechView : ContentPage
     private void techSpecial_TextChanged(object sender, TextChangedEventArgs e)
     {
         FormChanged();
-        techSpecial.Text = Validate.Description(e.NewTextValue);
+        techSpecial.Text = Validate.Name(e.NewTextValue);
     }
     private void techRate_TextChanged(object sender, TextChangedEventArgs e)
     {
         FormChanged();
         techRate.Text = Validate.Currency(e.NewTextValue);
-    }
-
-    private void newTech_Clicked(object sender, EventArgs e)
-    {
-        //setup new tech form
-        newTech.IsEnabled = false;
-        t = null;
-        formValid = false;
-        techInfo.BindingContext = null;
-        techForm.IsEnabled = true;
-        techOptions.IsVisible = false;
-        addTech.IsVisible = true;
-        techFormTitle.Text = "New Technician";
-    }
-
-    private void updateShopSettings_Clicked(object sender, EventArgs e)
-    {
-        updateShopSettings.IsEnabled = false;
-        if (shopRate.Text != null && shopSupplies.Text != null && shopSettings != null)
-        {
-            shopSettings.ShopHourlyRate = double.Parse(shopRate.Text);
-            shopSettings.ShopSupplyCost = double.Parse(shopSupplies.Text);
-            MauiProgram.ShopDB.UpdateShopSettings(shopSettings);
-        }
-        
-    }
-
+    }       
     private void shopRate_TextChanged(object sender, TextChangedEventArgs e)
     {
         shopSettingsChanged();
         shopRate.Text = Validate.Currency(e.NewTextValue);
-    }
-    private void shopSettingsChanged()
-    {
-        if (shopRate.Text != null && shopSupplies.Text != null)
-        {
-            updateShopSettings.IsEnabled = true;
-            return;
-        }
-        updateShopSettings.IsEnabled = false;
-            
-    }
-
+    } 
     private void shopSupplies_TextChanged(object sender, TextChangedEventArgs e)
     {
         shopSettingsChanged();
