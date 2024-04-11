@@ -110,7 +110,7 @@
                         <Entry Grid.Column="1" Grid.Row="0" VerticalOptions="Center"
                                Placeholder="Employee Name" WidthRequest="220"
                                x:Name="techName" Text="{Binding Name}"
-                               TextChanged="techName_TextChanged"/>
+                               TextChanged="techName_TextChanged"  MaxLength="28"/>
 
                         <Label Text="Phone Number:" VerticalOptions="Center" HorizontalOptions="End"
                                 Grid.Row="1" Margin="0,0,10,0"/>
@@ -124,7 +124,7 @@
                         <Entry Grid.Column="1" Grid.Row="2" VerticalOptions="Center"
                                 Placeholder="Specialization" WidthRequest="220"
                                x:Name="techSpecial" Text="{Binding Specialization}"
-                               TextChanged="techSpecial_TextChanged"/>
+                               TextChanged="techSpecial_TextChanged"  MaxLength="28"/>
 
                         <Label Text="Hourly Rate: $" VerticalOptions="Center" HorizontalOptions="End"
                                     Grid.Row="3"/>

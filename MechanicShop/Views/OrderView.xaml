@@ -76,7 +76,7 @@
                     <!--(RepairOrderDescription : string)-->
                     <Label Text="Problem Description:"/>
                     <Editor WidthRequest="450" HeightRequest="100" Background="{StaticResource White}" 
-                            x:Name="problemDescriptionEntry" 
+                            x:Name="problemDescriptionEntry" MaxLength="500"
                             Placeholder="Enter problem description here"
                             TextChanged="problemDescriptionEntry_TextChanged"/>
                     <!--REPAIR ORDER JOBS (For currently displayed repair order)-->
