@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using MechanicShop.Models;
+using MechanicShop.Services;
 
 namespace MechanicShop.Views;
 
@@ -166,80 +167,22 @@ public partial class TechView : ContentPage
     private void techName_TextChanged(object sender, TextChangedEventArgs e)
     {
         FormChanged();
-        var entry = (Entry)sender;
-        if (e.NewTextValue == null || e.NewTextValue == "") { return; }
-        // Regular expression pattern to allow only alphabetic characters, space, hyphen, apostrophe, and period
-        string pattern = @"^[a-zA-ZÀ-ÿ\s'\-\.\,]+$";
-
-        // Check if the entered text matches the pattern
-        if (!Regex.IsMatch(e.NewTextValue, pattern))
-        {
-            // If the entered text contains disallowed characters, remove them
-            var newText = Regex.Replace(e.NewTextValue, @"[^a-zA-ZÀ-ÿ\s'\-\.\,]", "");
-
-            // Update the entry's text with the sanitized text
-            entry.Text = newText;
-        }
+        techName.Text = Validate.Name(e.NewTextValue);
     }
     private void techPhone_TextChanged(object sender, TextChangedEventArgs e)
     {
         FormChanged();
-        var entry = (Entry)sender;
-        if (e.NewTextValue == null) { return; }
-        // Remove non-digit characters
-        var newText = new string(e.NewTextValue.Where(char.IsDigit).ToArray());
-        // Limit maximum length to 10 digits
-        if (newText.Length > 10)
-        {
-            newText = newText.Substring(0, 10);
-        }
-        // Automatically insert dashes
-        if (newText.Length > 3)
-        {
-            newText = newText.Insert(3, "-");
-            if (newText.Length > 7)
-            {
-                newText = newText.Insert(7, "-");
-            }
-        }
-        entry.Text = newText;
+        techPhone.Text = Validate.Phone(e.NewTextValue);
     }
     private void techSpecial_TextChanged(object sender, TextChangedEventArgs e)
     {
         FormChanged();
-        var entry = (Entry)sender;
-        if (e.NewTextValue == null || e.NewTextValue == "") { return; }
-        // Regular expression pattern to allow only alphabetic characters, space, hyphen, apostrophe, and period
-        string pattern = @"^[a-zA-ZÀ-ÿ\s'\-\.\,]+$";
-
-        // Check if the entered text matches the pattern
-        if (!Regex.IsMatch(e.NewTextValue, pattern))
-        {
-            // If the entered text contains disallowed characters, remove them
-            var newText = Regex.Replace(e.NewTextValue, @"[^a-zA-ZÀ-ÿ\s'\-\.\,]", "");
-
-            // Update the entry's text with the sanitized text
-            entry.Text = newText;
-        }
+        techSpecial.Text = Validate.Description(e.NewTextValue);
     }
     private void techRate_TextChanged(object sender, TextChangedEventArgs e)
     {
         FormChanged();
-        var entry = (Entry)sender;
-        if (e.NewTextValue == null) { return; }
-        // Remove non-digit characters
-        var newText = new string(e.NewTextValue.Where(char.IsDigit).ToArray());
-        // Limit maximum length to 5 digits
-        if (newText.Length > 4)
-        {
-            newText = newText.Substring(0, 4);
-        }
-        // Automatically insert decimal
-        if (newText.Length > 2)
-        {
-            newText = newText.Insert(2, ".");           
-        }
-        entry.Text = newText;
+        techRate.Text = Validate.Currency(e.NewTextValue);
     }
 
     private void newTech_Clicked(object sender, EventArgs e)
@@ -253,8 +196,6 @@ public partial class TechView : ContentPage
         techOptions.IsVisible = false;
         addTech.IsVisible = true;
         techFormTitle.Text = "New Technician";
-
-
     }
 
     private void updateShopSettings_Clicked(object sender, EventArgs e)
@@ -272,21 +213,7 @@ public partial class TechView : ContentPage
     private void shopRate_TextChanged(object sender, TextChangedEventArgs e)
     {
         shopSettingsChanged();
-        var entry = (Entry)sender;
-        if (e.NewTextValue == null) { return; }
-        // Remove non-digit characters
-        var newText = new string(e.NewTextValue.Where(char.IsDigit).ToArray());
-        // Limit maximum length to 5 digits
-        if (newText.Length > 5)
-        {
-            newText = newText.Substring(0, 5);
-        }
-        // Automatically insert decimal
-        if (newText.Length >= 3 && newText.Length <= 5 && newText.IndexOf('.') == -1)
-        {
-            newText = newText.Insert(newText.Length - 2, ".");
-        }
-        entry.Text = newText;
+        shopRate.Text = Validate.Currency(e.NewTextValue);
     }
     private void shopSettingsChanged()
     {
@@ -302,21 +229,7 @@ public partial class TechView : ContentPage
     private void shopSupplies_TextChanged(object sender, TextChangedEventArgs e)
     {
         shopSettingsChanged();
-        var entry = (Entry)sender;
-        if (e.NewTextValue == null) { return; }
-        // Remove non-digit characters
-        var newText = new string(e.NewTextValue.Where(char.IsDigit).ToArray());
-        // Limit maximum length to 5 digits
-        if (newText.Length > 5)
-        {
-            newText = newText.Substring(0, 5);
-        }
-        // Automatically insert decimal
-        if (newText.Length >= 3 && newText.Length <= 5 && newText.IndexOf('.') == -1)
-        {
-            newText = newText.Insert(newText.Length - 2, ".");
-        }
-        entry.Text = newText;
+        shopSupplies.Text = Validate.Currency(e.NewTextValue);
     }
 
    

@@ -85,6 +85,24 @@ namespace MechanicShop.Services
             }
             return input;
         }
+
+        public static string Currency(string input) //Chloe
+        {
+            if (input == null) { return ""; }
+            // Remove non-digit characters
+            var newText = new string(input.Where(char.IsDigit).ToArray());
+            // Limit maximum length to 5 digits
+            if (newText.Length > 5)
+            {
+                newText = newText.Substring(0, 5);
+            }
+            // Automatically insert decimal
+            if (newText.Length >= 3 && newText.Length <= 5 && newText.IndexOf('.') == -1)
+            {
+                newText = newText.Insert(newText.Length - 2, ".");
+            }
+            return newText;
+        }
     }
 
     
