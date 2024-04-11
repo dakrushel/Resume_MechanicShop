@@ -236,6 +236,7 @@ public partial class CustomerView : ContentPage
             if (c.CustomerPhone == editPhoneBox.Text)
             {
                 toEdit = c;
+                Customer.UpdateCustomerNameOnROs(toEdit.Name, editNameBox.Text);
                 break;
             }
         }

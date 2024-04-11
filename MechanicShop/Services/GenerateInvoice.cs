@@ -15,6 +15,7 @@ namespace MechanicShop.Services
         //TESTED
         public static void SaveInvoiceDelRO(RepairOrder rO)
         {
+            //ALL DEM VARIABLES! Because ROs don't have them once they are in the DB
             ShopSettings shopSettings = MauiProgram.ShopDB.GetShopSettings();
             Vehicle tempVehicle = MauiProgram.ShopDB.GetVehicleByVIN(rO.VIN);
             List<ServiceJob> tempJobs = MauiProgram.ShopDB.GetServiceJobListByRepairOrderId(rO.RepairOrderId);

@@ -98,6 +98,22 @@ namespace MechanicShop.Models
             else { return true; }
         }
 
+        //Update Customer name on RO(s)
+        public static void UpdateCustomerNameOnROs(string oldName, string newName) //Denver
+        {
+            //Retrieve a list of ROs from the DB that are under the customers name
+            Customer tempCust = MauiProgram.ShopDB.GetACustomerByName(oldName);
+            List<RepairOrder> tempRO = MauiProgram.ShopDB.GetRepairOrdersByCustPhone(tempCust.CustomerPhone);
+            //If that list is not empty, update customer names in all ROs on the list
+            if (tempRO.Count > 0)
+            {
+                foreach (RepairOrder r in tempRO)
+                {
+                    r.CustomerName = newName;
+                    MauiProgram.ShopDB.UpdateRepairOrder(r);
+                }
+            }
+        }
         public override string ToString()
         {
             return
