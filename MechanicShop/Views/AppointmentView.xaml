@@ -26,34 +26,43 @@
                 <!--Service Job Menu=====================================================================-->
                 <!--============================================================================================-->
                 <Border HorizontalOptions="Center" Padding="20" WidthRequest="500"
-                        x:Name="serviceJobMenu" HeightRequest="400" 
+                        x:Name="serviceJobMenu" HeightRequest="440" 
                         VerticalOptions="Center" IsVisible="false">
                     <VerticalStackLayout Spacing="10">
                         <Label Text="Service Jobs" FontSize="25" TextDecorations="Underline"/>
                         <!--service jobs list (all service jobs)-->
-                        <ListView x:Name="serviceJobs" ItemSelected="serviceJobs_ItemSelected"
-                                    HeightRequest="200" WidthRequest="460" Background="AliceBlue">
-                            <!--All jobs that have been added to this repair order go here-->
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="auto"></RowDefinition>
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="50"></ColumnDefinition>
-                                                <ColumnDefinition Width="340"></ColumnDefinition>
-                                                <ColumnDefinition Width="50"></ColumnDefinition>
-                                            </Grid.ColumnDefinitions>
-                                            <Label Grid.Column="0" Text="{Binding ServiceJobId}" HorizontalOptions="Center"/>
-                                            <Label Grid.Column="1" Text="{Binding ServiceJobDescription}"/>
-                                            <Label Grid.Column="2" Text="{Binding ServiceJobHours}" HorizontalOptions="Start"/>
-                                        </Grid>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                        <Border WidthRequest="450" Padding="5" Background="AntiqueWhite">
+                            <VerticalStackLayout>
+                                <HorizontalStackLayout Margin="0,2" HorizontalOptions="Center">
+                                    <Label Text="   #" WidthRequest="50" FontSize="16" TextDecorations="Underline"/>
+                                    <Label Text="Service job" WidthRequest="340" FontSize="16" TextDecorations="Underline"/>
+                                    <Label Text="Hours" WidthRequest="50" FontSize="16" TextDecorations="Underline"/>
+                                </HorizontalStackLayout>
+                                <ListView x:Name="serviceJobs" ItemSelected="serviceJobs_ItemSelected"
+                                            HeightRequest="200" WidthRequest="440" Background="AliceBlue">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <ViewCell>
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="auto"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="50"></ColumnDefinition>
+                                                        <ColumnDefinition Width="340"></ColumnDefinition>
+                                                        <ColumnDefinition Width="50"></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Grid.Column="0" Text="{Binding ServiceJobId}" HorizontalOptions="Center"/>
+                                                    <Label Grid.Column="1" Text="{Binding ServiceJobDescription}"/>
+                                                    <Label Grid.Column="2" Text="{Binding ServiceJobHours}" HorizontalOptions="Start"/>
+                                                </Grid>
+                                            </ViewCell>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </VerticalStackLayout>
+                        </Border>
+                        
                         <HorizontalStackLayout x:Name="thisJob" HorizontalOptions="Center">
                             <Entry Text="{Binding ServiceJobId}"
                                     WidthRequest="50" HorizontalTextAlignment="Center"/>
@@ -80,57 +89,76 @@
                             <Label Text="Today's Date is:" FontSize="20"/>
                             <Label x:Name="DateDisplay" Text="" FontSize="20"/>
                         </HorizontalStackLayout>
-                        <Label Text="Upcoming Appointments:"/>
-                        <ListView x:Name="activeAppointments"
-                            HeightRequest="200" WidthRequest="400" Background="AliceBlue"
-                                  ItemSelected="appointments_ItemSelected">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="auto"></RowDefinition>
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="50"></ColumnDefinition>
-                                                <ColumnDefinition Width="240"></ColumnDefinition>
-                                                <ColumnDefinition Width="100"></ColumnDefinition>
-                                            </Grid.ColumnDefinitions>
-                                            <Label Grid.Column="0" Text="{Binding RepairOrderId}" HorizontalOptions="Center"/>
-                                            <Label Grid.Column="1" Text="{Binding CustomerName}"/>
-                                            <Label Grid.Column="2" Text="{Binding AppointmentDate}" HorizontalOptions="Start"/>
-                                        </Grid>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                        <Label Text="Expired Appointments:" Margin="0,20,0,0"/>
-                        <ListView x:Name="expiredAppointments"
-                                HeightRequest="100" WidthRequest="400" Background="AliceBlue"
-                                  ItemSelected="appointments_ItemSelected">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="auto"></RowDefinition>
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="50"></ColumnDefinition>
-                                                <ColumnDefinition Width="240"></ColumnDefinition>
-                                                <ColumnDefinition Width="100"></ColumnDefinition>
-
-                                            </Grid.ColumnDefinitions>
-                                            <Label Grid.Column="0" Text="{Binding RepairOrderId}" HorizontalOptions="Center"/>
-                                            <Label Grid.Column="1" Text="{Binding CustomerName}"/>
-                                            <Label Grid.Column="2" Text="{Binding AppointmentDate}" HorizontalOptions="Start"/>
-                                        </Grid>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                        <Label Text="Upcoming Appointments:" FontSize="18"/>
+                        <Border Padding="5" Background="AntiqueWhite">
+                            <VerticalStackLayout>
+                                <HorizontalStackLayout HorizontalOptions="Center" Margin="0,2">
+                                    <Label Text="  #" WidthRequest="50" FontSize="16" TextDecorations="Underline"/>
+                                    <Label Text="Customer Name" WidthRequest="240" FontSize="16" TextDecorations="Underline"/>
+                                    <Label Text="Date" WidthRequest="100" FontSize="16" TextDecorations="Underline"/>
+                                </HorizontalStackLayout>
+                                <ListView x:Name="activeAppointments"
+                                    HeightRequest="200" WidthRequest="390" Background="AliceBlue"
+                                    ItemSelected="appointments_ItemSelected">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <ViewCell>
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="auto"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="50"></ColumnDefinition>
+                                                        <ColumnDefinition Width="240"></ColumnDefinition>
+                                                        <ColumnDefinition Width="100"></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Grid.Column="0" Text="{Binding RepairOrderId}" HorizontalOptions="Start"/>
+                                                    <Label Grid.Column="1" Text="{Binding CustomerName}"/>
+                                                    <Label Grid.Column="2" Text="{Binding AppointmentDate}" HorizontalOptions="Start"/>
+                                                </Grid>
+                                            </ViewCell>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </VerticalStackLayout>
+                        </Border>
+                        
+                        <Label Text="Expired Appointments:" Margin="0,20,0,0" FontSize="18"/>
+                        <Border Padding="5" Background="AntiqueWhite">
+                            <VerticalStackLayout>
+                                <HorizontalStackLayout HorizontalOptions="Center" Margin="0,2">
+                                    <Label Text="   #" WidthRequest="50" FontSize="16" TextDecorations="Underline"/>
+                                    <Label Text="Customer Name" WidthRequest="240" FontSize="16" TextDecorations="Underline"/>
+                                    <Label Text="Date" WidthRequest="100" FontSize="16" TextDecorations="Underline"/>
+                                </HorizontalStackLayout>
+                                <ListView x:Name="expiredAppointments"
+                                    HeightRequest="100" WidthRequest="390" Background="AliceBlue"
+                                    ItemSelected="appointments_ItemSelected">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <ViewCell>
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="auto"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="50"></ColumnDefinition>
+                                                        <ColumnDefinition Width="240"></ColumnDefinition>
+                                                        <ColumnDefinition Width="100"></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Grid.Column="0" Text="{Binding RepairOrderId}" HorizontalOptions="Start"/>
+                                                    <Label Grid.Column="1" Text="{Binding CustomerName}"/>
+                                                    <Label Grid.Column="2" Text="{Binding AppointmentDate}" HorizontalOptions="Start"/>
+                                                </Grid>
+                                            </ViewCell>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </VerticalStackLayout>
+                        </Border>
+                        
                         <!--SEARCH APPOINTMENTS-->
-                        <Label Text="Find Appointment:" Margin="0,20,0,0"/>
+                        <Label Text="Find Appointment:" Margin="0,20,0,0" FontSize="18"/>
                         <HorizontalStackLayout Spacing="10" WidthRequest="400">
                             <Label Text="Name:" WidthRequest="50"
                                     VerticalOptions="Center" HorizontalOptions="End"/>
@@ -158,7 +186,7 @@
                 <!--APPOINTMENT SLIP WIDGET=====================================================================-->
                 <!--============================================================================================-->
                 <Border x:Name="appointmentSlip" HorizontalOptions="Center" Padding="20"
-                        HeightRequest="700" WidthRequest="500" IsEnabled="False">
+                         WidthRequest="500" IsEnabled="False">
                     <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
                         <HorizontalStackLayout HorizontalOptions="End" Padding="4"  Spacing="90" Margin="20,0">
                             <Label Text="Appoiontment Slip" FontSize="20" VerticalOptions="Center"
@@ -216,35 +244,50 @@
                         <Label Text="======================================================="
                                HorizontalOptions="Center"/>
                         <!--(RepairOrderDescription : string)-->
-                        <Label Text="Problem Description:"/>
-                        <Editor WidthRequest="450" HeightRequest="100" Background="{StaticResource White}" 
-                                x:Name="problemDescriptionEntry" TextChanged="Editor_TextChanged"
-                                Placeholder="Enter problem description here" MaxLength="500"/>
+                        <Border Padding="5" WidthRequest="450" Background="AntiqueWhite">
+                            <VerticalStackLayout>
+                                <Label Text="Problem Description:"/>
+                                <Editor WidthRequest="440" HeightRequest="100" Background="{StaticResource White}" 
+                                        x:Name="problemDescriptionEntry" TextChanged="Editor_TextChanged"
+                                        Placeholder="Enter problem description here" MaxLength="500"/>
+                            </VerticalStackLayout>
+                        </Border>
+                        
                         <!--REPAIR ORDER JOBS (For currently displayed repair order)-->
                         <Label Text="Jobs:" Margin="0,5,0,0"/>
-                        <ListView x:Name="repairOrderJobs" ItemSelected="repairOrderJobs_ItemSelected"
-                                HeightRequest="100" WidthRequest="450" Background="AliceBlue">
-                            <!--All jobs that have been added to this repair order go here-->
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="auto"></RowDefinition>
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="50"></ColumnDefinition>
-                                                <ColumnDefinition Width="340"></ColumnDefinition>
-                                                <ColumnDefinition Width="50"></ColumnDefinition>
-                                            </Grid.ColumnDefinitions>
-                                            <Label Grid.Column="0" Text="{Binding ServiceJobId}" HorizontalOptions="Center"/>
-                                            <Label Grid.Column="1" Text="{Binding ServiceJobDescription}"/>
-                                            <Label Grid.Column="2" Text="{Binding ServiceJobHours}" HorizontalOptions="Center"/>
-                                        </Grid>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                        <Border WidthRequest="450" Padding="5" Background="AntiqueWhite">
+                            <VerticalStackLayout>
+                                <HorizontalStackLayout Margin="0,2" HorizontalOptions="Center">
+                                    <Label Text="   #" WidthRequest="50" FontSize="16" TextDecorations="Underline"/>
+                                    <Label Text="Service job" WidthRequest="340" FontSize="16" TextDecorations="Underline"/>
+                                    <Label Text="Hours" WidthRequest="50" FontSize="16" TextDecorations="Underline"/>
+                                </HorizontalStackLayout>
+                                <ListView x:Name="repairOrderJobs" ItemSelected="repairOrderJobs_ItemSelected"
+                                        HeightRequest="100" WidthRequest="440" Background="AliceBlue">
+                                    <!--All jobs that have been added to this repair order go here-->
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <ViewCell>
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="auto"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="50"></ColumnDefinition>
+                                                        <ColumnDefinition Width="340"></ColumnDefinition>
+                                                        <ColumnDefinition Width="50"></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Grid.Column="0" Text="{Binding ServiceJobId}" HorizontalOptions="Center"/>
+                                                    <Label Grid.Column="1" Text="{Binding ServiceJobDescription}"/>
+                                                    <Label Grid.Column="2" Text="{Binding ServiceJobHours}" HorizontalOptions="Center"/>
+                                                </Grid>
+                                            </ViewCell>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </VerticalStackLayout>
+                        </Border>
+                        
                         <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
                             <Button x:Name="removeJobBtn" Text="Remove Job" BackgroundColor="maroon"
                                     TextColor="White" WidthRequest="250" IsEnabled="False"

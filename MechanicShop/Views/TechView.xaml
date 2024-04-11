@@ -6,39 +6,48 @@
     <ScrollView>
         <HorizontalStackLayout HorizontalOptions="Center" Spacing="100">
             <VerticalStackLayout VerticalOptions="Center" Spacing="50">
-                <Border x:Name="techList" HeightRequest="355" WidthRequest="500"
+                <Border x:Name="techList" HeightRequest="390" WidthRequest="500"
                         Padding="20">
                     <VerticalStackLayout Spacing="10">
                         <Label Text="Technicians" FontSize="30"/>
                         <!--Technician List View-->
-                        <ListView Grid.ColumnSpan="2" Grid.Row="4" 
-                                    x:Name="techListView" WidthRequest="450"
-                                    HeightRequest="200" Background="AliceBlue"
-                                  ItemSelected="techListView_ItemSelected">     
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
+                        <Border Padding="5" WidthRequest="450" Background="AntiqueWhite">
+                            <VerticalStackLayout>
+                                <HorizontalStackLayout>
+                                    <Label Text="Id" WidthRequest="50" FontSize="16" TextDecorations="Underline"/>
+                                    <Label Text="Technician Name" WidthRequest="200" FontSize="16" TextDecorations="Underline"/>
+                                    <Label Text="Specialty" WidthRequest="190" FontSize="16" TextDecorations="Underline"/>
+                                </HorizontalStackLayout>
+                                <ListView Grid.ColumnSpan="2" Grid.Row="4" 
+                                        x:Name="techListView" WidthRequest="440"
+                                        HeightRequest="200" Background="AliceBlue"
+                                        ItemSelected="techListView_ItemSelected">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
 
-                                    <ViewCell>
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="auto"></RowDefinition>
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="50"></ColumnDefinition>
-                                                <ColumnDefinition Width="200"></ColumnDefinition>
-                                                <ColumnDefinition Width="200"></ColumnDefinition>
+                                            <ViewCell>
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="auto"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="50"></ColumnDefinition>
+                                                        <ColumnDefinition Width="200"></ColumnDefinition>
+                                                        <ColumnDefinition Width="190"></ColumnDefinition>
 
-                                            </Grid.ColumnDefinitions>
-                                            <Label Grid.Column="0" Text="{Binding EmployeeId}"></Label>
-                                            <Label Grid.Column="1" Text="{Binding Name}"></Label>
-                                            <Label Grid.Column="2" Text="{Binding Specialization}"></Label>
-                                        </Grid>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Grid.Column="0" Text="{Binding EmployeeId}"></Label>
+                                                    <Label Grid.Column="1" Text="{Binding Name}"></Label>
+                                                    <Label Grid.Column="2" Text="{Binding Specialization}"></Label>
+                                                </Grid>
+                                            </ViewCell>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </VerticalStackLayout>
+                        </Border>
                         <Button x:Name="newTech" Text="Add New Hire" Margin="2"
-                                Clicked="newTech_Clicked"/>
+                                Clicked="newTech_Clicked" WidthRequest="450"/>
                     </VerticalStackLayout>
                 </Border>
                 

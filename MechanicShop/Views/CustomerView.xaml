@@ -60,32 +60,42 @@
                         <!--Customer List View-->
                         <Label Grid.Row="3" Grid.ColumnSpan="2" Text="Customer List" VerticalOptions="End" FontAttributes="Bold"
                                FontSize="20"/>
-                        <ListView Grid.ColumnSpan="3" Grid.Row="4" 
+                        <Border Grid.ColumnSpan="3" Grid.Row="4" WidthRequest="610" Background="AntiqueWhite">
+                            <VerticalStackLayout Padding="5">
+                                <HorizontalStackLayout HorizontalOptions="Center" Margin="0,0,0,2">
+                                    <Label Text="Phone" WidthRequest="120" FontSize="16" TextDecorations="Underline"/>
+                                    <Label Text="Name" WidthRequest="240" FontSize="16" TextDecorations="Underline"/>
+                                    <Label Text="Email" WidthRequest="200" FontSize="16" TextDecorations="Underline"/>
+                                </HorizontalStackLayout>
+                                <ListView  
                                         x:Name="customersCollectionView" WidthRequest="600"
-                                        HeightRequest="200" Background="AliceBlue"
+                                        HeightRequest="150" Background="AliceBlue"
                                         ItemSelected="customers_ItemSelected">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="auto"></RowDefinition>
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="120"></ColumnDefinition>
-                                                <ColumnDefinition Width="240"></ColumnDefinition>
-                                                <ColumnDefinition Width="200"></ColumnDefinition>
-                                            </Grid.ColumnDefinitions>
-                                            <Label Grid.Column="1" Text="{Binding Name}"></Label>
-                                            <Label Grid.Column="0" Text="{Binding CustomerPhone}"></Label>
-                                            <Label Grid.Column="2" Text="{Binding Address}"></Label>
-                                        </Grid>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <ViewCell>
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="auto"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="120"></ColumnDefinition>
+                                                        <ColumnDefinition Width="240"></ColumnDefinition>
+                                                        <ColumnDefinition Width="200"></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Grid.Column="1" Text="{Binding Name}"></Label>
+                                                    <Label Grid.Column="0" Text="{Binding CustomerPhone}"></Label>
+                                                    <Label Grid.Column="2" Text="{Binding Address}"></Label>
+                                                </Grid>
+                                            </ViewCell>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </VerticalStackLayout>
+                        </Border>
+                        
                         <Button x:Name="addCustomer" Grid.Row="5" Grid.ColumnSpan="3" Text="Add New Customer"
-                                Clicked="addCustomer_Clicked"/>
+                                Clicked="addCustomer_Clicked" WidthRequest="610"/>
                     </Grid>
                 </Border>
                 <!--END CUSTOMER SEARCH FORM / LIST VIEW........................................................-->                           
@@ -264,7 +274,7 @@
                                     Clicked="addVehicle_Clicked" HorizontalOptions="End"/>
                         </HorizontalStackLayout>
                         <!--Vehicle ListView and labels-->
-                        <Border>
+                        <Border Background="AntiqueWhite">
                             <VerticalStackLayout Padding="5">
                                 <HorizontalStackLayout WidthRequest="350" Margin="0,0,0,2">
                                     <Label Text="Year" WidthRequest="50" FontSize="16" TextDecorations="Underline"/>
