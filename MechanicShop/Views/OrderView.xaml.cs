@@ -187,7 +187,9 @@ public partial class OrderView : ContentPage
             MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
             //invoice the RO
             GenerateInvoice.SaveInvoiceDelRO(repairOrder);
-            //Delete the RO (This happens in invoice method)          
+            //Delete the RO (This happens in invoice method)
+            await DisplayAlert("Invoice Created", "The Repair Order has been closed and invoiced", "Ok");
+            OnAppearing();
         }
     }
 

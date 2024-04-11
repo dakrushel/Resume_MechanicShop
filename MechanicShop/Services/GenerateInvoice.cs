@@ -67,7 +67,7 @@ namespace MechanicShop.Services
             }
 
             //Delete RO from database RepairOrder, Customer, Vehicle, ServiceJob, Technician
-            //MauiProgram.ShopDB.RemoveRepairOrder(rO.RepairOrderId);
+            MauiProgram.ShopDB.RemoveRepairOrder(rO.RepairOrderId);
 
 
         }
