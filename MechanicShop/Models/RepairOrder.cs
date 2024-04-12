@@ -20,7 +20,7 @@ namespace MechanicShop.Models
         // CAN ACTIVATE INTO RO MODE
 
 
-        // cost maybe will be calculate in GUI based on hours times tech payrate
+        // cost maybe will be calculated in GUI based on hours times tech payrate
 
         //Primary key is Repair Order ID
         [PrimaryKey, NotNull, ForeignKey(typeof(RepairOrderServiceJobBridge)), AutoIncrement]

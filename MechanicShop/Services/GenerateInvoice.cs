@@ -13,7 +13,7 @@ namespace MechanicShop.Services
         public static string RepairOrderOutput { get; set; }
         
         //TESTED
-        public static void SaveInvoiceDelRO(RepairOrder rO)
+        public static void SaveInvoiceDelRO(RepairOrder rO) //Denver
         {
             //ALL DEM VARIABLES! Because ROs don't have them once they are in the DB
             ShopSettings shopSettings = MauiProgram.ShopDB.GetShopSettings();
@@ -23,15 +23,18 @@ namespace MechanicShop.Services
             string? techName = tech.Name;
             string workDone = null;
             double totalHours = 0;
+
+            //First, check if there are any jobs on the RO
             if (tempJobs != null)
             {
+                //If there are, list them in workDone
                 foreach (ServiceJob sj in tempJobs)
                 {
                     workDone += $"    {sj.ServiceJobDescription}\n    Hours.................................................. {sj.ServiceJobHours}\n\n";
                     totalHours += sj.ServiceJobHours;
                 }
             }
-            //Write RO to txt
+            //Store the whole thing in a RepairOrderOutput
             RepairOrderOutput =
                 $"==================================================================\n\n" +
                 $"    REPAIR ORDER: {rO.RepairOrderId}\n" +
@@ -60,9 +63,11 @@ namespace MechanicShop.Services
             //Generate NEW txt file for each Invoice (based on Customer Name, RO ID, and Date Closed)
             Constant.repairOrderFilename += $"{rO.DateClose}_{rO.CustomerName}_{rO.RepairOrderId}.txt";
 
+            //Write it to file
             using (StreamWriter sw = new StreamWriter(Constant.RepairOrderPath))
             {
                 sw.Write(RepairOrderOutput);
+                //Reset repairOrderFilename
                 Constant.repairOrderFilename = @"..\..\..\..\..\Resources\Raw\Invoices\";
             }
 

@@ -156,15 +156,17 @@ namespace MechanicShop.Models
         }
 
         //TESTED
-        public List<Customer> GetCustomerByName(string customerName)
+        public List<Customer> GetCustomerByName(string customerName) //Denver
         {
+            //Search for a partial match(es) based on customer name
             return this.database.Table<Customer>()
                 .Where(x => x.Name.ToLower().Contains(customerName.ToLower()))
                 .ToList();
         }
 
-        public List<Customer> GetCustomerByPhone(string customerPhone)
+        public List<Customer> GetCustomerByPhone(string customerPhone) //Denver
         {
+            //Search for partial matches based on customer phone number
             return this.database.Table<Customer>()
                 .Where(x => x.CustomerPhone.ToLower().Contains(customerPhone.ToLower()))
                 .ToList();
@@ -246,6 +248,7 @@ namespace MechanicShop.Models
 
         public Technician GetTechnician(int? employeeId) //Denver
         {
+            //Get a single technician by employeeId
             return this.database.Table<Technician>().FirstOrDefault(x => x.EmployeeId == employeeId);
         }
         /*---------------------------- REPAIR ORDER ------------------------------------*/
@@ -318,21 +321,25 @@ namespace MechanicShop.Models
             return this.database.Table<RepairOrder>().First(x => x.RepairOrderId == PK);
         }
 
+        //TESTED
         public List<RepairOrder> GetRepairOrdersByVIN(string vin) //Denver
         {
+            //returns a list of RepairOrder with a particular VIN
             return this.database.Table<RepairOrder>().ToList()
                 .Where(x => x.VIN == vin).ToList();
         }
 
-        public List<RepairOrder> GetRepairOrdersByCustPhone(string customerPhone)
+        public List<RepairOrder> GetRepairOrdersByCustPhone(string customerPhone) //Denver
         {
+            //returns a list (partial matches) of RepairOrders based on customer phone #
             return this.database.Table<RepairOrder>()
-                .Where(x => x.CustomerPhoneNumber.ToLower().Contains(customerPhone.ToLower()))
+                .Where(x => x.CustomerPhoneNumber.Contains(customerPhone.ToLower()))
                 .ToList();
         }
 
         public List<RepairOrder> GetRepairOrdersByCustName(string customerName)
         {
+            //Same as above but with customer name and case insensitive
             return this.database.Table<RepairOrder>()
                 .Where(x => x.CustomerName.ToLower().Contains(customerName.ToLower()))
                 .ToList();
