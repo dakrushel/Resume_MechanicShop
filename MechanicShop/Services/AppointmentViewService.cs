@@ -14,13 +14,13 @@ namespace MechanicShop.Services
     {
 
         //FOR APPOINTMENTS PAGE
-        public static ObservableCollection<RepairOrder> upcomingAppointments = new ObservableCollection<RepairOrder>();
-        public static ObservableCollection<RepairOrder> expiredAppointments = new ObservableCollection<RepairOrder>();
+        public static ObservableCollection<RepairOrder>? upcomingAppointments;
+        public static ObservableCollection<RepairOrder>? expiredAppointments;
         public static void refreshAppointments() // Chloe
         {
             // Sorts appointments into upcoming and expired for seperate listviews in APPOINTMENTS page
-            upcomingAppointments.Clear();
-            expiredAppointments.Clear();
+            upcomingAppointments = new ObservableCollection<RepairOrder>();
+            expiredAppointments = new ObservableCollection<RepairOrder>();
             List<RepairOrder> appointments = MauiProgram.ShopDB.GetRepairOrdersThatAreNOTActive();
 
             foreach (var appointment in appointments)
@@ -36,6 +36,26 @@ namespace MechanicShop.Services
                 }
             }
         }
+        public static void RefreshByPhone(string phone) //Chloe
+        {
+            upcomingAppointments = new ObservableCollection<RepairOrder>();
+            expiredAppointments = new ObservableCollection<RepairOrder>();
+            List<RepairOrder> appointments = MauiProgram.ShopDB.GetRepairOrdersByCustPhone(phone);
+
+            foreach (var appointment in appointments)
+            {
+                DateTime appointmentDate = DateTime.Parse(appointment.AppointmentDate);
+                if (appointmentDate < AppointmentView.currentDate.AddDays(-1))
+                {
+                    expiredAppointments.Add(appointment);
+                }
+                else
+                {
+                    upcomingAppointments.Add(appointment);
+                }
+            }
+        }
+       
 
 
         //FOR REPAIR ORDERS PAGE
@@ -62,12 +82,12 @@ namespace MechanicShop.Services
         }
 
         // Get a list of technicians that are not currently assigned to any repair orders.
-        public static ObservableCollection<Technician>? openTechnicians = new ObservableCollection<Technician>();
+        public static ObservableCollection<Technician>? openTechnicians;
 
         public static void RefreshOpenTechnicians() //Chloe
         {
             // clears the static list
-            openTechnicians.Clear();
+            openTechnicians = new ObservableCollection<Technician>();
             // queries a list of all techs and a list of all orders from Zack's code
             List<Technician>? techList = MauiProgram.ShopDB.GetAllTechnicians();
             List<RepairOrder>? roList = MauiProgram.ShopDB.GetAllRepairOrders();
@@ -95,7 +115,10 @@ namespace MechanicShop.Services
                 }
             }
             // sets the collection
-            openTechnicians = new ObservableCollection<Technician>(techList);
+            if (techList != null)
+            {
+                openTechnicians = new ObservableCollection<Technician>(techList);
+            }        
         }
 
         public static Technician? GetTechByID (int? id) //Chloe

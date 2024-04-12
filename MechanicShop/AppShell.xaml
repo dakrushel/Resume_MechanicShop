@@ -82,13 +82,12 @@ Shell.BackgroundColor="#814827"-->
         <DataTemplate>
             <StackLayout>
                 <Label Text="Mechanic Shop"
-                       TextColor="#EAC135"
+                       TextColor="{StaticResource Tertiary}"
                        FontSize="Medium"
                        FontAttributes="Bold"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
                        Margin="0,0,0,10"/>
-                
 
             </StackLayout>
         </DataTemplate>

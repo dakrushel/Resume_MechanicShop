@@ -52,7 +52,7 @@
                         <ListView Grid.ColumnSpan="3" Grid.Row="4" 
                                         x:Name="customersCollectionView" WidthRequest="600"
                                         HeightRequest="200" Background="AliceBlue"
-                                        ItemSelected="customers_ItemSelected" >
+                                        ItemSelected="customers_ItemSelected">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
 

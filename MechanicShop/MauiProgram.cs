@@ -31,13 +31,13 @@ namespace MechanicShop
             ShopDB = new MechanicShopSQLite();
 
             ////FOR TESTING
-            void PrintToTxt(string s)
+            /*void PrintToTxt(string s)
             {
                 using (StreamWriter sw = new StreamWriter(Constant.TestPath))
                 {
                     sw.Write(s);
                 }
-            }
+            }*/
             //Generate Invoice
             //Customer testCustomer = ShopDB.GetCustomerByPhone("123-456-7890")[0];
             //List<RepairOrder> appointments = ShopDB.GetRepairOrdersByVIN(testCustomer.CustomerVehicles[1].VIN);

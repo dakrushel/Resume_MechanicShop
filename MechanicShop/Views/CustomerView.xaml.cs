@@ -95,31 +95,42 @@ public partial class CustomerView : ContentPage
     //====================================================================================================
     // Customer Search Box---------------------------------------------------------------------
     //====================================================================================================
-    private async void searchPhoneBtn_Clicked(object sender, EventArgs e)
+    private void searchPhoneBtn_Clicked(object sender, EventArgs e)
     {
         // Search customer by phone number
         // only accept whole phone number BC the dashes will be in the right place
-        string phone = phoneEntry.Text;
+        string phone = phoneEntry.Text; // get ssearch value
         if (phone.Length == 12)
         {
+            //perform search
             var customers = new ObservableCollection<Customer>(MauiProgram.ShopDB.GetCustomerByPhone(phone));
             customersCollectionView.ItemsSource = customers;
         }
     }
+    private void SearchTextChanged(object sender, TextChangedEventArgs e)
+    {
+        //(This is for the name search box)
+        // enable buttons
+        searchNameBtn.IsEnabled = true;
+        clearCustomerSearch.IsEnabled = true;
+        // validate input
+        nameEntry.Text = Validate.Name(e.NewTextValue);
+
+    }
     private void searchNameBtn_Clicked(object sender, EventArgs e)
     {
+        // get the search value from the entry box
         string name = nameEntry.Text;
         if (name != null)
         {
+            // perform the filter search
             var customers = new ObservableCollection<Customer>(MauiProgram.ShopDB.GetCustomerByName(name));
             customersCollectionView.ItemsSource = customers;
         }
     }
     private void clearCustomerSearch_Clicked(object sender, EventArgs e)
     {
-        // inactive unless search fields filled in
-        ResetSearchWidget();
-        
+        ResetSearchWidget();      
     }
     private void addCustomer_Clicked(object sender, EventArgs e)
     {
@@ -129,18 +140,19 @@ public partial class CustomerView : ContentPage
         newNameBox.Text = nameEntry.Text;
         newPhoneBox.Text = phoneEntry.Text;
         searchCustomers.IsEnabled = false;
+        ResetCustomerDisplay();
     }
     private void customers_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
-        //TODO: hightlight???
         Customer? selectedCustomer = e.SelectedItem as Customer;
         customerDisplay.IsEnabled = true;
         if (selectedCustomer != null)
         {
+            // Send customer info to display form
             cNameBox.Text = selectedCustomer.Name;
             cPhoneBox.Text = selectedCustomer.CustomerPhone;
             cEmailBox.Text = selectedCustomer.Address;
-            // TODO get cars
+            // Get customer vehicle list
             var vehicles = new ObservableCollection<Vehicle>(MauiProgram.ShopDB.GetCustomerVehicles(selectedCustomer.CustomerPhone));
             cVehicleList.ItemsSource = vehicles;
             vehicleInformation.BindingContext = null;
@@ -209,7 +221,6 @@ public partial class CustomerView : ContentPage
         editNameBox.Text = cNameBox.Text;
         editPhoneBox.Text = cPhoneBox.Text;
         editEmailBox.Text = cEmailBox.Text;
-
     }
     private void cancelEditCustomer_Clicked(object sender, EventArgs e)
     {
@@ -290,6 +301,7 @@ public partial class CustomerView : ContentPage
     }
     public void ResetAddVehicleForm()
     {
+        // reset all inputs
         AddVehicleForm.IsVisible = false;
         searchCustomers.IsEnabled = true;
         customerDisplay.IsEnabled = true;
@@ -298,7 +310,6 @@ public partial class CustomerView : ContentPage
         colourPicker.SelectedItem = null;
         makePicker.SelectedItem = null;
         modelPicker.SelectedItem = null;
-        //TODO: Reset picker selections
     }
     private async void AddThisVehicleBtn_Clicked(object sender, EventArgs e)
     {
@@ -378,7 +389,6 @@ public partial class CustomerView : ContentPage
         }
 
     }
-
     private async void newAppointmentBtn_Clicked(object sender, EventArgs e)
     {
         Customer? c = customersCollectionView.SelectedItem as Customer;
@@ -389,37 +399,9 @@ public partial class CustomerView : ContentPage
             Pass.PassVehicle(v);
         }
         await Shell.Current.GoToAsync("//AppointmentView");
-
     }
 
     
-    private void SearchTextChanged(object sender, TextChangedEventArgs e)
-    {
-        //(This is for the name search box)
-        searchNameBtn.IsEnabled = true;
-        var entry = (Entry)sender;
-        if (e.NewTextValue == null || e.NewTextValue == "") { return; }
-        // Regular expression pattern to allow only alphabetic characters, space, hyphen, apostrophe, and period
-        string pattern = @"^[a-zA-ZÀ-ÿ\s'\-\.\,]+$";
-        // Check if the entered text matches the pattern
-        if (!Regex.IsMatch(e.NewTextValue, pattern))
-        {
-            // If the entered text contains disallowed characters, remove them
-            var newText = Regex.Replace(e.NewTextValue, @"[^a-zA-ZÀ-ÿ\s'\-\.\,]", "");
-
-            // Update the entry's text with the sanitized text
-            entry.Text = newText;
-        }
-        clearCustomerSearch.IsEnabled = true;
-    }
-
-
-    
-
-
-
-    
-
 
     //====================================================================================================
     // INPUT VALIDATIONS AND FORM BUTTON TRIGGERS
@@ -444,81 +426,33 @@ public partial class CustomerView : ContentPage
         AddThisCustomerBtn.IsEnabled = true;
     }
     private void newEmailBox_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        
-        AddCustomerForm_Updated();
-        
+    {     
+        AddCustomerForm_Updated();    
     }
     private void newNameBox_TextChanged(object sender, TextChangedEventArgs e)
-    {      
-        var entry = (Entry)sender;
-        if (e.NewTextValue == null || e.NewTextValue == "") { return; }
-        // Regular expression pattern to allow only alphabetic characters, space, hyphen, apostrophe, and period
-        string pattern = @"^[a-zA-ZÀ-ÿ\s'\-\.\,]+$";
-
-        // Check if the entered text matches the pattern
-        if (!Regex.IsMatch(e.NewTextValue, pattern))
-        {
-            // If the entered text contains disallowed characters, remove them
-            var newText = Regex.Replace(e.NewTextValue, @"[^a-zA-ZÀ-ÿ\s'\-\.\,]", "");
-
-            // Update the entry's text with the sanitized text
-            entry.Text = newText;
-            AddCustomerForm_Updated();
-        }
+    {
+        AddCustomerForm_Updated();
+        newNameBox.Text = Validate.Name(e.NewTextValue);
     }
     private void phoneEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
+        phoneEntry.Text = Validate.Phone(e.NewTextValue);
         clearCustomerSearch.IsEnabled = true;
-        var entry = (Entry)sender;
-        if (e.NewTextValue == null) { return; }
-        // Remove non-digit characters
-        var newText = new string(e.NewTextValue.Where(char.IsDigit).ToArray());
-        // Limit maximum length to 10 digits
-        if (newText.Length > 10)
+        if (phoneEntry.Text != null)
         {
-            newText = newText.Substring(0, 10);
-        }
-        // Automatically insert dashes
-        if (newText.Length > 3)
-        {
-            newText = newText.Insert(3, "-");
-            if (newText.Length > 7)
+            if (phoneEntry.Text.Length == 12)
             {
-                newText = newText.Insert(7, "-");
+                searchPhoneBtn.IsEnabled = true;
+                return;
             }
-        }
-        entry.Text = newText;
-        if (entry.Text.Length == 12)
-        {
-            searchPhoneBtn.IsEnabled = true;
-            return;
-        }
+        }    
         searchPhoneBtn.IsEnabled = false;
     }
     // New customer phone number entry
     private void newPhoneBox_TextChanged(object sender, TextChangedEventArgs e)
     {
+        newPhoneBox.Text = Validate.Phone(e.NewTextValue);
         AddCustomerForm_Updated();
-        var entry = (Entry)sender;
-        if (e.NewTextValue == null) { return; }
-        // Remove non-digit characters
-        var newText = new string(e.NewTextValue.Where(char.IsDigit).ToArray());
-        // Limit maximum length to 10 digits
-        if (newText.Length > 10)
-        {
-            newText = newText.Substring(0, 10);
-        }
-        // Automatically insert dashes
-        if (newText.Length > 3)
-        {
-            newText = newText.Insert(3, "-");
-            if (newText.Length > 7)
-            {
-                newText = newText.Insert(7, "-");
-            }
-        }
-        entry.Text = newText;
     }
 
     //====================================================================================================
@@ -531,10 +465,8 @@ public partial class CustomerView : ContentPage
             AddThisVehicleBtn.IsEnabled = false;
             return;
         }
-
         AddThisVehicleBtn.IsEnabled = true;
     }
-
     private void yearPicker_SelectedIndexChanged(object sender, EventArgs e)
     {
         AddVehicleForm_Updated();
@@ -542,24 +474,8 @@ public partial class CustomerView : ContentPage
 
     private void vinEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
-        if (e.NewTextValue == null || e.NewTextValue == "") { return; }
-        var entry = (Entry)sender;
-        // Convert the entered text to uppercase
-        string newText = e.NewTextValue.ToUpper();
-        // Ensure that the entered text contains only numbers and capital letters
-        string validCharacters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        string filteredText = "";
-        foreach (char c in newText)
-        {
-            if (validCharacters.Contains(c))
-            {
-                filteredText += c;
-            }
-        }
-        // Update the entry's text with the filtered text
-        entry.Text = filteredText;
+        vinEntry.Text = Validate.VIN(e.NewTextValue);
         AddVehicleForm_Updated();
-
     }
 
     private void modelPicker_SelectedIndexChanged(object sender, EventArgs e)
@@ -574,21 +490,7 @@ public partial class CustomerView : ContentPage
 
     private void editNameBox_TextChanged(object sender, TextChangedEventArgs e)
     {
-        var entry = (Entry)sender;
-        if (e.NewTextValue == null || e.NewTextValue == "") { return; }
-        // Regular expression pattern to allow only alphabetic characters, space, hyphen, apostrophe, and period
-        string pattern = @"^[a-zA-ZÀ-ÿ\s'\-\.\,]+$";
-
-        // Check if the entered text matches the pattern
-        if (!Regex.IsMatch(e.NewTextValue, pattern))
-        {
-            // If the entered text contains disallowed characters, remove them
-            var newText = Regex.Replace(e.NewTextValue, @"[^a-zA-ZÀ-ÿ\s'\-\.\,]", "");
-
-            // Update the entry's text with the sanitized text
-            entry.Text = newText;
-            AddCustomerForm_Updated();
-        }
+        editNameBox.Text = Validate.Name(e.NewTextValue);
     }
 
     

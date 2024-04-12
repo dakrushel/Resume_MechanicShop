@@ -81,8 +81,4 @@
 	  </MauiXaml>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Resources\Raw\Invoices\" />
-	</ItemGroup>
-
 </Project>
