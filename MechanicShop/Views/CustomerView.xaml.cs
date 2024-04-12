@@ -327,7 +327,12 @@ public partial class CustomerView : ContentPage
         if (delete)
         {
             string custPhone = cPhoneBox.Text;
-            MauiProgram.ShopDB.RemoveCustomer(custPhone);
+            bool safeToDelete = Customer.RemoveCustomerChecker(custPhone);
+            if (!safeToDelete)
+            {
+                await DisplayAlert("Cannot Delete Customer","This Customer has active orders in the system","Ok");
+                return;
+            }
             ResetCustomerDisplay();
             var customers = new ObservableCollection<Customer>(MauiProgram.ShopDB.GetAllCustomers());
             customersCollectionView.ItemsSource = customers;
@@ -353,7 +358,12 @@ public partial class CustomerView : ContentPage
             Vehicle? toDelete = cVehicleList.SelectedItem as Vehicle;
             if (toDelete != null)
             {
-                MauiProgram.ShopDB.RemoveVehicle(toDelete.VIN);
+                bool safeToDelete = Vehicle.RemoveVehicleChecker(toDelete);
+                if (!safeToDelete)
+                {
+                    await DisplayAlert("Cannot Delete Vehicle", "This Vehicle has active orders in the system", "Ok");
+                    return;
+                }
                 var vehicles = new ObservableCollection<Vehicle>(MauiProgram.ShopDB.GetCustomerVehicles(cPhoneBox.Text));
                 cVehicleList.ItemsSource = vehicles;
                 vehicleInformation.BindingContext = null;

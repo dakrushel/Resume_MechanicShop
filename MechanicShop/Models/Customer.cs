@@ -92,7 +92,7 @@ namespace MechanicShop.Models
 
                 else
                 {
-                    //MauiProgram.ShopDB.RemoveCustomer(phoneNum);
+                    MauiProgram.ShopDB.RemoveCustomer(phoneNum);
                     return true;
                 }
             }

@@ -124,11 +124,7 @@ namespace MechanicShop.Services
         {
             return false;
         }
-        public static bool CanDeleteCustomer(Customer customer)
-        {
-            // this should also cascade to delete all of their vehicles
-            return false;
-        }
+        
     }
 
     
