@@ -397,10 +397,13 @@ public partial class AppointmentView : ContentPage
         {
             if (apptPhone.Text.Length == 12)
             {
+                apptPhone.TextColor = Color.FromArgb("080D10");
                 SearchPhone.IsEnabled = true;
                 return;
             }
         }
+        apptPhone.TextColor = Color.FromArgb("FF0000");
         SearchPhone.IsEnabled = false;
     }
+
 }

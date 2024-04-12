@@ -315,8 +315,7 @@ public partial class CustomerView : ContentPage
             cVehicleList.ItemsSource = vehicles;
             vehicleInformation.BindingContext = newVehicle;
             ResetAddVehicleForm();
-        }
-        
+        } 
     }
     //====================================================================================================
     // CUSTOMER INFORMATION DISPLAY -----------------------------------------------------------
@@ -391,7 +390,8 @@ public partial class CustomerView : ContentPage
             AddThisCustomerBtn.IsEnabled = false;
             return;
         }
-        if (newNameBox.Text == "" || !newEmailBox.Text.Contains('@'))
+        string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+        if (newNameBox.Text == "" || !Regex.IsMatch(newEmailBox.Text, pattern))
         {
             AddThisCustomerBtn.IsEnabled = false;
             return;
@@ -400,12 +400,31 @@ public partial class CustomerView : ContentPage
     }
     private void newEmailBox_TextChanged(object sender, TextChangedEventArgs e)
     {     
-        AddCustomerForm_Updated();    
+        if (newEmailBox.Text != null)
+        {
+            AddCustomerForm_Updated();
+            string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+            if (!Regex.IsMatch(newEmailBox.Text, pattern))
+            {
+                newEmailBox.TextColor = Color.FromArgb("FF0000");
+                return;
+            }
+            newEmailBox.TextColor = Color.FromArgb("080D10");
+        }     
     }
     private void newNameBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         AddCustomerForm_Updated();
         newNameBox.Text = Validate.Name(e.NewTextValue);
+        if (newNameBox.Text != null)
+        {
+            if (newNameBox.Text.Length < 3)
+            {
+                newNameBox.TextColor = Color.FromArgb("FF0000");
+                return;
+            }
+        }
+        newNameBox.TextColor = Color.FromArgb("080D10");
     }
     private void phoneEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
@@ -415,10 +434,12 @@ public partial class CustomerView : ContentPage
         {
             if (phoneEntry.Text.Length == 12)
             {
+                phoneEntry.TextColor = Color.FromArgb("080D10");
                 searchPhoneBtn.IsEnabled = true;
                 return;
             }
-        }    
+        }
+        phoneEntry.TextColor = Color.FromArgb("FF0000");
         searchPhoneBtn.IsEnabled = false;
     }
     // New customer phone number entry
@@ -426,8 +447,16 @@ public partial class CustomerView : ContentPage
     {
         newPhoneBox.Text = Validate.Phone(e.NewTextValue);
         AddCustomerForm_Updated();
+        if (newPhoneBox.Text != null)
+        {
+            if (newPhoneBox.Text.Length != 12)
+            {
+                newPhoneBox.TextColor = Color.FromArgb("FF0000");
+                return;
+            }
+        }
+        newPhoneBox.TextColor = Color.FromArgb("080D10");
     }
-
     //====================================================================================================
     // Triggers for Add Vehicle Button in new vehicle form
     //====================================================================================================
@@ -448,6 +477,15 @@ public partial class CustomerView : ContentPage
     {
         vinEntry.Text = Validate.VIN(e.NewTextValue);
         AddVehicleForm_Updated();
+        if (vinEntry.Text != null)
+        {
+            if (vinEntry.Text.Length != 17)
+            {
+                vinEntry.TextColor = Color.FromArgb("FF0000");
+                return;
+            }
+        }
+        vinEntry.TextColor = Color.FromArgb("080D10");
     }
     private void modelPicker_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -460,6 +498,28 @@ public partial class CustomerView : ContentPage
     private void editNameBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         editNameBox.Text = Validate.Name(e.NewTextValue);
-    }  
+        if (editNameBox.Text != null)
+        {
+            if (editNameBox.Text.Length < 3)
+            {
+                editNameBox.TextColor = Color.FromArgb("FF0000");
+                return;
+            }
+        }
+        editNameBox.TextColor = Color.FromArgb("080D10");
+    }
+    private void editEmailBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if(editEmailBox.Text != null)
+        {
+            string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+            if (!Regex.IsMatch(editEmailBox.Text, pattern))
+            {
+                editEmailBox.TextColor = Color.FromArgb("FF0000");
+                return;
+            }
+            editEmailBox.TextColor = Color.FromArgb("080D10");
+        }        
+    }
 }
 

@@ -198,6 +198,11 @@ public partial class TechView : ContentPage
             await DisplayAlert("Invalid Specialization", "Must be more than 2 characters", "Ok");
             return;
         }
+        if (techRate.Text.Length < 2)
+        {
+            await DisplayAlert("Invalid Pay Rate", "Please enter a valid pay rate", "Ok");
+            return;
+        }
         formValid = true;
     }
     //==================================================================================
@@ -237,21 +242,57 @@ public partial class TechView : ContentPage
     {
         FormChanged();
         techName.Text = Validate.Name(e.NewTextValue);
+        if (techName.Text != null)
+        {
+            if (techName.Text.Length < 3)
+            {
+                techName.TextColor = Color.FromArgb("FF0000");
+                return;
+            }
+        }
+        techName.TextColor = Color.FromArgb("080D10");
     }
     private void techPhone_TextChanged(object sender, TextChangedEventArgs e)
     {
         FormChanged();
         techPhone.Text = Validate.Phone(e.NewTextValue);
+        if (techPhone.Text != null)
+        {
+            if (techPhone.Text.Length != 12)
+            {
+                techPhone.TextColor = Color.FromArgb("FF0000");
+                return;
+            }
+        }
+        techPhone.TextColor = Color.FromArgb("080D10");
     }
     private void techSpecial_TextChanged(object sender, TextChangedEventArgs e)
     {
         FormChanged();
         techSpecial.Text = Validate.Name(e.NewTextValue);
+        if (techSpecial.Text != null)
+        {
+            if (techSpecial.Text.Length < 3)
+            {
+                techSpecial.TextColor = Color.FromArgb("FF0000");
+                return;
+            }
+        }
+        techSpecial.TextColor = Color.FromArgb("080D10");
     }
     private void techRate_TextChanged(object sender, TextChangedEventArgs e)
     {
         FormChanged();
         techRate.Text = Validate.Currency(e.NewTextValue);
+        if (techRate.Text != null)
+        {
+            if (techRate.Text.Length < 3)
+            {
+                techRate.TextColor = Color.FromArgb("FF0000");
+                return;
+            }
+        }
+        techRate.TextColor = Color.FromArgb("080D10");
     }       
     private void shopRate_TextChanged(object sender, TextChangedEventArgs e)
     {

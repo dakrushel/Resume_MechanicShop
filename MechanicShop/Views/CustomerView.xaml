@@ -127,7 +127,7 @@
                                TextChanged="newPhoneBox_TextChanged" Keyboard="Numeric"/>
                         <Label Grid.Row="3"
                             Text="Email:" VerticalOptions="Center" HorizontalOptions="End"/>
-                        <Entry x:Name="newEmailBox" Grid.Row="3" Grid.Column="1"
+                        <Entry x:Name="newEmailBox" Grid.Row="3" Grid.Column="1" IsSpellCheckEnabled="False"
                             WidthRequest="300" MaxLength="30" Placeholder="customer@email.com"
                                TextChanged="newEmailBox_TextChanged"/>
                         <HorizontalStackLayout Grid.Row="4" Grid.ColumnSpan="2" Spacing="10" Margin="20,15"
@@ -168,8 +168,9 @@
                             IsReadOnly="True" IsEnabled="False"/>
                         <Label Grid.Row="3"
                             Text="Email:" VerticalOptions="Center" HorizontalOptions="End"/>
-                        <Entry x:Name="editEmailBox" Grid.Row="3" Grid.Column="1"
-                            WidthRequest="300" MaxLength="30" Placeholder="customer@email.com"/>
+                        <Entry x:Name="editEmailBox" Grid.Row="3" Grid.Column="1" IsSpellCheckEnabled="False"
+                            WidthRequest="300" MaxLength="30" Placeholder="customer@email.com"
+                               TextChanged="editEmailBox_TextChanged"/>
                         <HorizontalStackLayout Grid.Row="4" Grid.ColumnSpan="2" Spacing="10" Margin="20,15"
                                HorizontalOptions="Center">
                             <Button WidthRequest="100" BackgroundColor="maroon" TextColor="white"
