@@ -345,6 +345,13 @@ namespace MechanicShop.Models
                 .ToList();
         }
 
+        public List<RepairOrder> GetRepairOrdersByTechnician(int employeeId)
+        {
+            //Same as above but with employee ID (for the RemoveTechChecker)
+            //Arg is an int so no need for partial matches or case sensitivity
+            return this.database.Table<RepairOrder>().Where(x => x.EmployeeId == employeeId).ToList();
+        }
+
         /*----------------------------SERVICE JOB ------------------------------------*/
 
         //TESTED

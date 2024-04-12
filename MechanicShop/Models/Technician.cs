@@ -35,6 +35,21 @@ namespace MechanicShop.Models
         public Technician()
         { }
 
-
+        public static bool RemoveTechChecker(Technician technician)
+        {
+            //Start with a list of ROs
+            List<RepairOrder> tempROs = MauiProgram.ShopDB.GetRepairOrdersByTechnician(technician.EmployeeId);
+            //Nest we need a list of active ROs
+            List<RepairOrder> activeROs = new List<RepairOrder>();
+            //Check to see if tempROs even has anything in it
+            if (tempROs.Count > 0)
+            {
+                //Then sort through and see if any of them are active
+                foreach (RepairOrder r in tempROs)
+                {
+                    if (r.IsActive)
+                }
+            }
+        }
     }
 }
