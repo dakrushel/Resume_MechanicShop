@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using MechanicShop.Models;
 
 namespace MechanicShop.Services
 {
@@ -107,6 +108,26 @@ namespace MechanicShop.Services
                 newText = newText.Insert(newText.Length - 2, ".");
             }
             return newText;
+        }
+
+
+        // CHECKERS FOR OBJECT DELETION
+        public static bool CanDeleteTech(Technician tech)
+        {
+            //check if tied to ANY repair orders
+            // if CAN DELETE, please DELETE and RETURN TRUE
+
+            // if CANT delete, please return FALSE
+            return false;
+        }
+        public static bool CanDeleteVehichle(Vehicle vehicle)
+        {
+            return false;
+        }
+        public static bool CanDeleteCustomer(Customer customer)
+        {
+            // this should also cascade to delete all of their vehicles
+            return false;
         }
     }
 
