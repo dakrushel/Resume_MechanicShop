@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using MechanicShop.Models;
 using MechanicShop.Services;
+using Microsoft.Maui.ApplicationModel;
 /* 
  * Order View page code behind (Written by Chloe) 
     This page handles logic for seperating lists, as well as assigning Technicians and
@@ -322,6 +323,83 @@ public partial class OrderView : ContentPage
         }
         RODetailsChanged();
     }
-
-    
+    private void roPhone_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        clearSearchForm.IsEnabled = true;
+        roPhone.Text = Validate.Phone(e.NewTextValue);
+        if (roPhone.Text != null)
+        {
+            if (roPhone.Text.Length == 12)
+            {
+                roPhone.TextColor = Color.FromArgb("080D10");
+                SearchPhone.IsEnabled = true;
+                return;
+            }
+        }
+        roPhone.TextColor = Color.FromArgb("FF0000");
+        SearchPhone.IsEnabled = false;
+    }
+    private void roName_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        clearSearchForm.IsEnabled = true;
+        roName.Text = Validate.Name(e.NewTextValue);
+        searchName.IsEnabled = true;
+    }
+    //==================================================================================
+    // Search Widget
+    //==================================================================================
+    private void RefreshSearch()
+    {
+        // sets all aspects of the search widget to default view
+        roPhone.Text = null;
+        roName.Text = null;
+        searchName.IsEnabled = false;
+        SearchPhone.IsEnabled = false;
+        clearSearchForm.IsEnabled = false;
+    }
+    private void clearSearchForm_Clicked(object sender, EventArgs e)
+    {
+        RefreshSearch(); // reset search form
+        RefreshROs(); // refresh appointments without search filters
+    }
+    private async void SearchPhone_Clicked(object sender, EventArgs e)
+    {
+        // Search appointments by customer phone number
+        string phone = roPhone.Text; // get search value (inputted phone number)
+        if (phone.Length == 12) // only accept a full phone number
+        {
+            // Call filter method to sort new lists based on phone
+            AppointmentViewService.RObyPhone(phone);
+            unasignedROs.ItemsSource = AppointmentViewService.unassigned; // bind lists to GUI
+            inProgressROs.ItemsSource = AppointmentViewService.inProgress;
+            // Check if the returned lists have any values in them
+            int? unassign = AppointmentViewService.unassigned?.Count;
+            int? progress = AppointmentViewService.inProgress?.Count;
+            if (unassign == 0 && progress == 0)
+            { // if lists have no values, Display a message that no results were found, and clear the search
+                await DisplayAlert("No Results", "No Repair Orders match this phone number", "Ok");
+                RefreshROs();
+            }
+        }
+    } 
+    private async void searchName_Clicked(object sender, EventArgs e)
+    {
+        // Search appointments by customer name
+        string name = roName.Text; // get search value (name or partial name inputted)
+        if (name != null && name != "") // ensure there is a value to compare
+        {
+            // Call filter method to compare search value to existing appointments.
+            AppointmentViewService.RObyName(name);
+            unasignedROs.ItemsSource = AppointmentViewService.unassigned; // bind lists to GUI
+            inProgressROs.ItemsSource = AppointmentViewService.inProgress;
+            // Check if the returned lists have any values in them
+            int? unassign = AppointmentViewService.unassigned?.Count;
+            int? progress = AppointmentViewService.inProgress?.Count;
+            if (unassign == 0 && progress == 0)
+            { // if lists have no values, Display a message that no results were found, and clear the search
+                await DisplayAlert("No Results", "No appointments match this Name", "Ok");
+                RefreshROs();
+            }
+        }
+    }
 }

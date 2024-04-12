@@ -83,19 +83,66 @@ namespace MechanicShop.Services
 
             foreach (var ro in roList)
             {
-                if (ro.EmployeeId > 0)
+                SortByAssigned(ro);
+            }
+        }
+
+        public static void RObyPhone(string phone)
+        {
+            unassigned.Clear();
+            inProgress.Clear();
+            // Get a list of all repair orders matching the input phone number
+            List<RepairOrder> ros = MauiProgram.ShopDB.GetRepairOrdersByCustPhone(phone);
+            // Sent to sorter to build collections
+            foreach (var ro in ros)
+            {
+                if (ro.IsActive == true) // filter out inactive (aka Appointments)
                 {
-                    inProgress.Add(ro);
+                    SortByAssigned(ro);
                 }
-                else
+            }
+        }
+        public static void RObyName(string name)
+        {
+            unassigned.Clear();
+            inProgress.Clear();
+            // Get a list of all repair orders matching the input phone number
+            List<RepairOrder> ros = MauiProgram.ShopDB.GetRepairOrdersByCustName(name);
+            // Sent to sorter to build collections
+            foreach (var ro in ros)
+            {
+                if (ro.IsActive == true) // filter out inactive (aka Appointments)
                 {
-                    unassigned.Add(ro);
+                    SortByAssigned(ro);
                 }
             }
         }
 
+        public static void SortByAssigned(RepairOrder ro)
+        {
+            if (ro.EmployeeId > 0)
+            {
+                inProgress.Add(ro);
+            }
+            else
+            {
+                unassigned.Add(ro);
+            }
+        }
+
+        
+        
+        
+        
+        
+        
         // Get a list of technicians that are not currently assigned to any repair orders.
         public static ObservableCollection<Technician>? openTechnicians;
+
+
+
+
+
 
         public static void RefreshOpenTechnicians() //Chloe
         {
@@ -134,19 +181,6 @@ namespace MechanicShop.Services
             }        
         }
 
-        public static Technician? GetTechByID (int? id) //Chloe
-        {
-            // returns a particular technician object based on the ID entered
-            foreach (var tech in MauiProgram.ShopDB.GetAllTechnicians())
-            {
-                if (tech.EmployeeId == id)
-                {
-                    return tech;
-                }
-            }
-            // returns null if no match is found
-            return null;
-        }
 
         public static double CalculateEstimate(List<ServiceJob> jobs) //Chloe
         {
