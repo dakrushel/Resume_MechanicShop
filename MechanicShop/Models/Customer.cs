@@ -9,6 +9,7 @@ namespace MechanicShop.Models
     [Table("Customer")]
     public class Customer 
     {
+        //Annotations for DB creation
         [Required]
         [PrimaryKey]
         public string CustomerPhone { get; set; }
