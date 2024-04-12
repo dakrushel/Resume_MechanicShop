@@ -35,7 +35,8 @@ namespace MechanicShop.Models
         public Technician()
         { }
 
-        public static bool RemoveTechChecker(Technician technician)
+        //Returns true if a tech is not assigned to an active RO and false if a tech is not
+        public static bool RemoveTechChecker(Technician technician)// Denver
         {
             //Start with a list of ROs
             List<RepairOrder> tempROs = MauiProgram.ShopDB.GetRepairOrdersByTechnician(technician.EmployeeId);
@@ -47,9 +48,13 @@ namespace MechanicShop.Models
                 //Then sort through and see if any of them are active
                 foreach (RepairOrder r in tempROs)
                 {
-                    if (r.IsActive)
+                    if (r.IsActive) {  activeROs.Add(r); }
                 }
+                //If there are active ROs return false, otherwise return true
+                if (activeROs.Count > 0) { return false; } else { return true; }
             }
+            //If there are no ROs, return true
+            else { return true; }
         }
     }
 }
