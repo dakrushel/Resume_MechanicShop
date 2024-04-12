@@ -56,7 +56,7 @@ namespace MechanicShop.Services
                 $"    Total Hours............................................ {totalHours}\n\n" +
                 $"    Shop Rate............................................ {shopSettings.ShopHourlyRate.ToString("C")}\n\n" +
                 $"    Shop Supplies........................................ {shopSettings.ShopSupplyCost.ToString("C")}\n\n" +
-                $"    Amount Owing......................................... {(totalHours * shopSettings.ShopHourlyRate).ToString("C")}" +
+                $"    Amount Owing......................................... {(totalHours * shopSettings.ShopHourlyRate + shopSettings.ShopSupplyCost).ToString("C")}" +
                 $"\n\n==================================================================";
             
             

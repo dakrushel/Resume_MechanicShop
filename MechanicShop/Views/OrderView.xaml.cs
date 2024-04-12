@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using MechanicShop.Models;
 using MechanicShop.Services;
+using Microsoft.Maui.Animations;
 using Microsoft.Maui.ApplicationModel;
 /* 
  * Order View page code behind (Written by Chloe) 
@@ -39,6 +40,7 @@ public partial class OrderView : ContentPage
         RefreshTechList();
         RefreshServiceJobs();
         RefreshROs();
+        removeTech.IsEnabled = false;
         updateRO.IsEnabled = false;
         selectedTech.Text = ":::Not Assigned:::";    
         if (Pass.CustomerPass != null && Pass.VehiclePass != null)
@@ -153,6 +155,7 @@ public partial class OrderView : ContentPage
         {
             thisJobs.Remove(toRemove); // remove job from list
             RefreshROJobs(); // refresh display
+
         }
         removeJobBtn.IsEnabled = false; // diasble remove button
     }
@@ -214,13 +217,25 @@ public partial class OrderView : ContentPage
         updateRO.IsEnabled = true;// enable the "Save Changes" button
         if (repairOrder != null)
         {  // Enable checkout button if all info is present
-            if (repairOrder.EmployeeId > 0 && thisJobs != null)
+            if (repairOrder.EmployeeId > 0 && thisJobs.Count >= 1)
             {
                 closeRO.IsEnabled = true;
                 return;
             }
         }
         closeRO.IsEnabled = false;
+    }
+    private void removeTech_Clicked(object sender, EventArgs e)
+    {
+        removeTech.IsEnabled = false;
+        if (repairOrder != null)
+        {
+            repairOrder.EmployeeId = 0;
+            MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
+            selectedTech.Text = ":::Not Assigned:::";
+            RefreshTechList();
+            RODetailsChanged();
+        }
     }
     //========================================================================================================
     //-----ORDER LOGS
@@ -253,6 +268,7 @@ public partial class OrderView : ContentPage
                 {
                     selectedTech.Text = tech.Name; // bind Tech name to the repair order
                     t = tech; // set local t variable to the tech OBJ
+                    removeTech.IsEnabled = true;
                 }
             }
         }
@@ -278,6 +294,8 @@ public partial class OrderView : ContentPage
             repairOrder.EmployeeId = t.EmployeeId; // attach the tech to the repair order
             selectedTech.Text = t.Name; // display the techs name on the Repair order
             MauiProgram.ShopDB.UpdateRepairOrder(repairOrder); // update the order in the DB
+            removeTech.IsEnabled = true;
+            RODetailsChanged();
         }
     }
     //========================================================================================================
@@ -402,4 +420,5 @@ public partial class OrderView : ContentPage
             }
         }
     }
+    
 }

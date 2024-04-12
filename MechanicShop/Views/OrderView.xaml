@@ -136,7 +136,10 @@
                     <!--TECHNICIAN-->
                     <HorizontalStackLayout WidthRequest="450" Spacing="10">
                         <Label Text="Technician:" VerticalOptions="Center" FontSize="16"/>
-                        <Label x:Name="selectedTech" Text="::Not Assigned::" WidthRequest="200" FontAttributes="Bold" FontSize="18"/>
+                        <Label x:Name="selectedTech" Text="::Not Assigned::" WidthRequest="220" FontAttributes="Bold" FontSize="18"
+                               VerticalOptions="Center"/>
+                        <Button Text="Remove Tech" VerticalOptions="Center" IsEnabled="False"
+                                x:Name="removeTech" Clicked="removeTech_Clicked"/>
                     </HorizontalStackLayout>
                     <!--OPTION BUTTONS-->
                     <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" Margin="0,20,0,0">

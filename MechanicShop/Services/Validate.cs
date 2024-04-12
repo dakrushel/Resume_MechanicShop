@@ -109,23 +109,5 @@ namespace MechanicShop.Services
             }
             return newText;
         }
-
-
-        // CHECKERS FOR OBJECT DELETION
-        public static bool CanDeleteTech(Technician tech)
-        {
-            //check if tied to ANY repair orders
-            // if CAN DELETE, please DELETE and RETURN TRUE
-
-            // if CANT delete, please return FALSE
-            return false;
-        }
-        public static bool CanDeleteVehichle(Vehicle vehicle)
-        {
-            return false;
-        }
-        
-    }
-
-    
+    }   
 }
