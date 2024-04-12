@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MechanicShop.Models;
+﻿using MechanicShop.Models;
 using MechanicShop.Views;
 using System.Collections.ObjectModel;
-using System.Runtime.CompilerServices;
+
 
 namespace MechanicShop.Services
 {

@@ -1,11 +1,14 @@
 using System.Collections.ObjectModel;
-using System.Reflection.Metadata.Ecma335;
-using System.Text.RegularExpressions;
 using MechanicShop.Models;
 using MechanicShop.Services;
+/* 
+ * Shop Management View page code behind (Written by Chloe) 
+    This page handles operations for Creating, reading,m updating and deleting Technicians
+    As well as setting shop currency rates for hourly rate and supplies
 
+    The code handles input validation and passing changes to and from the back end
+ */
 namespace MechanicShop.Views;
-
 public partial class TechView : ContentPage
 {
     public static bool formValid = false;
@@ -14,35 +17,33 @@ public partial class TechView : ContentPage
 	public TechView()
 	{
 		InitializeComponent();
-        updateShopSettings.IsEnabled = false;
 	}
     protected override void OnAppearing()
     {
         // override initialize to get changes any time the page loads, rather than only
         // initial loading of the page. 
         base.OnAppearing();
+        // reset local variables
+        formValid = false;
         t = null;
+        // reset tech form buttons and fields
         techName.Text = null;
         techPhone.Text = null;
         techSpecial.Text = null;
         techRate.Text = null;
         techID.Text = null;
         techHireDate.Text = null;
-
-        RefreshTechList();
         techInfo.BindingContext = null;
-        formValid = false;
         updateTech.IsEnabled = false;
         techForm.IsEnabled = false;
         techFormTitle.Text = "Technician Info:";
         newTech.IsEnabled = true;
-
         techOptions.IsVisible = true;
         addTech.IsVisible = false;
         updateShopSettings.IsEnabled = false;
+        //Refresh Widgets
+        RefreshTechList();       
         RefreshShopSettings();
-       
-
     }
     private void RefreshTechList()
     {
@@ -61,21 +62,20 @@ public partial class TechView : ContentPage
     // Technician DISPLAY LIST
     //==================================================================================
     private void techListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
-    {
+    {   //setup the technician information form view
         techFormTitle.Text = "Technician Info:";
         newTech.IsEnabled = true;
         techForm.IsEnabled = true;
         t = e.SelectedItem as Technician;
-        if (t != null)
+        if (t != null)  // ensure a tech is selected
         {
-            techInfo.BindingContext = t;
+            techInfo.BindingContext = t;  // display their inromation
             techRate.Text = t.HourlyRate.ToString("C");
         }
         updateTech.IsEnabled = false;
     }
     private void newTech_Clicked(object sender, EventArgs e)
-    {
-        //setup new tech form
+    {   // Set up the new technician form
         newTech.IsEnabled = false;
         t = null;
         formValid = false;
@@ -91,39 +91,39 @@ public partial class TechView : ContentPage
     //==================================================================================
     private async void deleteTech_Clicked(object sender, EventArgs e)
     {
-        if (t != null)
-        {
+        if (t != null) // ensure a tech is selected
+        {   // confirmation popup that the user really wants to delete
             bool delete = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this Technician?", "Delete Technician", "Cancel");
             if (!delete)
-            {
+            {   // if they dont want to delete, cancel the operation
                 return;
             }
-            MauiProgram.ShopDB.RemoveTechnician(t.EmployeeId);
-            OnAppearing();
+            MauiProgram.ShopDB.RemoveTechnician(t.EmployeeId); // delete the technician
+            OnAppearing(); // refresh page
         }
     }
     private void updateTech_Clicked(object sender, EventArgs e)
     {
-        UpdateTech();
+        UpdateTech(); // one of two ways to update a tech
     }
     private void UpdateTech()
     {
-        updateTech.IsEnabled = false;
-        ValidateFormInfo();
-        if (formValid && t != null)
-        {
+        updateTech.IsEnabled = false; // diasable button
+        ValidateFormInfo(); // validate all form informarion
+        if (formValid && t != null) // double check all info is present
+        {   //update the technician OBJ
             t.Name = techName.Text;
             t.EmployeePhone = techPhone.Text;
             t.Specialization = techSpecial.Text;
             t.HourlyRate = double.Parse(techRate.Text);
-            MauiProgram.ShopDB.UpdateTechnician(t);
-            RefreshTechList();
+            MauiProgram.ShopDB.UpdateTechnician(t); // persist to DB
+            RefreshTechList(); // refresh tech list display widget
         }
     }
     private async void clearTechForm_Clicked(object sender, EventArgs e)
     {
         if (techOptions.IsVisible == true && updateTech.IsEnabled == true)
-        {
+        {   // if a technician was being updated but the process wasnt complete, ask to save
             bool saveChanges = await DisplayAlert("Update Technician?","Changes have been made to this technicians info. do you want to save changes?","Save Changes","Don't Save");
             if (saveChanges)
             {
@@ -131,33 +131,31 @@ public partial class TechView : ContentPage
             }
         }
         if (addTech.IsVisible == true && addTech.IsEnabled == true)
-        {
+        {  // same for if a tech was being added
             bool saveNew = await DisplayAlert("Save New Tech?", "You've entered new technician information, do you want to add this Technician?", "Add New Technician", "Discard Information");
             if (saveNew)
             {
                 AddTech();
             }
         }
-        OnAppearing();
+        OnAppearing(); // refresh the page
     }
     private void addTech_Clicked(object sender, EventArgs e)
     {
-        AddTech();
+        AddTech(); // one of two ways to add a tech
     }
     private void AddTech()
     {
-        ValidateFormInfo();
-        if (formValid)
+        ValidateFormInfo(); // Validate all form inforamtion
+        if (formValid) // Continue only if valid (Error messages will display from called method otherwise)
         {
-            string name = techName.Text;
+            string name = techName.Text; // gather all needed info
             string phone = techPhone.Text;
             string special = techSpecial.Text;
             double rate = double.Parse(techRate.Text);
-            // need EmployeeId
             string date = AppointmentView.TodayDate;
-
-            if (name != null && phone != null && special != null && date != null)
-            {
+            if (name != null && phone != null && special != null && date != null) // ensure all info valid once again
+            {  // make the tech OBJ, add to Database, refresh page
                 Technician newTech = new Technician(name, phone, date, special, rate);
                 MauiProgram.ShopDB.AddTechnician(newTech);
                 OnAppearing();
@@ -169,18 +167,17 @@ public partial class TechView : ContentPage
         if (techName.Text != null && techPhone.Text != null && techSpecial.Text != null && techRate.Text != null)
         {
             if (techName.Text.Length >= 3 && techPhone.Text.Length == 12 && techSpecial.Text.Length >= 3 && techRate.Text.Length >= 2)
-            {
+            {  //enabled buttons if all information is present
                 updateTech.IsEnabled = true;
                 addTech.IsEnabled = true;
                 return;
             }
-
         }
         updateTech.IsEnabled = false;
         addTech.IsEnabled = false;
     } 
     private async void ValidateFormInfo()
-    {
+    {  //various error messages if a user manages to submit an incomplete form.
         if (techName.Text == null || techPhone.Text == null || techSpecial.Text == null || techRate.Text == null)
         {
             await DisplayAlert("Form Incomplete", "Please fill out all fields", "Ok");
@@ -208,26 +205,30 @@ public partial class TechView : ContentPage
     //==================================================================================
     private void updateShopSettings_Clicked(object sender, EventArgs e)
     {
-        updateShopSettings.IsEnabled = false;
+        updateShopSettings.IsEnabled = false; //disable button
         if (shopRate.Text != null && shopSupplies.Text != null && shopSettings != null)
-        {
-            shopSettings.ShopHourlyRate = double.Parse(shopRate.Text);
-            shopSettings.ShopSupplyCost = double.Parse(shopSupplies.Text);
-            MauiProgram.ShopDB.UpdateShopSettings(shopSettings);
+        {  // ensure all values are not null AND are valid
+            if (shopRate.Text != "" && shopSupplies.Text != "")
+            { // update values to DB
+                shopSettings.ShopHourlyRate = double.Parse(shopRate.Text);
+                shopSettings.ShopSupplyCost = double.Parse(shopSupplies.Text);
+                MauiProgram.ShopDB.UpdateShopSettings(shopSettings);
+            }         
         }
-        RefreshShopSettings();
+        RefreshShopSettings(); // refresh widget
     }
     private void shopSettingsChanged()
-    {
+    { // ensure all needed values are present and valid
         if (shopRate.Text != null && shopSupplies.Text != null && shopSettings != null)
-        {
-            updateShopSettings.IsEnabled = true;
-            return;
+        {  // ensure there are actual values and not jjust white space
+            if (shopRate.Text != "" && shopSupplies.Text != "")
+            {   // enable button
+                updateShopSettings.IsEnabled = true;
+                return;
+            } 
         }
         updateShopSettings.IsEnabled = false;
-
     }
-
     //==================================================================================
     // INPUT VALIDATION
     //==================================================================================

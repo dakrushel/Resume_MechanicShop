@@ -2,7 +2,16 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MechanicShop.Views.TechView"
-             Title="Technicians">
+             Title="Shop Management">
+
+    <!--Technician View / or Shop Management page (Written by Chloe)
+    On this page you can add, edit, display, and remove Technicians from the system
+    - The form handles input validation for technician information values
+        
+    This page also allows you to set the shop hourly rate, as well as the shop supplies cost. 
+    These values are used across the system to calculate estimates as well as generate invoices.
+    When you update these value, changes will be immediately reflected across the entire system!
+        -->
     <ScrollView>
         <HorizontalStackLayout HorizontalOptions="Center" Spacing="100">
             <VerticalStackLayout VerticalOptions="Center" Spacing="50">
@@ -24,7 +33,6 @@
                                         ItemSelected="techListView_ItemSelected">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-
                                             <ViewCell>
                                                 <Grid>
                                                     <Grid.RowDefinitions>
@@ -34,7 +42,6 @@
                                                         <ColumnDefinition Width="50"></ColumnDefinition>
                                                         <ColumnDefinition Width="200"></ColumnDefinition>
                                                         <ColumnDefinition Width="190"></ColumnDefinition>
-
                                                     </Grid.ColumnDefinitions>
                                                     <Label Grid.Column="0" Text="{Binding EmployeeId}"></Label>
                                                     <Label Grid.Column="1" Text="{Binding Name}"></Label>
@@ -50,7 +57,6 @@
                                 Clicked="newTech_Clicked" WidthRequest="450"/>
                     </VerticalStackLayout>
                 </Border>
-                
                 <!--SHOP SETTINGS-->
                 <Border WidthRequest="350" HeightRequest="280">
                     <VerticalStackLayout Spacing="10" Padding="20">
@@ -71,23 +77,18 @@
                             <Entry x:Name="shopRate" Grid.Column="1"
                                    Text="{Binding ShopHourlyRate}"
                                    TextChanged="shopRate_TextChanged"/>
-
                             <Label Text="Shop Supplies: $" HorizontalOptions="End"
                                    VerticalOptions="Center" Grid.Row="1"/>
                             <Entry x:Name="shopSupplies" Grid.Column="1" Grid.Row="1"
                                    Text="{Binding ShopSupplyCost}"
                                    TextChanged="shopSupplies_TextChanged"/>
-
                             <Button Grid.Row="2" Grid.ColumnSpan="2" Margin="0,30,0,0"
                                     x:Name="updateShopSettings" Text="Update Shop Settings"
                                     IsEnabled="False" Clicked="updateShopSettings_Clicked"/>
-                            
-
                         </Grid>
                     </VerticalStackLayout>
                 </Border>
             </VerticalStackLayout>
-            
             <!--TECHNICIAN FORM-->
             <Border x:Name="techForm" HeightRequest="530" WidthRequest="500" Padding="20">
                 <VerticalStackLayout Spacing="10">
@@ -96,7 +97,6 @@
                         <Button x:Name="clearTechForm" HorizontalOptions="End"
                                 Text="Clear" WidthRequest="100" Clicked="clearTechForm_Clicked"/>
                     </HorizontalStackLayout>
-                    
                     <Grid RowSpacing="10" HorizontalOptions="Center"
                           x:Name="techInfo">
                         <Grid.RowDefinitions>
@@ -112,44 +112,36 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        
-
                         <Label Text="Technician Name:" VerticalOptions="Center" HorizontalOptions="End"
                                Grid.Row="0" Margin="0,0,10,0"/>
                         <Entry Grid.Column="1" Grid.Row="0" VerticalOptions="Center"
                                Placeholder="Employee Name" WidthRequest="220"
                                x:Name="techName" Text="{Binding Name}"
                                TextChanged="techName_TextChanged"  MaxLength="28"/>
-
                         <Label Text="Phone Number:" VerticalOptions="Center" HorizontalOptions="End"
                                 Grid.Row="1" Margin="0,0,10,0"/>
                         <Entry Grid.Column="1" Grid.Row="1" VerticalOptions="Center"
                                 Placeholder="Employee Phone" WidthRequest="220"
                                x:Name="techPhone" Text="{Binding EmployeePhone}"
                                TextChanged="techPhone_TextChanged"/>
-
                         <Label Text="Specialization:" VerticalOptions="Center" HorizontalOptions="End"
                                 Grid.Row="2" Margin="0,0,10,0"/>
                         <Entry Grid.Column="1" Grid.Row="2" VerticalOptions="Center"
                                 Placeholder="Specialization" WidthRequest="220"
                                x:Name="techSpecial" Text="{Binding Specialization}"
                                TextChanged="techSpecial_TextChanged"  MaxLength="28"/>
-
                         <Label Text="Hourly Rate: $" VerticalOptions="Center" HorizontalOptions="End"
                                     Grid.Row="3"/>
                         <Entry Grid.Column="1" Grid.Row="3" VerticalOptions="Center"
                                 Placeholder="Pay Rate" WidthRequest="220"
                                 x:Name="techRate" Text="{Binding HourlyRate}"
                                 TextChanged="techRate_TextChanged"/>
-
                         <Label Text="==========================================="
                                Grid.Row="4" Grid.ColumnSpan="2" HorizontalOptions="Center"/>
-
                         <Label Text="Employee Id:" VerticalOptions="Center" HorizontalOptions="End"
                                Grid.Row="5" Margin="0,0,10,0"/>
                         <Entry Grid.Column="1" Grid.Row="5" IsReadOnly="True" Placeholder="Auto Generated"
                                 x:Name="techID" WidthRequest="220" Text="{Binding EmployeeId}"/>
-
                         <Label Text="Hire Date:" VerticalOptions="Center" HorizontalOptions="End"
                                 Grid.Row="6" Margin="0,0,10,0"/>
                         <Entry Grid.Column="1" Grid.Row="6" VerticalOptions="Center"

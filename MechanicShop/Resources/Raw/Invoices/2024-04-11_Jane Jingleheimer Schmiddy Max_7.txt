@@ -1,10 +1,10 @@
 ==================================================================
 
-    REPAIR ORDER: 2
+    REPAIR ORDER: 7
     ----------------------------------------------------------
     CUSTOMER
 
-    Name: Jane		 Phone: 999-000-5999
+    Name: Jane Jingleheimer Schmiddy Max		 Phone: 999-000-5999
 
     Vehicle: 2009 Toyota Tacoma
     VIN: 12312312342351235
@@ -13,32 +13,29 @@
     DATE
 
     Created:	     Appointment:	   Closed:
-    2024-04-08         2024-04-15	   2024-04-10
+    2024-04-09         2024-04-18	   2024-04-11
 
     ----------------------------------------------------------
     DESCRIPTION
 
-    Engine is making expensive noises.
+    Cheese all over the engine bay
 
-    Employee ID: 1			Technician: Test Testy
+    Employee ID: 3			Technician: Ricky Smithh
 
     Work done:
-    Oil Change
+    Tire Change
     Hours.................................................. 0.5
 
-    Engine work up
+    Electronic work up
     Hours.................................................. 1
 
-    Inspection
-    Hours.................................................. 3
 
+    Total Hours............................................ 1.5
 
-    Total Hours............................................ 4.5
+    Shop Rate............................................ $160.44
 
-    Shop Rate............................................ $180.95
+    Shop Supplies........................................ $19.00
 
-    Shop Supplies........................................ $22.45
-
-    Amount Owing......................................... $814.27
+    Amount Owing......................................... $240.66
 
 ==================================================================

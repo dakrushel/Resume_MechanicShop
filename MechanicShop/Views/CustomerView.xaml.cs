@@ -3,7 +3,6 @@ using System.Text.RegularExpressions;
 using MechanicShop.Models;
 using MechanicShop.Resources;
 using MechanicShop.Services;
-
 /* 
  * Customer View page code behind (Written by Chloe) 
     Here you can Create, read, edit, and delete customers AND vehicles.
@@ -11,13 +10,9 @@ using MechanicShop.Services;
     You can search customers by name or phone
     You can begin a new appointment creation from this page.
  */
-
-
 namespace MechanicShop.Views;
-
 public partial class CustomerView : ContentPage
-{
-    
+{ 
     public CustomerView()
 	{
 		InitializeComponent();           

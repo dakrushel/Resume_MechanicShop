@@ -2,9 +2,18 @@ using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using MechanicShop.Models;
 using MechanicShop.Services;
+/* 
+ * Order View page code behind (Written by Chloe) 
+    This page handles logic for seperating lists, as well as assigning Technicians and
+    closing our repair orders. You can do much of the same things as the Appointment View page,
+    But this page is meant to be representative of cars that have been checked into the shop
+    - When a technician is assigned, they will not show in the list of availale techs
+    - Once an RO is closed, that tech will be marked as available again
 
+    This page also handles all of the checks to make sure a repair order has everything is needs
+    before you're able to close it out.
+ */
 namespace MechanicShop.Views;
-
 public partial class OrderView : ContentPage
 {
     // Page temp variables (for currently displayed repair order)
@@ -13,7 +22,6 @@ public partial class OrderView : ContentPage
     public static Technician? t = null;
     public static RepairOrder? repairOrder = null;
     public static ObservableCollection<ServiceJob> thisJobs = new ObservableCollection<ServiceJob>();
-
     public OrderView()
 	{
 		InitializeComponent();
@@ -31,48 +39,44 @@ public partial class OrderView : ContentPage
         RefreshServiceJobs();
         RefreshROs();
         updateRO.IsEnabled = false;
-        selectedTech.Text = ":::Not Assigned:::";
-        // If receiving a customer from PASS
+        selectedTech.Text = ":::Not Assigned:::";    
         if (Pass.CustomerPass != null && Pass.VehiclePass != null)
-        {
+        { // If receiving a customer from PASS. set up PASS view
             // page temp objects
             c = Pass.RetreiveCustomer();
             v = Pass.RetrieveVehicle();
             repairOrder = Pass.RetrieveRO();
-
-
             //Binding Contexts
-            cInformation.BindingContext = c;
-            vInformation.BindingContext = v;
-            thisJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.
-                GetServiceJobListByRepairOrderId(repairOrder.RepairOrderId));
-            repairOrderJobs.ItemsSource = thisJobs;
-            problemDescriptionEntry.Text = repairOrder.RepairOrderDescription;
-
+            if (repairOrder != null && c != null && v != null)
+            {
+                cInformation.BindingContext = c;
+                vInformation.BindingContext = v;
+                thisJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.
+                    GetServiceJobListByRepairOrderId(repairOrder.RepairOrderId));
+                repairOrderJobs.ItemsSource = thisJobs;
+                problemDescriptionEntry.Text = repairOrder.RepairOrderDescription;
+            }  
             //Widget Visibility
             orderSlip.IsVisible = true;
             roLogs.IsVisible = false;
             serviceJobMenu.IsEnabled = true;
         }
         else
-        {
+        { // Otherwise set up standard view
             // Clear all page variables
             c = null;
             v = null;
             t = null;
             repairOrder = null;
             thisJobs.Clear();
-
             //Binding Contexts
             cInformation.BindingContext = null;
             vInformation.BindingContext = null;
-
             //widget visibility
             orderSlip.IsVisible = false;
             roLogs.IsVisible = true;
             serviceJobMenu.IsEnabled = false;
         }
-
     }
     private void RefreshTechList()
     {
@@ -91,75 +95,66 @@ public partial class OrderView : ContentPage
     }
     private void RefreshROs()
     {
-        AppointmentViewService.refreshROs();
-        unasignedROs.ItemsSource = AppointmentViewService.unassigned;
+        AppointmentViewService.refreshROs(); // refresh sorted lists in the logic layer
+        unasignedROs.ItemsSource = AppointmentViewService.unassigned; // bind lists to GUI
         inProgressROs.ItemsSource = AppointmentViewService.inProgress;
-        
     }
-
-
-
     //========================================================================================================
     //-----ORDER SLIP
     //========================================================================================================
     private async void DeleteRO_Clicked(object sender, EventArgs e)
     {
-        if (repairOrder != null)
+        if (repairOrder != null) // check that order is not null
         {
             // confirmation message to prevent accidental deletion
             bool delete = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this Repair Order?", "Delete RO", "Cancel");
             if (delete)
-            {
+            { // delete the order and refresh the page
                 MauiProgram.ShopDB.RemoveRepairOrder(repairOrder.RepairOrderId);
                 OnAppearing();
             }
         }
     }
-
     private void updateRO_Clicked(object sender, EventArgs e)
     {
-        UpdateRo();
+        UpdateRo(); //One of two ways to update Order
     }
     private void UpdateRo()
     {
-        updateRO.IsEnabled = false;
-        if (repairOrder != null)
+        updateRO.IsEnabled = false; // disable update button
+        if (repairOrder != null) // ensure RO not null
         {
-            //update problem description
-            repairOrder.RepairOrderDescription = problemDescriptionEntry.Text;
-
+            repairOrder.RepairOrderDescription = problemDescriptionEntry.Text; //update problem description
+            // remove and replace repair order jobs to reflect current job list
             MauiProgram.ShopDB.RemoveRepairOrderServiceJobBridgeAttachedToRepairOrder(repairOrder.RepairOrderId);
             foreach (ServiceJob job in thisJobs)
             {
                 repairOrder.AssignServiceJob(job.ServiceJobId);
             }
-
-            MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
-
+            MauiProgram.ShopDB.UpdateRepairOrder(repairOrder); // updare RO in Database
         }
     }
     private void repairOrderJobs_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
-        ServiceJob? sj = e.SelectedItem as ServiceJob;
-        if (sj != null)
+        ServiceJob? sj = e.SelectedItem as ServiceJob; // get job OBJ
+        if (sj != null) // ensure not null
         {
-            removeJobBtn.IsEnabled = true;
+            removeJobBtn.IsEnabled = true; // enable remove button and change text for UX
             removeJobBtn.Text = $"Remove {sj.ServiceJobDescription}";
         }
     }
     private void removeJobBtn_Clicked(object sender, EventArgs e)
     {
-        removeJobBtn.Text = "Remove Job";
-        updateRO.IsEnabled = true;
+        removeJobBtn.Text = "Remove Job"; // reset  remove button
+        updateRO.IsEnabled = true; // enable update RO button
         ServiceJob? toRemove = repairOrderJobs.SelectedItem as ServiceJob;
-        if (toRemove != null)
+        if (toRemove != null) // ensure job selected
         {
-            thisJobs.Remove(toRemove);
-            RefreshROJobs();
+            thisJobs.Remove(toRemove); // remove job from list
+            RefreshROJobs(); // refresh display
         }
-        removeJobBtn.IsEnabled = false;
+        removeJobBtn.IsEnabled = false; // diasble remove button
     }
-
     private async void closeRO_Clicked(object sender, EventArgs e)
     {
         //this will delete the OBj and generate invoice. Need to make sure all info there (tech, jobs, etc)
@@ -189,38 +184,35 @@ public partial class OrderView : ContentPage
             GenerateInvoice.SaveInvoiceDelRO(repairOrder);
             //Delete the RO (This happens in invoice method)
             await DisplayAlert("Invoice Created", "The Repair Order has been closed and invoiced", "Ok");
-            OnAppearing();
+            OnAppearing(); // refresh page
         }
     }
-
     private async void Clear_Clicked(object sender, EventArgs e)
     {
-        if (updateRO.IsEnabled == true)
-        {
+        if (updateRO.IsEnabled == true) // check if changes were made to the repair order
+        { // if so, prompt user to save changes first
             bool savechanges = await DisplayAlert("Save Changes?","This RO has been altered, do you want to save changes before closing?","Save Changes","Discard Changes");
             if (savechanges)
             {
-                UpdateRo();
+                UpdateRo(); // save if they say they want to save
             }
         }      
-        OnAppearing();
+        OnAppearing(); // refresh the page
     }
     private void RefreshROJobs()
     {
-        repairOrderJobs.ItemsSource = thisJobs;
-        if (thisJobs != null)
-        {
+        repairOrderJobs.ItemsSource = thisJobs; // bind lical joblist to display
+        if (thisJobs != null) // check if list is empty
+        {   // if not empty, calculate estimate and display on screeen
             priceEstimate.Text = AppointmentViewService.CalculateEstimate(thisJobs.ToList()).ToString("C");
         }
-        RODetailsChanged();
+        RODetailsChanged(); // allert details changed
     }
     private void RODetailsChanged()
     {
-        // enable the "Save CHanges" button
-        updateRO.IsEnabled = true;
-        // Enable checkout button if all info is present
+        updateRO.IsEnabled = true;// enable the "Save Changes" button
         if (repairOrder != null)
-        {
+        {  // Enable checkout button if all info is present
             if (repairOrder.EmployeeId > 0 && thisJobs != null)
             {
                 closeRO.IsEnabled = true;
@@ -229,20 +221,17 @@ public partial class OrderView : ContentPage
         }
         closeRO.IsEnabled = false;
     }
-
-
-
     //========================================================================================================
     //-----ORDER LOGS
     //========================================================================================================
     private void ROs_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
-        serviceJobMenu.IsEnabled = true;
-        orderSlip.IsVisible = true;
+        serviceJobMenu.IsEnabled = true; // enable job menu
+        orderSlip.IsVisible = true; // switch to order slip view
         roLogs.IsVisible = false;
-        repairOrder = e.SelectedItem as RepairOrder;
-        RefreshTechList();
-        if (repairOrder != null)
+        repairOrder = e.SelectedItem as RepairOrder; // get RepairOrder OBJ
+        RefreshTechList(); // refresh tech list to get list of available techs
+        if (repairOrder != null) // ensure we have an RO OBJ
         {
             // set local variables
             c = MauiProgram.ShopDB.GetACustomerByName(repairOrder.CustomerName);
@@ -255,78 +244,62 @@ public partial class OrderView : ContentPage
             thisJobs = new ObservableCollection<ServiceJob>(MauiProgram.ShopDB.
                 GetServiceJobListByRepairOrderId(repairOrder.RepairOrderId));
             RefreshROJobs();
-            updateRO.IsEnabled = false;
-            if (repairOrder.EmployeeId != null)
-            {
-                Technician? tech = AppointmentViewService.GetTechByID(repairOrder.EmployeeId);
-                if (tech != null)
+            updateRO.IsEnabled = false; // disable update button until changes are made
+            if (repairOrder.EmployeeId > 0) // check if RO has a tech assigned
+            { // if so, get that tech's information
+                Technician? tech = MauiProgram.ShopDB.GetTechnician(repairOrder.EmployeeId);
+                if (tech != null) // check that we have a tech OBJ
                 {
-                    selectedTech.Text = tech.Name;
+                    selectedTech.Text = tech.Name; // bind Tech name to the repair order
+                    t = tech; // set local t variable to the tech OBJ
                 }
-            }
-            if (repairOrder.EmployeeId != null)
-            {
-                t = MauiProgram.ShopDB.GetTechnician(repairOrder.EmployeeId);
             }
         }
     }
-
     //========================================================================================================
     //-----TECHNICIAN LIST
     //========================================================================================================
     private void techList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
-        Technician? techToAssign = e.SelectedItem as Technician;
-        if (techToAssign != null && repairOrder != null)
+        Technician? techToAssign = e.SelectedItem as Technician; // get a tech OBJ
+        if (techToAssign != null && repairOrder != null) // ensure all values are present
         {
-            assignTech.IsEnabled = true;
-            assignTech.Text = $"Assign {techToAssign.Name} to This RO?";
-            t = techToAssign;
+            assignTech.IsEnabled = true; // enable 'assign tech' button
+            assignTech.Text = $"Assign {techToAssign.Name} to This RO?"; // Change text for UX
+            t = techToAssign; // Set the page local tech variable to the selected tech OBJ
         }
     }
     private void assignTech_Clicked(object sender, EventArgs e)
     {
-        assignTech.IsEnabled = false;
-        if (t != null && repairOrder != null)
+        assignTech.IsEnabled = false; // disable button
+        if (t != null && repairOrder != null) // ensure both values are present
         {
-            repairOrder.EmployeeId = t.EmployeeId;
-            selectedTech.Text = t.Name;
-            MauiProgram.ShopDB.UpdateRepairOrder(repairOrder);
+            repairOrder.EmployeeId = t.EmployeeId; // attach the tech to the repair order
+            selectedTech.Text = t.Name; // display the techs name on the Repair order
+            MauiProgram.ShopDB.UpdateRepairOrder(repairOrder); // update the order in the DB
         }
     }
-
-
     //========================================================================================================
     //-----SERVICE JOBS MENU
     //========================================================================================================
     private void addThisJob_Clicked(object sender, EventArgs e)
     {
-        ServiceJob? sj = thisJob.BindingContext as ServiceJob;
+        ServiceJob? sj = thisJob.BindingContext as ServiceJob; //get a job OBJ
         if (sj != null)
         {
-            if (thisJobs.Contains(sj))
-            {
-                return;
-            }
-            thisJobs.Add(sj);
-            addThisJob.IsEnabled = false;
+            thisJobs.Add(sj); // add to job list
+            RefreshROJobs(); // refresh display
         }
     }
     private void serviceJobs_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
-        ServiceJob? sj = e.SelectedItem as ServiceJob;
-        if (sj != null)
+        ServiceJob? sj = e.SelectedItem as ServiceJob; // get selected job
+        if (sj != null) // ensure a job is chosen
         {
-            thisJob.BindingContext = sj;
-            if (thisJobs.Contains(sj))
-            {
-                addThisJob.IsEnabled = false;
-                return;
-            }
-            addThisJob.IsEnabled = true;
+            thisJob.BindingContext = sj; // bind to display
+            addThisJob.IsEnabled = true; // enable add job button
         }
     }
-
     //==================================================================================
     // INPUT VALIDATION
     //==================================================================================
