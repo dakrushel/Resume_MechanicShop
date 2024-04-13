@@ -329,6 +329,7 @@ namespace MechanicShop.Models
                 .Where(x => x.VIN == vin).ToList();
         }
 
+        //TESTED
         public List<RepairOrder> GetRepairOrdersByCustPhone(string customerPhone) //Denver
         {
             //returns a list (partial matches) of RepairOrders based on customer phone #
@@ -337,12 +338,21 @@ namespace MechanicShop.Models
                 .ToList();
         }
 
-        public List<RepairOrder> GetRepairOrdersByCustName(string customerName)
+        //TESTED
+        public List<RepairOrder> GetRepairOrdersByCustName(string customerName)//Denver
         {
             //Same as above but with customer name and case insensitive
             return this.database.Table<RepairOrder>()
                 .Where(x => x.CustomerName.ToLower().Contains(customerName.ToLower()))
                 .ToList();
+        }
+
+        //TESTED
+        public List<RepairOrder> GetRepairOrdersByTechnician(int employeeId)
+        {
+            //Same as above but with employee ID (for the RemoveTechChecker)
+            //Arg is an int so no need for partial matches or case sensitivity
+            return this.database.Table<RepairOrder>().Where(x => x.EmployeeId == employeeId).ToList();
         }
 
         /*----------------------------SERVICE JOB ------------------------------------*/
