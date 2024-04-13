@@ -9,7 +9,7 @@ namespace MechanicShop.Models
     [Table("Customer")]
     public class Customer 
     {
-        //Attributing Primary Key for DB
+        //Annotations for DB creation
         [Required]
         [PrimaryKey]
         public string CustomerPhone { get; set; }
@@ -26,16 +26,16 @@ namespace MechanicShop.Models
 
         public List<Vehicle> CustomerVehicles { get; set; } 
 
-        //CTOR for customer 
         public Customer(string name, string address, string phone)
         {
+            // inputs MUST be validated from front end BEFORE they get here OR ELSE!!!!
             this.Name = name;
             this.Address = address;
+            // Phone has to be unique as it is PK, validate in front end
             this.CustomerPhone = phone;
             MauiProgram.ShopDB.AddCustomer(this);
         }
 
-        //empty constructor for DB list creation
         public Customer() { }
 
         //Provides access to Database
@@ -92,7 +92,7 @@ namespace MechanicShop.Models
 
                 else
                 {
-                    //MauiProgram.ShopDB.RemoveCustomer(phoneNum);
+                    MauiProgram.ShopDB.RemoveCustomer(phoneNum);
                     return true;
                 }
             }
