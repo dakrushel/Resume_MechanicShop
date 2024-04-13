@@ -84,7 +84,7 @@ namespace MechanicShop.Models
             //Otherwise return true
             else
             {
-                //MauiProgram.ShopDB.RemoveVehicle(vehicle.VIN);
+                MauiProgram.ShopDB.RemoveVehicle(vehicle.VIN);
                 return true;
             }
         }

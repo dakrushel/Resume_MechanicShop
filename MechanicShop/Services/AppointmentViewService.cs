@@ -1,64 +1,77 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MechanicShop.Models;
+﻿using MechanicShop.Models;
 using MechanicShop.Views;
 using System.Collections.ObjectModel;
-using System.Runtime.CompilerServices;
+
 
 namespace MechanicShop.Services
 {
     public static class AppointmentViewService
     {
-
-        //FOR APPOINTMENTS PAGE
+        //====================================================================================================
+        //               FOR APPOINTMENTS PAGE
+        //====================================================================================================
         public static ObservableCollection<RepairOrder>? upcomingAppointments;
         public static ObservableCollection<RepairOrder>? expiredAppointments;
         public static void refreshAppointments() // Chloe
         {
-            // Sorts appointments into upcoming and expired for seperate listviews in APPOINTMENTS page
+            // Establish new collections
             upcomingAppointments = new ObservableCollection<RepairOrder>();
             expiredAppointments = new ObservableCollection<RepairOrder>();
+            // Get a list of all INACTIVE orders (aka appointments) from the DB
             List<RepairOrder> appointments = MauiProgram.ShopDB.GetRepairOrdersThatAreNOTActive();
-
+            // Send to sort method to populate the colelctions
             foreach (var appointment in appointments)
             {
-                DateTime appointmentDate = DateTime.Parse(appointment.AppointmentDate);
-                if (appointmentDate < AppointmentView.currentDate.AddDays(-1))
-                {
-                    expiredAppointments.Add(appointment);
-                }
-                else
-                {
-                    upcomingAppointments.Add(appointment);
-                }
+                SortByDate(appointment);
             }
         }
         public static void RefreshByPhone(string phone) //Chloe
         {
             upcomingAppointments = new ObservableCollection<RepairOrder>();
             expiredAppointments = new ObservableCollection<RepairOrder>();
+            // Get a list of all repair orders matching the input phone number
             List<RepairOrder> appointments = MauiProgram.ShopDB.GetRepairOrdersByCustPhone(phone);
-
+            // Sent to sorter to build collections
             foreach (var appointment in appointments)
             {
-                DateTime appointmentDate = DateTime.Parse(appointment.AppointmentDate);
-                if (appointmentDate < AppointmentView.currentDate.AddDays(-1))
+                if (appointment.IsActive == false) // filter out active (aka Repaior Orders)
                 {
-                    expiredAppointments.Add(appointment);
-                }
-                else
+                    SortByDate(appointment);
+                }         
+            }
+        }
+        public static void RefreshByName(string name) //Chloe
+        {
+            upcomingAppointments = new ObservableCollection<RepairOrder>();
+            expiredAppointments = new ObservableCollection<RepairOrder>();
+            // Get a list of all repair orders matching (or containing) the input name
+            List<RepairOrder> appointments = MauiProgram.ShopDB.GetRepairOrdersByCustName(name);
+            foreach (var appointment in appointments)
+            {
+                if (appointment.IsActive == false) // filter out active (aka Repaior Orders)
                 {
-                    upcomingAppointments.Add(appointment);
+                    SortByDate(appointment);
                 }
             }
         }
-       
+        public static void SortByDate(RepairOrder appointment)
+        {
+            // Sorts appointments into upcoming and expired for seperate listviews in APPOINTMENTS page
+            DateTime appointmentDate = DateTime.Parse(appointment.AppointmentDate);
+            if (appointmentDate < AppointmentView.currentDate.AddDays(-1))
+            {
+                expiredAppointments?.Add(appointment);
+            }
+            else
+            {
+                upcomingAppointments?.Add(appointment);
+            }
+        }
 
 
-        //FOR REPAIR ORDERS PAGE
+        //====================================================================================================
+        //               FOR REPAIR ORDERS PAGE
+        //====================================================================================================
         public static ObservableCollection<RepairOrder> unassigned = new ObservableCollection<RepairOrder>();
         public static ObservableCollection<RepairOrder> inProgress = new ObservableCollection<RepairOrder>();
         public static void refreshROs() // Chloe
@@ -70,19 +83,66 @@ namespace MechanicShop.Services
 
             foreach (var ro in roList)
             {
-                if (ro.EmployeeId > 0)
+                SortByAssigned(ro);
+            }
+        }
+
+        public static void RObyPhone(string phone)
+        {
+            unassigned.Clear();
+            inProgress.Clear();
+            // Get a list of all repair orders matching the input phone number
+            List<RepairOrder> ros = MauiProgram.ShopDB.GetRepairOrdersByCustPhone(phone);
+            // Sent to sorter to build collections
+            foreach (var ro in ros)
+            {
+                if (ro.IsActive == true) // filter out inactive (aka Appointments)
                 {
-                    inProgress.Add(ro);
+                    SortByAssigned(ro);
                 }
-                else
+            }
+        }
+        public static void RObyName(string name)
+        {
+            unassigned.Clear();
+            inProgress.Clear();
+            // Get a list of all repair orders matching the input phone number
+            List<RepairOrder> ros = MauiProgram.ShopDB.GetRepairOrdersByCustName(name);
+            // Sent to sorter to build collections
+            foreach (var ro in ros)
+            {
+                if (ro.IsActive == true) // filter out inactive (aka Appointments)
                 {
-                    unassigned.Add(ro);
+                    SortByAssigned(ro);
                 }
             }
         }
 
+        public static void SortByAssigned(RepairOrder ro)
+        {
+            if (ro.EmployeeId > 0)
+            {
+                inProgress.Add(ro);
+            }
+            else
+            {
+                unassigned.Add(ro);
+            }
+        }
+
+        
+        
+        
+        
+        
+        
         // Get a list of technicians that are not currently assigned to any repair orders.
         public static ObservableCollection<Technician>? openTechnicians;
+
+
+
+
+
 
         public static void RefreshOpenTechnicians() //Chloe
         {
@@ -121,19 +181,6 @@ namespace MechanicShop.Services
             }        
         }
 
-        public static Technician? GetTechByID (int? id) //Chloe
-        {
-            // returns a particular technician object based on the ID entered
-            foreach (var tech in MauiProgram.ShopDB.GetAllTechnicians())
-            {
-                if (tech.EmployeeId == id)
-                {
-                    return tech;
-                }
-            }
-            // returns null if no match is found
-            return null;
-        }
 
         public static double CalculateEstimate(List<ServiceJob> jobs) //Chloe
         {

@@ -70,7 +70,7 @@ Shell.BackgroundColor="#814827"-->
         Route="OrderView" />
 
         <ShellContent
-        Title="Technicians"
+        Title="Management"
         Icon="technician.png"  
         ContentTemplate="{DataTemplate local:TechView}"
         Route="TechView" />

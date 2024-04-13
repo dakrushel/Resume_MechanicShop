@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using MechanicShop.Models;
 
 namespace MechanicShop.Services
 {
@@ -23,6 +24,11 @@ namespace MechanicShop.Services
                 // If the entered text contains disallowed characters, remove them
                 var newText = Regex.Replace(input, @"[^a-zA-ZÀ-ÿ\s'\-\.\,]", "");
                 // Update the entry's text with the sanitized text
+                // Limit maximum length to 10 digits
+                if (newText.Length > 28)
+                {
+                    newText = newText.Substring(0, 28);
+                }
                 return newText;
             }
             return input;
@@ -85,7 +91,23 @@ namespace MechanicShop.Services
             }
             return input;
         }
-    }
 
-    
+        public static string Currency(string input) //Chloe
+        {
+            if (input == null) { return ""; }
+            // Remove non-digit characters
+            var newText = new string(input.Where(char.IsDigit).ToArray());
+            // Limit maximum length to 5 digits
+            if (newText.Length > 5)
+            {
+                newText = newText.Substring(0, 5);
+            }
+            // Automatically insert decimal
+            if (newText.Length >= 3 && newText.Length <= 5 && newText.IndexOf('.') == -1)
+            {
+                newText = newText.Insert(newText.Length - 2, ".");
+            }
+            return newText;
+        }
+    }   
 }

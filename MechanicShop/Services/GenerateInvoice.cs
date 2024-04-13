@@ -44,7 +44,7 @@ namespace MechanicShop.Services
                 $"    Vehicle: {tempVehicle.Year} {tempVehicle.Make} {tempVehicle.Model}\n" +
                 $"    VIN: {rO.VIN}\n\n" +
                 $"    ----------------------------------------------------------\n" +
-                $"    DATE\n\n" +
+                $"    DATES\n\n" +
                 $"    Created:\t     Appointment:\t   Closed:\n" +
                 $"    {rO.DateCreated}         {rO.AppointmentDate}\t   {rO.DateClose}\n\n" +
                 $"    ----------------------------------------------------------\n" +
@@ -56,7 +56,7 @@ namespace MechanicShop.Services
                 $"    Total Hours............................................ {totalHours}\n\n" +
                 $"    Shop Rate............................................ {shopSettings.ShopHourlyRate.ToString("C")}\n\n" +
                 $"    Shop Supplies........................................ {shopSettings.ShopSupplyCost.ToString("C")}\n\n" +
-                $"    Amount Owing......................................... {(totalHours * shopSettings.ShopHourlyRate).ToString("C")}" +
+                $"    Amount Owing......................................... {(totalHours * shopSettings.ShopHourlyRate + shopSettings.ShopSupplyCost).ToString("C")}" +
                 $"\n\n==================================================================";
             
             
@@ -72,7 +72,7 @@ namespace MechanicShop.Services
             }
 
             //Delete RO from database RepairOrder, Customer, Vehicle, ServiceJob, Technician
-            //MauiProgram.ShopDB.RemoveRepairOrder(rO.RepairOrderId);
+            MauiProgram.ShopDB.RemoveRepairOrder(rO.RepairOrderId);
 
 
         }
