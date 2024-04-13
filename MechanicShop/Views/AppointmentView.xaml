@@ -189,7 +189,7 @@
                          WidthRequest="500" IsEnabled="False">
                     <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
                         <HorizontalStackLayout HorizontalOptions="End" Padding="4"  Spacing="90" Margin="20,0">
-                            <Label Text="Appoiontment Slip" FontSize="20" VerticalOptions="Center"
+                            <Label Text="Appointment Slip" FontSize="20" VerticalOptions="Center"
                                    TextDecorations="Underline"/>
                             <Button x:Name="clearSlip" Clicked="clearSlip_Clicked" Text="Clear Slip"
                                      WidthRequest="150"/>

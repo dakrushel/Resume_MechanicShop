@@ -329,7 +329,11 @@ namespace MechanicShop.Models
                 .Where(x => x.VIN == vin).ToList();
         }
 
-        //TESTED
+/// <summary>
+///        //TESTED
+/// </summary>
+/// <param name="customerPhone"></param>
+/// <returns></returns>
         public List<RepairOrder> GetRepairOrdersByCustPhone(string customerPhone) //Denver
         {
             //returns a list (partial matches) of RepairOrders based on customer phone #
