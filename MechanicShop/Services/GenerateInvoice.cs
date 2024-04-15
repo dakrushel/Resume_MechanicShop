@@ -44,7 +44,7 @@ namespace MechanicShop.Services
                 $"    Vehicle: {tempVehicle.Year} {tempVehicle.Make} {tempVehicle.Model}\n" +
                 $"    VIN: {rO.VIN}\n\n" +
                 $"    ----------------------------------------------------------\n" +
-                $"    DATE\n\n" +
+                $"    DATES\n\n" +
                 $"    Created:\t     Appointment:\t   Closed:\n" +
                 $"    {rO.DateCreated}         {rO.AppointmentDate}\t   {rO.DateClose}\n\n" +
                 $"    ----------------------------------------------------------\n" +

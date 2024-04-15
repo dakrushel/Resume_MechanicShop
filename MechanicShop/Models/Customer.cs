@@ -78,16 +78,16 @@ namespace MechanicShop.Models
                 List<RepairOrder> tempRO = new List<RepairOrder>();
                 foreach (Vehicle v in custVehicles)
                 {
-                    tempRO.AddRange(MauiProgram.ShopDB.GetRepairOrdersByVIN(v.VIN));
+                    customerROs.AddRange(MauiProgram.ShopDB.GetRepairOrdersByVIN(v.VIN));
                 }
                 //Check to see if any of those ROs are active or not closed and add them to customerROs
-                foreach (RepairOrder ro in tempRO)
-                {
-                    if (ro.IsActive && ro.DateClose == null)
-                    {
-                        customerROs.Add(ro);
-                    }
-                }
+                //foreach (RepairOrder ro in tempRO)
+                //{
+                //    if (ro.IsActive && ro.DateClose == null)
+                //    {
+                //        customerROs.Add(ro);
+                //    }
+                //}
                 if (customerROs.Count > 0) { return false; }
 
                 else
