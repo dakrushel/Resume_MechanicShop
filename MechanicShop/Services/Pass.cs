@@ -7,7 +7,7 @@ using MechanicShop.Models;
 
 namespace MechanicShop.Services
 {
-    public static class Pass // Whitten by Chloe
+    public static class Pass // Written by Chloe
     {
         // FOR PASSING OBJECTS BETWEEN PAGES. Certain tasks in this app require navigating to a 
         // different page/view WITH an object ready to load. The getters, setters and variables in
