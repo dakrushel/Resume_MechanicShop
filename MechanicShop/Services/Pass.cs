@@ -7,14 +7,21 @@ using MechanicShop.Models;
 
 namespace MechanicShop.Services
 {
-    public static class Pass
+    public static class Pass // Whitten by Chloe
     {
+        // FOR PASSING OBJECTS BETWEEN PAGES. Certain tasks in this app require navigating to a 
+        // different page/view WITH an object ready to load. The getters, setters and variables in
+        // this class are built for this purpose. 
 
-        // FOR PASSING OBJECTS BETWEEN PAGES
+        // When passing something to another page, a view will load bojects into these variables and then
+        // navigate to the other page as normal.
+
+        // When loading the Appointment or Repair Order view, the system checks if anything is stored here
+        // if so, the view will retrieve these objects and set up the GUI accordingly,
+        // if there is nothing here, the default page view loads.
         public static Customer? CustomerPass {  get; set; }
         public static Vehicle? VehiclePass { get; set; }
         public static RepairOrder? ROPass { get; set; }
-
         public static void PassCustomer (Customer c)
         {
             if (c != null)
@@ -54,7 +61,5 @@ namespace MechanicShop.Services
             ROPass = null;
             return ro;
         }
-
-
     }
 }
