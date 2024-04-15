@@ -54,7 +54,7 @@ namespace MechanicShop.Services
                 }
             }
         }
-        public static void SortByDate(RepairOrder appointment)
+        public static void SortByDate(RepairOrder appointment) // Chloe
         {
             // Sorts appointments into upcoming and expired for seperate listviews in APPOINTMENTS page
             DateTime appointmentDate = DateTime.Parse(appointment.AppointmentDate);
@@ -67,7 +67,6 @@ namespace MechanicShop.Services
                 upcomingAppointments?.Add(appointment);
             }
         }
-
 
         //====================================================================================================
         //               FOR REPAIR ORDERS PAGE
@@ -86,8 +85,7 @@ namespace MechanicShop.Services
                 SortByAssigned(ro);
             }
         }
-
-        public static void RObyPhone(string phone)
+        public static void RObyPhone(string phone) //Chloe
         {
             unassigned.Clear();
             inProgress.Clear();
@@ -102,11 +100,11 @@ namespace MechanicShop.Services
                 }
             }
         }
-        public static void RObyName(string name)
+        public static void RObyName(string name) //Chloe
         {
             unassigned.Clear();
             inProgress.Clear();
-            // Get a list of all repair orders matching the input phone number
+            // Get a list of all repair orders matching the input Name
             List<RepairOrder> ros = MauiProgram.ShopDB.GetRepairOrdersByCustName(name);
             // Sent to sorter to build collections
             foreach (var ro in ros)
@@ -117,8 +115,7 @@ namespace MechanicShop.Services
                 }
             }
         }
-
-        public static void SortByAssigned(RepairOrder ro)
+        public static void SortByAssigned(RepairOrder ro) // Chloe
         {
             if (ro.EmployeeId > 0)
             {
@@ -129,21 +126,9 @@ namespace MechanicShop.Services
                 unassigned.Add(ro);
             }
         }
-
-        
-        
-        
-        
-        
-        
+       
         // Get a list of technicians that are not currently assigned to any repair orders.
         public static ObservableCollection<Technician>? openTechnicians;
-
-
-
-
-
-
         public static void RefreshOpenTechnicians() //Chloe
         {
             // clears the static list
@@ -180,8 +165,6 @@ namespace MechanicShop.Services
                 openTechnicians = new ObservableCollection<Technician>(techList);
             }        
         }
-
-
         public static double CalculateEstimate(List<ServiceJob> jobs) //Chloe
         {
             // get the current shop hourly rate from the database
@@ -192,7 +175,6 @@ namespace MechanicShop.Services
             // multiply total hours by shop rate and return value
             return hours * rates.ShopHourlyRate;
         }
-
         public static double GetTotal(List<ServiceJob> jobs) //Chloe
         {
             // get the shop supplies cost
@@ -202,7 +184,6 @@ namespace MechanicShop.Services
             // return the cost with shop supplies added
             return jobCost + rates.ShopSupplyCost;
         }
-
         public static double GetHours(List<ServiceJob> jobs) //Chloe
         {
             // Returns total hours for a joblist
@@ -212,9 +193,6 @@ namespace MechanicShop.Services
                 hours += job.ServiceJobHours;
             }
             return hours;
-        }
-        
-
-        
+        }    
     }
 }

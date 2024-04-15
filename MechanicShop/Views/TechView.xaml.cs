@@ -98,6 +98,12 @@ public partial class TechView : ContentPage
             {   // if they dont want to delete, cancel the operation
                 return;
             }
+            bool safeToDelete = Technician.RemoveTechChecker(t);
+            if (!safeToDelete)
+            {
+                await DisplayAlert("Cannot Delete Technician","This technician is assigned to active repair orders","Ok");
+                return;
+            }
             MauiProgram.ShopDB.RemoveTechnician(t.EmployeeId); // delete the technician
             OnAppearing(); // refresh page
         }

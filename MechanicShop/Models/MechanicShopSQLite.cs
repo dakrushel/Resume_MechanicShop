@@ -350,25 +350,35 @@ namespace MechanicShop.Models
                 .Where(x => x.VIN == vin).ToList();
         }
 
-        //Returns list of repair order based on customer phone
-        public List<RepairOrder> GetRepairOrdersByCustPhone(string customerPhone)
+/// <summary>
+///        //TESTED
+/// </summary>
+/// <param name="customerPhone"></param>
+/// <returns></returns>
+        public List<RepairOrder> GetRepairOrdersByCustPhone(string customerPhone) //Denver
         {
             return this.database.Table<RepairOrder>()
                 .Where(x => x.CustomerPhoneNumber.ToLower().Contains(customerPhone.ToLower()))
                 .ToList();
         }
 
-        //Returns list of repair orders by customer name
-        public List<RepairOrder> GetRepairOrdersByCustName(string customerName)
+        //TESTED
+        public List<RepairOrder> GetRepairOrdersByCustName(string customerName)//Denver
         {
             return this.database.Table<RepairOrder>()
                 .Where(x => x.CustomerName.ToLower().Contains(customerName.ToLower()))
                 .ToList();
         }
 
-        //====================================================================================================
-        // Service Job -------------------------------
-        //====================================================================================================
+        //TESTED
+        public List<RepairOrder> GetRepairOrdersByTechnician(int employeeId)
+        {
+            //Same as above but with employee ID (for the RemoveTechChecker)
+            //Arg is an int so no need for partial matches or case sensitivity
+            return this.database.Table<RepairOrder>().Where(x => x.EmployeeId == employeeId).ToList();
+        }
+
+        /*----------------------------SERVICE JOB ------------------------------------*/
 
         //Add service job
         public void AddServiceJob(ServiceJob job)
