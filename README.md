@@ -15,8 +15,8 @@ The Customer View allows the user to View and search through existing customers,
 Add new customers, View and edit customer details, and delete customers from the 
 system. (Please not that a customer with active appointments or Repair Orders in 
 the system cannot be deleted until those orders are processed through, preventing 
-errors) Additionally on this page the user can manage the customers vehicle 
-collection, Adding or removing vehicles as needed. (Vehicles with existing orders 
+errors) Additionally on this page the user can manage the customer's vehicle 
+collection, adding or removing vehicles as needed. (Vehicles with existing orders 
 also cannot be deleted) This page also provides input validation for all entry 
 fields, with visual indicators to help the user ensure that all information is 
 correct.
@@ -24,7 +24,7 @@ correct.
 The Appointments View allows the user to manage, search through, and view/edit/delete
 appointments in the system. For convenience, there are two appointment lists, 
 one showing all upcoming appointments, and another showing appointments that are 
-expired, helping the user to easily see any customers that may need to contacted 
+expired, helping the user to easily see any customers that may need to be contacted 
 to reschedule. From this page you can take down information about the problem from 
 the customer, as well as choose an appointment date, or reschedule an existing 
 appointment. You can also add jobs to the appointment, which allows you to see an 
@@ -39,7 +39,7 @@ who aren’t currently assigned to a repair order. You may assign a technician t
 an order here. An Order may also be invoiced from this page, but only if it has 
 jobs AND a technician assigned to it (preventing errors). 
 
-Invoicing: When and order is closed you will find the customers invoice in the 
+Invoicing: When and order is closed you will find the customer's invoice in the 
 Resources/Raw/Invoices folder. The filename will be 
 (Date Invoiced)_(Customer Name)_(Order#). The invoice is meant to be a customer 
 record of the work performed and has the total amount due so that the customer may 
@@ -48,7 +48,7 @@ go to the register and pay their bill.
 Shop Management: The final view of the application is where a user may add, view, 
 edit, and delete technicians from the system. Just like customers, all input is 
 validated, and a tech cannot be deleted if they are assigned to a repair order. 
-From this screen you may also update the shops hourly service rate, and the cost 
+From this screen you may also update the shop's hourly service rate, and the cost 
 of shop supplies. Both are used to calculate estimates, and generate amount owed 
 on invoices. 
 
